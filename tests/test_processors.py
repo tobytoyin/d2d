@@ -1,6 +1,6 @@
 import pytest
 
-from obsidian_py_processor.processors import *
+from obsidian_py_processor.providers.obsidian.processors import *
 from tests.test_markdowns import *
 
 
