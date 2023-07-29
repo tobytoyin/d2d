@@ -1,6 +1,6 @@
 import pytest
 
-from obsidian_py_processor.processors import frontmatter_processor
+from obsidian_py_processor.processors import *
 from tests.test_markdowns import *
 
 
@@ -13,4 +13,16 @@ def test_frontmatter_processor_hv_meta(dummy_doc_with_frontmatter):
 def test_frontmatter_processor_no_meta(dummy_doc_without_frontmatter):
     expected = {}
     result = frontmatter_processor(dummy_doc_without_frontmatter)
+    assert result == expected
+
+
+def test_links_processor_hv_links(doc_with_links):
+    expected = set(['document-id-1', 'document-id-2', 'document-id-3'])
+    result = links_processor(doc_with_links)
+    assert result == expected
+
+
+def test_links_processor_no_links(doc_without_links):
+    expected = set()
+    result = links_processor(doc_without_links)
     assert result == expected
