@@ -10,7 +10,7 @@ class ObsidianMarkdownRegex:
     links = r'(?<!!)\[\[(.*)\]\]'
 
 
-def frontmatter_processor(doc: str) -> str:
+def frontmatter_processor(doc: str) -> dict:
     """convert frontmatter string into metada dict"""
     metayamml_match = re.search(ObsidianMarkdownRegex.frontmatter, doc)
 
