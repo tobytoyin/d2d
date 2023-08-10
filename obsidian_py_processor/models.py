@@ -1,15 +1,25 @@
 from abc import ABC, abstractmethod
-from dataclasses import dataclass
 from typing import Callable, List
 
+from pydantic import BaseModel, ConfigDict
 
-@dataclass
-class Document(ABC):
-    path: str
+
+class DocumentMetadata(BaseModel):
+    """Class to convert dict int a Metadataclass"""
+    model_config = ConfigDict(extra='allow')
+    doc_type: str
+
+class Document(BaseModel):
+    links_processor: Callable[[str], set] = None
+    metadata_processor: Callable[[str], dict] = None
     _contents: str = None
+    path: str
     
-    # def process_metadata(self, processor_func: Callable[[str], dict]):
-    #     ...
+        
+    # def __init__(self, path: str) -> None:
+    #     super().__init__()
+    #     self.path = path
+    #     self._contents: str = None
     
     @abstractmethod
     def read(self) -> str:
@@ -22,7 +32,12 @@ class Document(ABC):
             self._contents = self.read()
         
         return self._contents
-
+    
+    @property
+    def metadata(self):
+        """Return the metadata of a Document"""
+        metadata = self.metadata_processor(self.contents)
+        return DocumentMetadata(**metadata)
         
     # @abstractmethod
     # def create_datamodel(self):

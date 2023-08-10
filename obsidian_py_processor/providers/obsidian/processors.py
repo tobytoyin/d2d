@@ -15,12 +15,12 @@ def frontmatter_processor(doc: str) -> dict:
     metayamml_match = re.search(ObsidianMarkdownRegex.frontmatter, doc)
 
     if not metayamml_match:
-        return {}
+        return {'doc_type': 'unknown'}
 
     yamml_str = metayamml_match.groups()[0]
 
     metadata = yaml.safe_load(yamml_str)
-
+    metadata['doc_type'] = metadata.pop('type')
     return metadata
 
 
