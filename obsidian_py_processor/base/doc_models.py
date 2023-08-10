@@ -61,20 +61,13 @@ class Document(BaseModel):
 
     @property
     def relations(self):
-        """Return the Document ID of the links"""
+        """use the `relations_processor` function to extract Relationship ID in doc"""
         if self._relations:
             return self._relations
 
-        self._relations = self.relations_processor(self.contents)
+        if self.relations_processor:
+            self._relations = self.relations_processor(self.contents)
+            
         return self._relations
 
 
-# @dataclass
-# class GraphDocumentModel(Document):
-
-
-#     def return_document(self):
-#         return {
-#             'text': self.text,
-#             'tags': self.tags,
-#         }
