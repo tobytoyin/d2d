@@ -1,5 +1,5 @@
 [tool.poetry]
-name = "obsidian-py-processor"
+name = "document-graph-processor"
 version = "0.1.0"
 description = ""
 authors = ["Toby <40096033+tobytoyin@users.noreply.github.com>"]
