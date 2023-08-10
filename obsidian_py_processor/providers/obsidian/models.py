@@ -6,6 +6,7 @@ from providers.obsidian import processors
 
 class ObsidianDocument(Document):
     metadata_processor = staticmethod(processors.frontmatter_processor)
+    relations_processor = staticmethod(processors.links_processor)
     
     def id_resolver(self):
         # use the filename as id
