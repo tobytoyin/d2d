@@ -14,7 +14,7 @@ class DocumentMetadata(BaseModel):
     doc_type: str
 
 
-class Document(BaseModel):
+class BaseDocument(BaseModel):
     relations_processor: RelationsProcessorFn = None
     metadata_processor: MetadataProcessorFn = None
 

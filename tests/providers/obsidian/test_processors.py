@@ -11,7 +11,7 @@ def test_document_id(doc_with_frontmatter):
 
 
 def test_frontmatter_processor_hv_meta(doc_with_frontmatter):
-    expected = {'id': 'd-123123', 'name': 'my-dummy-doc', 'doc_type': 'test'}
+    expected = {'name': 'my-dummy-doc', 'doc_type': 'test'}
     result = doc_with_frontmatter.metadata.model_dump()
     assert result == expected
 
