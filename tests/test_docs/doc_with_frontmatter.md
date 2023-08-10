@@ -1,5 +1,6 @@
 ---
 id: d-123123
+type: test
 name: my-dummy-doc
 ---
 
