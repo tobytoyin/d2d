@@ -1,7 +1,7 @@
 import pytest
 
 from obsidian_py_processor.providers.obsidian.processors import *
-from tests.load_test_files import *
+from tests.providers.obsidian.load_test_files import *
 
 
 def test_frontmatter_processor_hv_meta(doc_with_frontmatter):
@@ -25,4 +25,10 @@ def test_links_processor_hv_links(doc_with_links):
 def test_links_processor_no_links(doc_without_links):
     expected = set()
     result = links_processor(doc_without_links)
+    assert result == expected
+
+    
+def test_document_id(doc_with_frontmatter):
+    expected = 'doc_with_frontmatter'  # filename without .ext 
+    result = doc_with_frontmatter.id
     assert result == expected
