@@ -8,6 +8,7 @@ authors = ["Toby <40096033+tobytoyin@users.noreply.github.com>"]
 python = "^3.9"
 Markdown = "^3.4.3"
 PyYAML = "^6.0.1"
+neo4j = "^5.11.0"
 
 [tool.poetry.dev-dependencies]
 pytest = "^5.2"

@@ -1,7 +1,7 @@
 import pytest
 
 from obsidian_py_processor.providers.obsidian.processors import *
-from tests.test_markdowns import *
+from tests.load_test_files import *
 
 
 def test_frontmatter_processor_hv_meta(doc_with_frontmatter):
