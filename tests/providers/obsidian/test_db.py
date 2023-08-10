@@ -1,6 +1,30 @@
-from neo4j import GraphDatabase
+import pytest
 
-uri = "neo4j+s://ae48b625.databases.neo4j.io"
-driver = GraphDatabase.driver(uri, auth=("neo4j", "jqUuhsUmBYq7CA7GZ5avmT0DIzHJq"))
-print(driver)
-driver.close()  # close the driver object
+from obsidian_py_processor.base.db_models import GraphDocumentModel
+from obsidian_py_processor.providers.obsidian.models import *
+from tests.providers.obsidian.load_test_files import *
+
+
+def test_graph_doc_1(doc_with_frontmatter):
+    expected = {'id': 'doc_with_frontmatter', 'relations': set(), 'doc_type': 'test', 'name': 'my-dummy-doc'}
+
+    record = GraphDocumentModel(document=doc_with_frontmatter).record
+    assert expected == record
+
+def test_graph_doc_2(doc_without_frontmatter):
+    expected = {'id': 'doc_without_frontmatter', 'relations': set(), 'doc_type': 'unknown'}
+
+    record = GraphDocumentModel(document=doc_without_frontmatter).record
+    assert expected == record
+    
+def test_graph_doc_3(doc_with_links):
+    expected = {'id': 'doc_with_internal_links', 'relations': set(['document-id-1', 'document-id-2', 'document-id-3']), 'doc_type': 'test', 'name': 'my-dummy-doc'}
+
+    record = GraphDocumentModel(document=doc_with_links).record
+    assert expected == record
+    
+def test_graph_doc_4(doc_without_links):
+    expected = {'id': 'doc_without_internal_links', 'relations': set(), 'doc_type': 'test', 'name': 'my-dummy-doc'}
+
+    record = GraphDocumentModel(document=doc_without_links).record
+    assert expected == record

@@ -1,8 +1,8 @@
-from base.doc_models import Document
+from base.doc_models import BaseDocument
 from providers.obsidian import processors
 
 
-class ObsidianDocument(Document):
+class ObsidianDocument(BaseDocument):
     metadata_processor = staticmethod(processors.frontmatter_processor)
     relations_processor = staticmethod(processors.links_processor)
     
@@ -13,3 +13,5 @@ class ObsidianDocument(Document):
     def read(self):
         with open(self.path, 'r') as f:
             return f.read()
+
+        
