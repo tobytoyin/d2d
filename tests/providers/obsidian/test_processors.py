@@ -1,6 +1,6 @@
 import pytest
 
-from obsidian_py_processor.providers.obsidian.processors import *
+from doc_graph_processor.providers.obsidian.processors import *
 from tests.providers.obsidian.load_test_files import *
 
 
