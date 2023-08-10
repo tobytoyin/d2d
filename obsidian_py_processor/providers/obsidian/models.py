@@ -1,6 +1,4 @@
-from dataclasses import dataclass
-
-from models import Document
+from base.doc_models import Document
 from providers.obsidian import processors
 
 

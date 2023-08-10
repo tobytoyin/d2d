@@ -4,6 +4,12 @@ from obsidian_py_processor.providers.obsidian.processors import *
 from tests.providers.obsidian.load_test_files import *
 
 
+def test_document_id(doc_with_frontmatter):
+    expected = 'doc_with_frontmatter'  # filename without .ext 
+    result = doc_with_frontmatter.id
+    assert result == expected
+
+
 def test_frontmatter_processor_hv_meta(doc_with_frontmatter):
     expected = {'id': 'd-123123', 'name': 'my-dummy-doc', 'doc_type': 'test'}
     result = doc_with_frontmatter.metadata.model_dump()
@@ -28,7 +34,3 @@ def test_links_processor_no_links(doc_without_links):
     assert result == expected
 
     
-def test_document_id(doc_with_frontmatter):
-    expected = 'doc_with_frontmatter'  # filename without .ext 
-    result = doc_with_frontmatter.id
-    assert result == expected
