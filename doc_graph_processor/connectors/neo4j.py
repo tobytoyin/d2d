@@ -1,38 +1,47 @@
 import yaml
 from base.db_models import GraphDocumentModel
 from neo4j import GraphDatabase
+from utils import no_quotes_object
 
 
 class Neo4JGraphModelAdapter:
     def __init__(self, model: GraphDocumentModel) -> None:
         self.model = model
+        self.doc_id = self.model.record['id']
         
     @property
-    def node_properties(self) -> str: 
-        prop_strings = []
-        for k, v in self.model.record['fields'].items():
-            prop_strings.append(f'{k}: "{v}"')
-            
-        prop_strings.append(f"id: '{self.model.record['id']}'")
-        return '{' + ','.join(prop_strings) + '}'
+    def node_properties(self) -> str:     
+        obj = {'id': self.doc_id, **self.model.record['fields']}
+        return no_quotes_object(obj)
     
     @property
     def node_label(self) -> str:
         return self.model.record['node_type'].capitalize()
         
     def create_node_work(self, tx):
+        """create or update a node"""
         query = f"""
-            CREATE (
-                n: {self.node_label}
+            MERGE (
+                n:{self.node_label}
                 {self.node_properties}
             )
         """
         print(query)
         result = tx.run(query)
-        result.consume()
         
     def create_relations_work(self, tx):
-        ...
+        relationships = self.model.record['relations']
+        queries = [f"MATCH (n {no_quotes_object({'id': self.doc_id})})"]
+        
+        if not relationships: 
+            return 
+        
+        for link_id in relationships:
+            queries.append(f"MERGE (n)-[:link]->({no_quotes_object({'id': link_id})})")
+            
+        query = ' '.join(queries)
+        print(query)
+        result = tx.run(query)
 
 
 class Neo4JConnector:
@@ -45,7 +54,7 @@ class Neo4JConnector:
     def run(self, uow):
         with self.driver.session() as session:
             result = session.execute_write(uow)
-            
+        
         self.close()
         
     # def __enter__(self):

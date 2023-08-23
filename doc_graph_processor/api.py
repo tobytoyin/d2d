@@ -33,6 +33,7 @@ print(GraphDocumentModel(document=doc).record)
 adapter = Neo4JGraphModelAdapter(db_model)
 
 neo4j.run(adapter.create_node_work)
+neo4j.run(adapter.create_relations_work)
 
 
 
