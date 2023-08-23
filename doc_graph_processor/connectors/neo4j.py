@@ -4,52 +4,64 @@ from neo4j import GraphDatabase
 from utils import no_quotes_object
 
 
-class Neo4JGraphModelAdapter:
+class Neo4JUoW:
     def __init__(self, model: GraphDocumentModel) -> None:
         self.model = model
-        self.doc_id = "222"
+        self.doc_id = self.model.record['id']
 
     @property
     def node_match(self) -> str:
         return no_quotes_object({'id': self.doc_id})
-    
-        
+
     @property
-    def node_properties(self) -> str:     
+    def node_properties(self) -> str:
         obj = {'id': self.doc_id, **self.model.record['fields']}
         return no_quotes_object(obj)
-    
+
     @property
     def node_label(self) -> str:
         return self.model.record['node_type'].capitalize()
-        
+
     def update_or_create_node(self, tx):
         """create or update a node"""
+
         query = f"""
-            OPTIONAL MATCH (n {self.node_match})
-            SET n = {self.node_properties} 
-            SET n:{self.node_label}
-            
-            WITH n
-            WHERE n IS NULL
-            MERGE (:{self.node_label} {self.node_properties})
+        MERGE (n {self.node_match})
+        SET 
+            n:{self.node_label},
+            n = {self.node_properties},
+            n.lastEdited = timestamp()         
         """
+
         print(query)
         result = tx.run(query)
-        
-    def create_relations_work(self, tx):
+
+    def update_or_create_relationships(self, tx):
         relationships = self.model.record['relations']
-        queries = [f"MATCH (n {no_quotes_object({'id': self.doc_id})})"]
         
-        if not relationships: 
-            return 
-        
+        # delete relationships
+        q = f"MATCH (n {self.node_match})-[r:LINK]->() DELETE r"
+        tx.run(q)        
+
+        if not relationships:
+            return
+
+        # create all related nodes if not exist
         for link_id in relationships:
-            queries.append(f"MERGE (n)-[:link]->({no_quotes_object({'id': link_id})})")
-            
-        query = ' '.join(queries)
-        print(query)
-        result = tx.run(query)
+            q = f"MERGE (n {no_quotes_object({'id': link_id})})"
+            print(q)
+            tx.run(q)
+
+
+
+        # add 1-many relationship
+        existing_nodes_query = f"""
+        MATCH (n {self.node_match})
+        MATCH (target) WHERE target.id IN {list(relationships)}
+        MERGE (n)-[:LINK]->(target)
+        """
+        print(existing_nodes_query)
+        tx.run(existing_nodes_query)
 
 
 class Neo4JConnector:
@@ -62,11 +74,11 @@ class Neo4JConnector:
     def run(self, uow):
         with self.driver.session() as session:
             result = session.execute_write(uow)
-        
+
         self.close()
-        
+
     # def __enter__(self):
-    #     session = 
+    #     session =
     #     self.session = session
     #     return self.session
 
