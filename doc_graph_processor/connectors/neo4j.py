@@ -7,7 +7,12 @@ from utils import no_quotes_object
 class Neo4JGraphModelAdapter:
     def __init__(self, model: GraphDocumentModel) -> None:
         self.model = model
-        self.doc_id = self.model.record['id']
+        self.doc_id = "222"
+
+    @property
+    def node_match(self) -> str:
+        return no_quotes_object({'id': self.doc_id})
+    
         
     @property
     def node_properties(self) -> str:     
@@ -18,13 +23,16 @@ class Neo4JGraphModelAdapter:
     def node_label(self) -> str:
         return self.model.record['node_type'].capitalize()
         
-    def create_node_work(self, tx):
+    def update_or_create_node(self, tx):
         """create or update a node"""
         query = f"""
-            MERGE (
-                n:{self.node_label}
-                {self.node_properties}
-            )
+            OPTIONAL MATCH (n {self.node_match})
+            SET n = {self.node_properties} 
+            SET n:{self.node_label}
+            
+            WITH n
+            WHERE n IS NULL
+            MERGE (:{self.node_label} {self.node_properties})
         """
         print(query)
         result = tx.run(query)
