@@ -1,15 +1,17 @@
 from abc import ABC, abstractmethod
 
-from base.doc_models import BaseDocument
 from pydantic import BaseModel
 
+from .doc_models import BaseDocument
+
 # Subclasses of BaseDBModel are used to formalised how different BaseDocument are translated
-# into different types of databases models, e.g., 
+# into different types of databases models, e.g.,
 # - Relational Database model
 # - Graph Database model
 
-# These databases models provides an standardised interface to reconstruct into queries/ uow 
+# These databases models provides an standardised interface to reconstruct into queries/ uow
 # based on different query languages
+
 
 class BaseDBModel(ABC, BaseModel):
     document: BaseDocument
@@ -29,9 +31,10 @@ class BaseDBModel(ABC, BaseModel):
     def record(self) -> dict:
         return self.base_properties
 
+
 class GraphDocumentModel(BaseDBModel):
     ...
-    
+
+
 class RelationalDocumentModel(BaseDBModel):
     ...
-        

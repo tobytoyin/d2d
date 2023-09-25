@@ -1,11 +1,11 @@
 import pytest
 
-from doc_graph_processor.providers.obsidian.processors import *
+from doc_uploader.providers.obsidian.processors import *
 from tests.providers.obsidian.load_test_files import *
 
 
 def test_document_id(doc_with_frontmatter):
-    expected = 'doc_with_frontmatter'  # filename without .ext 
+    expected = 'doc_with_frontmatter'  # filename without .ext
     result = doc_with_frontmatter.id
     assert result == expected
 
@@ -32,5 +32,3 @@ def test_links_processor_no_links(doc_without_links):
     expected = set()
     result = doc_without_links.relations
     assert result == expected
-
-    

@@ -1,7 +1,7 @@
 import pytest
 import yaml
 
-from doc_graph_processor.providers.obsidian.models import ObsidianDocument
+from doc_uploader.providers.obsidian.models import ObsidianDocument
 
 TEST_DOC_PREFIX = './tests/providers/obsidian'
 

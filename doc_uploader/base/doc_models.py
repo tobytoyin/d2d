@@ -67,7 +67,5 @@ class BaseDocument(BaseModel):
 
         if self.relations_processor:
             self._relations = self.relations_processor(self.contents)
-            
+
         return self._relations
-
-

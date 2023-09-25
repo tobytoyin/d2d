@@ -1,9 +1,9 @@
 [tool.poetry]
-name = "document-graph-processor"
+name = "doc_uploader"
 version = "0.1.0"
 description = ""
 authors = ["Toby <40096033+tobytoyin@users.noreply.github.com>"]
-packages = [{include = "document-graph-processor"}]
+packages = [{include = "doc_uploader"}]
 
 [tool.poetry.dependencies]
 python = "^3.9"
@@ -14,7 +14,7 @@ pydantic = "^2.1.1"
 sentence-transformers = "^2.2.2"
 
 [tool.poetry.dev-dependencies]
-pytest = "^5.2"
+pytest = "^7.4.2"
 
 [build-system]
 requires = ["poetry-core>=1.0.0"]
