@@ -3,6 +3,7 @@ name = "document-graph-processor"
 version = "0.1.0"
 description = ""
 authors = ["Toby <40096033+tobytoyin@users.noreply.github.com>"]
+packages = [{include = "document-graph-processor"}]
 
 [tool.poetry.dependencies]
 python = "^3.9"
