@@ -1,7 +1,5 @@
-import pytest
-
-from doc_graph_processor.base.db_models import GraphDocumentModel
-from doc_graph_processor.providers.obsidian.models import *
+from doc_uploader.base.db_models import GraphDocumentModel
+from doc_uploader.providers.obsidian.models import *
 from tests.providers.obsidian.load_test_files import *
 
 
