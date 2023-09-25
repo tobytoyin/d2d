@@ -5,16 +5,17 @@ from utils import no_quotes_object
 
 
 class Neo4JUoW:
+    """Unit of Work converts a GrapDocumentModel into equivalent Cypher queries"""
     def __init__(self, model: GraphDocumentModel) -> None:
         self.model = model
         self.doc_id = self.model.record['id']
 
     @property
-    def node_match(self) -> str:
+    def node_match_props(self) -> str:
         return no_quotes_object({'id': self.doc_id})
 
     @property
-    def node_properties(self) -> str:
+    def node_props(self) -> str:
         obj = {'id': self.doc_id, **self.model.record['fields']}
         return no_quotes_object(obj)
 
@@ -26,42 +27,50 @@ class Neo4JUoW:
         """create or update a node"""
 
         query = f"""
-        MERGE (n {self.node_match})
+        MERGE (n {self.node_match_props})
         SET 
             n:{self.node_label},
-            n = {self.node_properties},
+            n = {self.node_props},
             n.lastEdited = timestamp()         
         """
 
         print(query)
-        result = tx.run(query)
+        tx.run(query)
+
+    
+    def detach_all_relationships(self, tx):
+        q = f"MATCH (n {self.node_match_props})-[r:LINK]->() DELETE r"
+        tx.run(q)    
+        
+        
+    def create_dep_nodes(self, tx, rel_ids):
+       for link_id in rel_ids:
+            q = f"MERGE (n {no_quotes_object({'id': link_id})})"
+            print(q)
+            tx.run(q)        
+            
+
+    def create_one_to_many_rel(self, tx, rel_ids):
+        existing_nodes_query = f"""
+        MATCH (n {self.node_match_props})
+        MATCH (target) WHERE target.id IN {rel_ids}
+        MERGE (n)-[:LINK]->(target)
+        """
+        print(existing_nodes_query)
+        tx.run(existing_nodes_query)              
+
 
     def update_or_create_relationships(self, tx):
         relationships = self.model.record['relations']
         
-        # delete relationships
-        q = f"MATCH (n {self.node_match})-[r:LINK]->() DELETE r"
-        tx.run(q)        
+        self.detach_all_relationships(tx)
 
         if not relationships:
             return
 
-        # create all related nodes if not exist
-        for link_id in relationships:
-            q = f"MERGE (n {no_quotes_object({'id': link_id})})"
-            print(q)
-            tx.run(q)
+        self.create_dep_nodes(tx, list(relationships))
+        self.create_one_to_many_rel(tx, list(relationships))
 
-
-
-        # add 1-many relationship
-        existing_nodes_query = f"""
-        MATCH (n {self.node_match})
-        MATCH (target) WHERE target.id IN {list(relationships)}
-        MERGE (n)-[:LINK]->(target)
-        """
-        print(existing_nodes_query)
-        tx.run(existing_nodes_query)
 
 
 class Neo4JConnector:
