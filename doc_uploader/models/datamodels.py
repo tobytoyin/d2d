@@ -1,5 +1,5 @@
 from abc import ABC
-from typing import Any, Dict
+from typing import Any, Dict, Set
 
 from pydantic import BaseModel
 
@@ -17,7 +17,7 @@ from doc_uploader.doc_handlers.base import BaseDocument
 class DataModel(BaseModel):
     id: str
     entity_type: str
-    relations: set
+    relations: Set[str]
     fields: Dict[str, Any]
 
 
@@ -28,13 +28,12 @@ class BaseDBModel(ABC):
     @property
     def base_properties(self) -> DataModel:
         document = self.document
-        metadata = document.metadata
 
         return DataModel(
-            entity_type=metadata.pop("doc_type"),
+            entity_type=document.entity_type,
             id=document.id,
             relations=document.relations,
-            fields=metadata,
+            fields=document.metadata,
         )
 
     def dict(self) -> dict:
