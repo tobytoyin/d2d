@@ -1,5 +1,5 @@
 from abc import ABC, abstractmethod
-from typing import Callable, Optional, Set
+from typing import Any, Callable, Optional, Set
 
 from pydantic import BaseModel, ConfigDict
 
@@ -28,11 +28,16 @@ class BaseDocument(ABC, BaseModel):
     contents_: Optional[str] = None  # str contents of the document
     id_: Optional[str] = None
     metadata_: Optional[DocMetadata] = None
-    relations_: Optional[Set[str]] = None
+    relations_: Set[str] = set()
 
-    metadata_processor: MetadataProcessorFn = None
-    relations_processor: RelationsProcessorFn = None
-    contents_normaliser: ContentsNormaliserFn = None
+    metadata_processor: MetadataProcessorFn = lambda _: {}
+    relations_processor: RelationsProcessorFn = lambda _: set()
+    contents_normaliser: ContentsNormaliserFn = lambda _: ""
+
+    def model_post_init(self, __context: Any) -> None:
+        self._parse_metadata()
+        self._parse_relations()
+        return super().model_post_init(__context)
 
     @abstractmethod
     def read(self) -> str:
@@ -59,23 +64,31 @@ class BaseDocument(ABC, BaseModel):
         return self.id_
 
     @property
-    def metadata(self):
-        """Return the metadata of a Document"""
-        print(self.metadata_)
+    def entity_type(self):
+        return self.metadata_.model_dump().get("doc_type")
+
+    def _parse_metadata(self):
         if self.metadata_:
-            return self.metadata_.model_dump()
+            return
 
         metadata = self.metadata_processor(self.contents)
-        self._metadata_in = DocMetadata(**metadata)
-        return self._metadata_in.model_dump()
+        self.metadata_ = DocMetadata(**metadata)
 
-    @property
-    def relations(self):
-        """use the `relations_processor` function to extract Relationship ID in doc"""
+    def _parse_relations(self):
         if self.relations_:
-            return self.relations_
+            return
 
         if self.relations_processor:
             self.relations_ = self.relations_processor(self.contents)
 
+    @property
+    def metadata(self):
+        """Return the metadata of a Document"""
+        metadata = self.metadata_.model_dump()
+        metadata.pop("doc_type")
+        return metadata
+
+    @property
+    def relations(self):
+        """use the `relations_processor` function to extract Relationship ID in doc"""
         return self.relations_
