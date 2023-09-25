@@ -9,20 +9,20 @@ class _Neo4JUoW:
 
     def __init__(self, model: GraphModel) -> None:
         self.model = model
-        self.doc_id = self.model.record['id']
+        self.doc_id = self.model.dict()["id"]
 
     @property
     def _node_match_props(self) -> str:
-        return no_quotes_object({'id': self.doc_id})
+        return no_quotes_object({"id": self.doc_id})
 
     @property
     def _node_props(self) -> str:
-        obj = {'id': self.doc_id, **self.model.record['fields']}
+        obj = {"id": self.doc_id, **self.model.dict()["fields"]}
         return no_quotes_object(obj)
 
     @property
     def node_label(self) -> str:
-        return self.model.record['node_type'].capitalize()
+        return self.model.record["node_type"].capitalize()
 
     def detach_all_relationships(self, tx):
         q = f"MATCH (n {self._node_match_props})-[r:LINK]->() DELETE r"
@@ -60,7 +60,7 @@ class Neo4JUoW(_Neo4JUoW, BaseUoW):
         tx.run(query)
 
     def update_or_create_relationships(self, tx):
-        relationships = self.model.record['relations']
+        relationships = self.model.dict()["relations"]
 
         self.detach_all_relationships(tx)
 

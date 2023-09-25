@@ -17,13 +17,11 @@ def test_graphmodel_with_extra_fields():
         "entity_type": "document",
         "id": "hello-0",
         "relations": set(["hello-1", "hello-2"]),
-        "fields": {
-            "tags": set(["tag1", "tag2"]),
-            "authors": set(["someone1", "someone2"]),
-        },
+        "tags": set(["tag1", "tag2"]),
+        "authors": set(["someone1", "someone2"]),
     }
 
-    assert graphmodel.dict() == expected
+    assert graphmodel.dict == expected
 
 
 def test_graphmodel_empty_fields():
@@ -39,7 +37,6 @@ def test_graphmodel_empty_fields():
         "entity_type": "document",
         "id": "hello-0",
         "relations": set(["hello-1", "hello-2"]),
-        "fields": {},
     }
 
-    assert graphmodel.dict() == expected
+    assert graphmodel.dict == expected

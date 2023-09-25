@@ -1,5 +1,6 @@
-import .neo4j as neo4j
 from ..app.profile import Profile
+from .mock import MockConnector
+from .neo4j import Neo4JConnector
 
 
 class ConnectorFactory:
@@ -7,13 +8,15 @@ class ConnectorFactory:
         self.profile = profile
 
     @property
+    def mock(self):
+        return MockConnector()
+
+    @property
     def neo4j(self):
-        cred = self.profile.storage('neo4j')
+        cred = self.profile.storage("neo4j")
 
-        return neo4j.Neo4JConnector(
-            uri=cred['uri'],
-            username=cred['username'],
-            password=cred['password'],
+        return Neo4JConnector(
+            uri=cred["uri"],
+            username=cred["username"],
+            password=cred["password"],
         )
-
-

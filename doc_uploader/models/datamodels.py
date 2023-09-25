@@ -26,7 +26,7 @@ class BaseDBModel(ABC):
         self.document = document
 
     @property
-    def base_properties(self) -> DataModel:
+    def dataobj(self) -> DataModel:
         document = self.document
 
         return DataModel(
@@ -36,11 +36,16 @@ class BaseDBModel(ABC):
             fields=document.metadata,
         )
 
+    @property
     def dict(self) -> dict:
-        return self.base_properties.model_dump()
+        obj = self.dataobj.model_dump()
+        fields = obj.pop("fields")
+        obj.update(fields)
+        return obj
 
-    def json(self) -> str:
-        return self.base_properties.model_dump_json()
+    # @property
+    # def json(self) -> str:
+    #     return self.dataobj.model_dump_json()
 
 
 class GraphModel(BaseDBModel):
