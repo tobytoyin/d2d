@@ -1,9 +1,8 @@
 import pytest
-import yaml
 
-from doc_uploader.providers.obsidian.models import ObsidianDocument
+from doc_uploader.doc_handlers.obsidian.model import ObsidianDocument
 
-TEST_DOC_PREFIX = './tests/providers/obsidian'
+TEST_DOC_PREFIX = './tests/doc_handlers/obsidian'
 
 
 @pytest.fixture

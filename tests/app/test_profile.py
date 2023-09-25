@@ -1,4 +1,4 @@
-from doc_uploader.app.profiles import Profile
+from doc_uploader.app.profile import Profile
 
 
 def test_profile():
