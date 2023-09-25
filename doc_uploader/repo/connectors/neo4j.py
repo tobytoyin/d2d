@@ -1,5 +1,6 @@
 import logging
 
+from doc_uploader.databases.base_models import GraphDocumentModel
 from neo4j import GraphDatabase
 
 

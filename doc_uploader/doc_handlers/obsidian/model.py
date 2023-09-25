@@ -1,5 +1,4 @@
-from doc_uploader.base.doc_models import BaseDocument
-
+from ..base import BaseDocument
 from .processors import frontmatter_processor, links_processor
 
 

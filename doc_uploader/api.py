@@ -1,25 +1,16 @@
-import re
+from doc_uploader.api.uploader import Uploader
+from doc_uploader.app.profile import Profile
+from doc_uploader.databases.base_models import GraphDocumentModel
+from doc_uploader.doc_handlers.factory import DocHandlerFactory
 
-import markdown
-import yaml
-from base.db_models import GraphDocumentModel
-from connectors.neo4j import Neo4JConnector, Neo4JUoW
-from nlp.sentence_embed import SentenceEmbedding
+test_file = 'tests/doc_handlers/obsidian/test_docs/doc_with_frontmatter.md'
+uploader = Uploader(profile=Profile())
 
-# from model import Document
-# from processors import frontmatter_processor
-from providers.obsidian.models import ObsidianDocument
-from providers.obsidian.processors import frontmatter_processor
+doc = DocHandlerFactory.obsidian(test_file)
 
-test_file = 'tests/providers/obsidian/test_docs/doc_with_frontmatter.md'
-
-doc = ObsidianDocument(path=test_file)
 print(doc.metadata.model_dump())
 
 db_model = GraphDocumentModel(document=doc)
 print(GraphDocumentModel(document=doc).record)
 
-adapter = Neo4JUoW(db_model)
-
-neo4j.run(adapter.update_or_create_node)
-neo4j.run(adapter.update_or_create_relationships)
+uploader.neo4j_uploader(db_model)
