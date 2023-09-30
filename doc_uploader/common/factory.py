@@ -1,5 +1,7 @@
 # common Protocol for factory
+import fnmatch
 import importlib
+from abc import ABC
 from functools import cache
 from importlib import resources
 from typing import Dict, Generic, Protocol, TypeVar
@@ -7,18 +9,16 @@ from typing import Dict, Generic, Protocol, TypeVar
 T = TypeVar("T")
 
 
-class FactoryRegistry(Protocol, Generic[T]):
+class FactoryRegistry(Generic[T]):
     """Container of available build-in `T`s under /adapters/*/adapter.py
 
     Returns:
         _type_: _description_
     """
 
-    _map: Dict[str, T] = {
-        # factory_key: <__class__ object>
-    }
+    _map: Dict[str, T] = {}
     import_loc: str
-    import_name: str
+    import_name_pattern: str
 
     @classmethod
     def register(cls, name: str):
@@ -35,7 +35,7 @@ class FactoryRegistry(Protocol, Generic[T]):
         return _register_decorator
 
     @classmethod
-    def get_interface(cls, name: str):
+    def get(cls, name: str) -> T:
         cls.register_from_adapters()
 
         return cls._map.get(name, None)
@@ -47,7 +47,8 @@ class FactoryRegistry(Protocol, Generic[T]):
         modules = resources.contents(cls.import_loc)  # get all modules under /plugins
         print(f"Found Modules at {modules}")
 
-        for mod in filter(lambda f: f.endswith(cls.import_name), modules):
+        for mod in fnmatch.filter(modules, cls.import_name_pattern):
+            # for mod in filter(lambda f: f.endswith(cls.import_name), modules):
             importlib.import_module(f"{cls.import_loc}.{mod[:-3]}")
 
         return len(modules)  # return cached when no diff

@@ -1,10 +1,15 @@
-from doc_uploader.doc_handlers.factory import Registry, get_adapter, get_document, get_props
+from doc_uploader.doc_handlers.factory import (
+    DocumentAdapterContainer,
+    create_document,
+    create_props,
+    get_adapter,
+)
 from doc_uploader.doc_handlers.interfaces import Document, DocumentAdapter, DocumentProps
 
 ALL_BUILDIN_ADAPTERS = set(["obsidian"])
 
 
-@Registry.register(name="mock")
+@DocumentAdapterContainer.register(name="mock")
 class FakeDocumentAdapaterWithMeta(DocumentAdapter):
     def __init__(self, text="hello world") -> None:
         super().__init__(text)
@@ -27,7 +32,7 @@ class FakeDocumentAdapaterWithMeta(DocumentAdapter):
 
 def test_factory_invoke_register():
     _ = get_adapter(name="mock", text="hello world")
-    assert set([*Registry.registry]) == set(["mock"]) | ALL_BUILDIN_ADAPTERS
+    assert set([*DocumentAdapterContainer._map]) == set(["mock"]) | ALL_BUILDIN_ADAPTERS
 
 
 def test_factory_creates_correct_class():
@@ -36,10 +41,10 @@ def test_factory_creates_correct_class():
 
 
 def test_factory_create_props():
-    props = get_props(adapter_name="mock", text="hello world")
+    props = create_props(adapter_name="mock", text="hello world")
     assert isinstance(props, DocumentProps)
 
 
 def test_factory_create_document():
-    props = get_document(adapter_name="mock", text="hello world")
+    props = create_document(adapter_name="mock", text="hello world")
     assert isinstance(props, Document)

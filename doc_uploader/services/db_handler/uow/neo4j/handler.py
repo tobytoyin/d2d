@@ -1,7 +1,7 @@
 from doc_uploader.models.datamodels import GraphModel
 from doc_uploader.utils import no_quotes_object
 
-from ..protocols import BaseUoW
+from ...protocols import DocumentToDB
 
 
 class _Neo4JUoW:
@@ -44,7 +44,7 @@ class _Neo4JUoW:
         tx.run(existing_nodes_query)
 
 
-class Neo4JUoW(_Neo4JUoW, BaseUoW):
+class Neo4JUoW(_Neo4JUoW, DocumentToDB):
     def update_or_create_document(self, tx):
         """create or update a node"""
 

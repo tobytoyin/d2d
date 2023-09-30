@@ -9,13 +9,14 @@ from doc_uploader.common.factory import FactoryRegistry
 from .interfaces import DocMetadata, Document, DocumentAdapter, DocumentProps
 
 
-class DocumentAdapterContainer(FactoryRegistry):
+class DocumentAdapterContainer(FactoryRegistry[DocumentAdapter]):
+    _map = {}
     import_loc = "doc_uploader.doc_handlers.adapters"
-    import_name = "adapter.py"
+    import_name_pattern = "adapter.py"
 
 
 def get_adapter(name: str, *args, **kwargs):
-    adapters = DocumentAdapterContainer.get_interface(name)
+    adapters = DocumentAdapterContainer.get(name)
     if not adapters:
         raise ValueError
 

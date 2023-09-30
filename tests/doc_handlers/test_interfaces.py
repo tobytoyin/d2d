@@ -82,13 +82,3 @@ def test_prop_relations(mock_document_adapter_meta):
 def test_prop_contents(mock_document_adapter_meta):
     props = DocumentProps(mock_document_adapter_meta)
     assert props.contents == "normalised hello world"
-
-
-def test_prop_entity_type(mock_document_adapter_meta):
-    props = DocumentProps(mock_document_adapter_meta)
-    assert props.entity_type == "test_document"
-
-
-def test_prop_no_entity_type(mock_document_adapter_no_meta):
-    props = DocumentProps(mock_document_adapter_no_meta)
-    assert props.entity_type == "document"

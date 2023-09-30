@@ -1,7 +1,7 @@
 import pytest
 
 from doc_uploader.doc_handlers.adapters.obsidian import ObsidianAdapter
-from doc_uploader.doc_handlers.interfaces import DocumentProps
+from doc_uploader.doc_handlers.factory import create_document
 
 TEST_DOC_PREFIX = "./tests/doc_handlers/obsidian"
 
@@ -12,7 +12,7 @@ def doc_with_frontmatter() -> ObsidianAdapter:
 
     with open(path, "r") as f:
         text = f.read()
-    return DocumentProps(ObsidianAdapter(text=text, path=path))
+    return create_document("obsidian", text=text, path=path)
 
 
 @pytest.fixture
@@ -21,7 +21,7 @@ def doc_without_frontmatter():
 
     with open(path, "r") as f:
         text = f.read()
-    return DocumentProps(ObsidianAdapter(text=text, path=path))
+    return create_document("obsidian", text=text, path=path)
 
 
 @pytest.fixture
@@ -30,7 +30,7 @@ def doc_with_links():
 
     with open(path, "r") as f:
         text = f.read()
-    return DocumentProps(ObsidianAdapter(text=text, path=path))
+    return create_document("obsidian", text=text, path=path)
 
 
 @pytest.fixture
@@ -39,4 +39,4 @@ def doc_without_links():
 
     with open(path, "r") as f:
         text = f.read()
-    return DocumentProps(ObsidianAdapter(text=text, path=path))
+    return create_document("obsidian", text=text, path=path)

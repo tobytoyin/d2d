@@ -1,16 +1,15 @@
 from doc_uploader.common.factory import FactoryRegistry
 
-from .uow.mock.handler import MockUoW
-from .uow.neo4j.handler import Neo4JUoW
+from .protocols import DocumentToDB
 
 
-class DocToDBAdapters(FactoryRegistry):
+class DocToDBAdapters(FactoryRegistry[DocumentToDB]):
     import_loc = "doc_uploader.services.uploader.uow"
-    import_name = "handler.py"
+    import_name_pattern = "handler.py"
 
 
 def get_uow(name: str, *args, **kwargs):
-    adapters = DocToDBAdapters.get_interface(name)
+    adapters = DocToDBAdapters.get(name)
     if not adapters:
         raise ValueError
 
