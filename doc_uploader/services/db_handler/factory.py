@@ -4,8 +4,8 @@ from .protocols import DocumentToDB
 
 
 class DocToDBAdapters(FactoryRegistry[DocumentToDB]):
-    import_loc = "doc_uploader.services.uploader.uow"
-    import_name_pattern = "handler.py"
+    _map = {}
+    import_pattern = "services/db_handler/uow/*/handler.py"
 
 
 def get_uow(name: str, *args, **kwargs):

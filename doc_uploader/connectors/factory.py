@@ -4,8 +4,7 @@ from doc_uploader.common.factory import FactoryRegistry
 
 class ConnectorsContainer(FactoryRegistry):
     _map = {}
-    import_loc = "doc_uploader.connectors.providers"
-    import_name_pattern = "*.py"
+    import_pattern = "doc_uploader/connectors/providers/*.py"
 
 
 def get_profile(connector_name: str):

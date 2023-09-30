@@ -1,5 +1,6 @@
 # common Protocol for factory
 import fnmatch
+import glob
 import importlib
 from abc import ABC
 from functools import cache
@@ -17,8 +18,7 @@ class FactoryRegistry(Generic[T]):
     """
 
     _map: Dict[str, T] = {}
-    import_loc: str
-    import_name_pattern: str
+    import_pattern: str
 
     @classmethod
     def register(cls, name: str):
@@ -44,11 +44,12 @@ class FactoryRegistry(Generic[T]):
     @cache
     def register_from_adapters(cls) -> int:
         """run import once to invoke all the registration of the class"""
-        modules = resources.contents(cls.import_loc)  # get all modules under /plugins
-        print(f"Found Modules at {modules}")
+        root_dir = "doc_uploader"
+        found_modules = glob.glob(cls.import_pattern, root_dir=root_dir)
+        for path in found_modules:
+            fullpath = f"{root_dir}/{path}"
+            module_name = fullpath.replace("/", ".")
+            module_name = module_name.replace(".py", "")
+            importlib.import_module(module_name)
 
-        for mod in fnmatch.filter(modules, cls.import_name_pattern):
-            # for mod in filter(lambda f: f.endswith(cls.import_name), modules):
-            importlib.import_module(f"{cls.import_loc}.{mod[:-3]}")
-
-        return len(modules)  # return cached when no diff
+        return len(found_modules)  # return cached when no diff
