@@ -22,7 +22,7 @@ class DocMetadata(BaseModel):
     doc_type: str = "document"  # required field
 
 
-class BaseDocument(BaseModel):
+class Document(BaseModel):
     uid: DocID
     contents: NormalisedContents
     metadata: DocMetadata

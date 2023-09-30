@@ -4,7 +4,7 @@ from functools import cache
 from importlib import resources
 from typing import Dict
 
-from .interfaces import DocumentAdapter
+from .interfaces import Document, DocumentAdapter, DocumentProps
 
 ADAPTERS_LOC = "doc_uploader.doc_handlers.adapters"
 ADAPTERS_PYNAME = "adapter.py"
@@ -37,11 +37,10 @@ class Registry:
 
 # factory function
 @cache
-def register_all():
+def register_from_adapters():
     """run import once to invoke all the registration of the class"""
-    print("registering all plugin modules")
     modules = resources.contents(ADAPTERS_LOC)  # get all modules under /plugins
-    print(modules)
+    print(f"Found Modules at {modules}")
 
     for mod in filter(lambda f: f.endswith(ADAPTERS_PYNAME), modules):
         print(mod)
@@ -49,7 +48,7 @@ def register_all():
 
 
 def get_adapter(name: str, *args, **kwargs):
-    register_all()  # invoke all registration
+    register_from_adapters()  # invoke all registration
     adapters = Registry.get_interface(name)
     if not adapters:
         raise ValueError
@@ -57,15 +56,19 @@ def get_adapter(name: str, *args, **kwargs):
     return adapters(*args, **kwargs)
 
 
-# @property
-# def document(self) -> BaseDocument:
-#     return BaseDocument(
-#         uid=self.id,
-#         contents=self.contents,
-#         metadata=self.metadata,
-#         relations=self.relations,
-#     )
+def get_props(adapter_name: str, *args, **kwargs):
+    adapter = get_adapter(name=adapter_name, *args, **kwargs)
+    return DocumentProps(adapter)
 
 
-# def document_factory():
-#     ...
+def get_document(adapter_name: str, *args, **kwargs):
+    props = get_props(adapter_name=adapter_name, *args, **kwargs)
+
+    # use the prop to return as a document
+    doc = Document(
+        uid=props.id,
+        contents=props.contents,
+        metadata=props.metadata,
+        relations=props.relations,
+    )
+    return doc
