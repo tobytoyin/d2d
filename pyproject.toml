@@ -6,7 +6,7 @@ authors = ["Toby <40096033+tobytoyin@users.noreply.github.com>"]
 packages = [{include = "doc_uploader"}]
 
 [tool.poetry.dependencies]
-python = "^3.9"
+python = "^3.11"
 Markdown = "^3.4.3"
 PyYAML = "^6.0.1"
 neo4j = "^5.11.0"
