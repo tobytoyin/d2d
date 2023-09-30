@@ -1,6 +1,7 @@
 from doc_uploader.models.datamodels import GraphModel
 from doc_uploader.utils import no_quotes_object
 
+from ...factory import DocToDBAdapters
 from ...protocols import DocumentToDB
 
 
@@ -9,7 +10,7 @@ class _Neo4JUoW:
 
     def __init__(self, model: GraphModel) -> None:
         self.model = model
-        self.doc_id = self.model.dict()["id"]
+        self.doc_id = self.model.dict["id"]
 
     @property
     def _node_match_props(self) -> str:
@@ -17,12 +18,12 @@ class _Neo4JUoW:
 
     @property
     def _node_props(self) -> str:
-        obj = {"id": self.doc_id, **self.model.dict()["fields"]}
+        obj = {"id": self.doc_id, **self.model.dict["fields"]}
         return no_quotes_object(obj)
 
     @property
     def node_label(self) -> str:
-        return self.model.record["node_type"].capitalize()
+        return self.model.dict["node_type"].capitalize()
 
     def detach_all_relationships(self, tx):
         q = f"MATCH (n {self._node_match_props})-[r:LINK]->() DELETE r"
@@ -44,6 +45,7 @@ class _Neo4JUoW:
         tx.run(existing_nodes_query)
 
 
+@DocToDBAdapters.register(name="neo4j")
 class Neo4JUoW(_Neo4JUoW, DocumentToDB):
     def update_or_create_document(self, tx):
         """create or update a node"""
@@ -60,7 +62,7 @@ class Neo4JUoW(_Neo4JUoW, DocumentToDB):
         tx.run(query)
 
     def update_or_create_relationships(self, tx):
-        relationships = self.model.dict()["relations"]
+        relationships = self.model.dict["relations"]
 
         self.detach_all_relationships(tx)
 
@@ -69,3 +71,6 @@ class Neo4JUoW(_Neo4JUoW, DocumentToDB):
 
         self.create_dep_nodes(tx, list(relationships))
         self.create_one_to_many_rel(tx, list(relationships))
+
+    def delete_document(self, *args, **kwargs) -> bool:
+        return
