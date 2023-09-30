@@ -13,7 +13,7 @@ class Profile:
 
     @cached_property
     def _profile(self):
-        with open(self.path, "r") as stream:
+        with open(self.path, "r", encoding="utf-8") as stream:
             try:
                 return yaml.safe_load(stream)
             except yaml.YAMLError as exc:
