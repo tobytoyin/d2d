@@ -1,13 +1,8 @@
-from abc import ABC, abstractmethod
+from abc import abstractmethod
+from typing import Protocol
 
-from doc_uploader.models.datamodels import BaseDBModel
 
-
-class BaseUoW(ABC):
-    def __init__(self, model: BaseDBModel) -> None:
-        self.model = model
-        super().__init__()
-
+class DocumentToDB(Protocol):
     @abstractmethod
     def update_or_create_document(self, *args, **kwargs) -> bool:
         """Method to create a single document entity in the database"""
@@ -20,4 +15,8 @@ class BaseUoW(ABC):
         Create one document --> many relationships to documents
 
         """
+        ...
+
+    @abstractmethod
+    def delete_document(self, *args, **kwargs) -> bool:
         ...

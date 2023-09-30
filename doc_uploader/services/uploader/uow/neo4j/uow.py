@@ -1,15 +1,17 @@
-from doc_uploader.models.datamodels import GraphModel
+from typing import Generic
+
+from doc_uploader.databases.base_models import GraphDocumentModel
 from doc_uploader.utils import no_quotes_object
 
-from ..base import BaseUoW
+from ..protocols import BaseUoW
 
 
 class _Neo4JUoW:
     """Unit of Work converts a GrapDocumentModel into equivalent Cypher queries"""
 
-    def __init__(self, model: GraphModel) -> None:
+    def __init__(self, model: GraphDocumentModel) -> None:
         self.model = model
-        self.doc_id = self.model.dict()["id"]
+        self.doc_id = self.model.record["id"]
 
     @property
     def _node_match_props(self) -> str:
@@ -17,7 +19,7 @@ class _Neo4JUoW:
 
     @property
     def _node_props(self) -> str:
-        obj = {"id": self.doc_id, **self.model.dict()["fields"]}
+        obj = {"id": self.doc_id, **self.model.record["fields"]}
         return no_quotes_object(obj)
 
     @property
@@ -57,10 +59,10 @@ class Neo4JUoW(_Neo4JUoW, BaseUoW):
         """
 
         print(query)
-        tx.run(query)
+        return tx.run(query)
 
     def update_or_create_relationships(self, tx):
-        relationships = self.model.dict()["relations"]
+        relationships = self.model.record["relations"]
 
         self.detach_all_relationships(tx)
 

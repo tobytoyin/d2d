@@ -1,9 +1,17 @@
 import logging
 
-from ..base import BaseUoW
+from doc_uploader.models.datamodels import BaseDBModel
+
+from ...factory import DocToDBAdapters
+from ..protocols import DocumentToDB
 
 
-class MockUoW(BaseUoW):
+@DocToDBAdapters.register(name="mock")
+class MockHandler(DocumentToDB):
+    def __init__(self, model: BaseDBModel) -> None:
+        self.model = model
+        super().__init__()
+
     def update_or_create_document(self):
         logging.debug(self.model.dataobj)
         logging.debug("updated and created document")
