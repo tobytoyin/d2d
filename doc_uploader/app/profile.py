@@ -1,7 +1,10 @@
+import os
 from functools import cached_property
 from typing import Optional
 
 import yaml
+
+PROFILE = os.environ("UPLOADER_PROFILE", "profile.yml")
 
 
 class Profile:
@@ -17,7 +20,7 @@ class Profile:
                 raise exc
 
     def storage(self, _key: Optional[str] = None):
-        storage = self._profile.get('storages')
+        storage = self._profile.get("storages")
 
         if not _key:
             return storage
