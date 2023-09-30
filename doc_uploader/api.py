@@ -1,9 +1,9 @@
-from doc_uploader.api.uploader import Uploader
-from doc_uploader.app.profile import Profile
-from doc_uploader.databases.base_models import GraphDocumentModel
-from doc_uploader.doc_handlers.factory import DocHandlerFactory
+from doc_uploader.connectors.factory import get_connector
+from doc_uploader.doc_handlers.factory import create_document
 
-test_file = 'tests/doc_handlers/obsidian/test_docs/doc_with_frontmatter.md'
+test_file = "tests/doc_handlers/obsidian/test_docs/doc_with_frontmatter.md"
+
+
 uploader = Uploader(profile=Profile())
 
 doc = DocHandlerFactory.obsidian(test_file)

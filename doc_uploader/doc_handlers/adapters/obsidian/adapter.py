@@ -9,9 +9,14 @@ from .processors import frontmatter_processor, links_processor
 
 @DocumentAdapterContainer.register(name="obsidian")
 class ObsidianAdapter(DocumentAdapter):
-    def __init__(self, text: str, path: str) -> None:
-        self.text = text
+    def __init__(self, path: str) -> None:
+        self.text = self._read(path)
         self.path = path
+
+    @staticmethod
+    def _read(path):
+        with open(path, "r") as f:
+            return f.read()
 
     def id_processor(self) -> DocID:
         return self.path.split("/")[-1].split(".")[0]
