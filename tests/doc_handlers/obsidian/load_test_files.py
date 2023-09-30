@@ -1,7 +1,7 @@
 import pytest
 
+from doc_uploader.doc_handlers.adapters.obsidian import ObsidianAdapter
 from doc_uploader.doc_handlers.interfaces import DocumentProps
-from doc_uploader.doc_handlers.obsidian.adapter import ObsidianAdapter
 
 TEST_DOC_PREFIX = "./tests/doc_handlers/obsidian"
 

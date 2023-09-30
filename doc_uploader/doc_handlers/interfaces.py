@@ -1,5 +1,5 @@
 from abc import ABC, abstractmethod
-from typing import Any, Callable, Generic, Optional, Protocol, Set, TextIO, Type, TypeAlias
+from typing import Any, Callable, Protocol, Set, runtime_checkable
 
 from pydantic import BaseModel, ConfigDict
 
@@ -29,6 +29,7 @@ class BaseDocument(BaseModel):
     relations: Set[DocID]
 
 
+@runtime_checkable
 class DocumentAdapter(Protocol):
     text: str
     kwargs: dict
