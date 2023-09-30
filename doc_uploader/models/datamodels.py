@@ -1,4 +1,5 @@
 from abc import ABC
+from functools import cached_property
 from typing import Any, Dict, Set
 
 from pydantic import BaseModel
@@ -39,7 +40,7 @@ class BaseDBModel(ABC):
             fields=metadata,
         )
 
-    @property
+    @cached_property
     def dict(self) -> dict:
         obj = self.dataobj.model_dump()
         fields = obj.pop("fields")

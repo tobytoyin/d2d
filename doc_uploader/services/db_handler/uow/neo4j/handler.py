@@ -1,3 +1,4 @@
+from doc_uploader.doc_handlers.interfaces import Document
 from doc_uploader.models.datamodels import GraphModel
 from doc_uploader.utils import no_quotes_object
 
@@ -8,22 +9,26 @@ from ...protocols import DocumentToDB
 class _Neo4JUoW:
     """Unit of Work converts a GrapDocumentModel into equivalent Cypher queries"""
 
-    def __init__(self, model: GraphModel) -> None:
-        self.model = model
-        self.doc_id = self.model.dict["id"]
+    def __init__(self, document: Document) -> None:
+        self.model = GraphModel(document)
+
+    @property
+    def _id(self):
+        print(self.model.dict)
+        return self.model.dict["id"]
 
     @property
     def _node_match_props(self) -> str:
-        return no_quotes_object({"id": self.doc_id})
+        return no_quotes_object({"id": self._id})
 
     @property
     def _node_props(self) -> str:
-        obj = {"id": self.doc_id, **self.model.dict["fields"]}
+        obj = {"id": self._id, **self.model.dataobj.fields}
         return no_quotes_object(obj)
 
     @property
     def node_label(self) -> str:
-        return self.model.dict["node_type"].capitalize()
+        return self.model.dict["entity_type"].capitalize()
 
     def detach_all_relationships(self, tx):
         q = f"MATCH (n {self._node_match_props})-[r:LINK]->() DELETE r"

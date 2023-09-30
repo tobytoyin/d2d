@@ -8,9 +8,8 @@ class DocToDBAdapters(FactoryRegistry[DocumentToDB]):
     import_pattern = "services/db_handler/uow/*/handler.py"
 
 
-def get_uow(name: str, *args, **kwargs):
+def get_uow(name: str, *args, **kwargs) -> DocumentToDB:
     adapters = DocToDBAdapters.get(name)
-    print(DocToDBAdapters._map)
     if not adapters:
         raise ValueError
 

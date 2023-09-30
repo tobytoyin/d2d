@@ -20,12 +20,12 @@ def get_adapter(name: str, *args, **kwargs):
 
 
 def create_props(adapter_name: str, *args, **kwargs):
-    adapter = get_adapter(name=adapter_name, *args, **kwargs)
+    adapter = get_adapter(adapter_name, *args, **kwargs)
     return DocumentProps(adapter)
 
 
 def create_document(adapter_name: str, *args, **kwargs):
-    props = create_props(adapter_name=adapter_name, *args, **kwargs)
+    props = create_props(adapter_name, *args, **kwargs)
 
     # use the prop to return as a document
     return Document(
