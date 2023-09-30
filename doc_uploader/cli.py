@@ -1,10 +1,16 @@
 import argparse
 
-parser = argparse.ArgumentParser(prog='ProgramName', description='What the program does', epilog='Text at the bottom of help')
+from doc_uploader.api import UploaderAPI
 
-parser.add_argument('file', nargs='+')
+parser = argparse.ArgumentParser(
+    prog="ProgramName", description="What the program does", epilog="Text at the bottom of help"
+)
 
-if __name__ == '__main__':
+
+parser.add_argument("--src")  # source
+parser.add_argument("--dst")  # destination
+parser.add_argument("--files", nargs="+")  # files from the source
+
+if __name__ == "__main__":
     args = parser.parse_args()
-    for f in args.file:
-        print(f)
+    UploaderAPI(source=args.src, destination=args.dst, files=args.files).upload()
