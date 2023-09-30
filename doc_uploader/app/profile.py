@@ -4,7 +4,7 @@ from typing import Optional
 
 import yaml
 
-PROFILE = os.environ("UPLOADER_PROFILE", "profile.yml")
+PROFILE = os.environ.get("UPLOADER_PROFILE", "profile.yml")
 
 
 class Profile:
