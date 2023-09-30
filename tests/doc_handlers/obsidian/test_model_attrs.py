@@ -9,14 +9,14 @@ def test_document_id(doc_with_frontmatter):
 
 
 def test_frontmatter_processor_hv_meta(doc_with_frontmatter):
-    expected = {"name": "my-dummy-doc"}
-    result = doc_with_frontmatter.metadata
+    expected = {"doc_type": "test", "name": "my-dummy-doc"}
+    result = doc_with_frontmatter.metadata.model_dump()
     assert result == expected
 
 
 def test_frontmatter_processor_no_meta(doc_without_frontmatter):
-    expected = {}
-    result = doc_without_frontmatter.metadata
+    expected = {"doc_type": "unknown"}
+    result = doc_without_frontmatter.metadata.model_dump()
     assert result == expected
 
 

@@ -3,7 +3,7 @@ from typing import Any, Dict, Set
 
 from pydantic import BaseModel
 
-from doc_uploader.doc_handlers.base import BaseDocument
+from doc_uploader.doc_handlers.interfaces import BaseDocument
 
 # Subclasses of BaseDBModel are used to formalised how different BaseDocument are translated
 # into different types of databases models, e.g.,
