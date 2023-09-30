@@ -1,4 +1,4 @@
-from doc_uploader.doc_handlers.obsidian import *
+from doc_uploader.doc_handlers.adapters.obsidian import *
 from tests.doc_handlers.obsidian.load_test_files import *
 
 
