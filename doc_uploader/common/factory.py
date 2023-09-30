@@ -1,13 +1,13 @@
 # common Protocol for factory
-import fnmatch
 import glob
 import importlib
+import logging
 from abc import ABC
 from functools import cache
 from importlib import resources
 from typing import Dict, Generic, Protocol, TypeVar
 
-T = TypeVar("T")
+T = TypeVar("T", contravariant=True)
 
 
 class FactoryRegistry(Generic[T]):
@@ -51,5 +51,7 @@ class FactoryRegistry(Generic[T]):
             module_name = fullpath.replace("/", ".")
             module_name = module_name.replace(".py", "")
             importlib.import_module(module_name)
+
+            print(f"Registered {module_name}")
 
         return len(found_modules)  # return cached when no diff

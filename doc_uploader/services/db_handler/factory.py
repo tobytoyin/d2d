@@ -10,6 +10,7 @@ class DocToDBAdapters(FactoryRegistry[DocumentToDB]):
 
 def get_uow(name: str, *args, **kwargs):
     adapters = DocToDBAdapters.get(name)
+    print(DocToDBAdapters._map)
     if not adapters:
         raise ValueError
 

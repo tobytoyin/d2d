@@ -1,21 +1,18 @@
-import importlib
-import logging
-from functools import cache
-from importlib import resources
-from typing import Dict
+from typing import Type
 
 from doc_uploader.common.factory import FactoryRegistry
 
 from .interfaces import DocMetadata, Document, DocumentAdapter, DocumentProps
 
 
-class DocumentAdapterContainer(FactoryRegistry):
+class DocumentAdapterContainer(FactoryRegistry[DocumentAdapter]):
     _map = {}
-    import_pattern = "doc_handlers/adapters/obsidian/adapter.py"
+    import_pattern = "doc_handlers/adapters/*/adapter.py"
 
 
 def get_adapter(name: str, *args, **kwargs):
     adapters = DocumentAdapterContainer.get(name)
+    print(DocumentAdapterContainer._map)
     if not adapters:
         raise ValueError
 
