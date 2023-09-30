@@ -1,4 +1,4 @@
-from doc_uploader.doc_handlers.factory import Registry
+from doc_uploader.doc_handlers.factory import DocumentAdapterContainer
 from doc_uploader.doc_handlers.interfaces import DocumentAdapter
 
 # adapter.py - is the lookup folder for the factory

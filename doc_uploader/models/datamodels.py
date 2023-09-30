@@ -3,9 +3,9 @@ from typing import Any, Dict, Set
 
 from pydantic import BaseModel
 
-from doc_uploader.doc_handlers.interfaces import BaseDocument
+from doc_uploader.doc_handlers.interfaces import Document
 
-# Subclasses of BaseDBModel are used to formalised how different BaseDocument are translated
+# Subclasses of BaseDBModel are used to formalised how different Document are translated
 # into different types of databases models, e.g.,
 # - Relational Database model
 # - Graph Database model
@@ -22,18 +22,21 @@ class DataModel(BaseModel):
 
 
 class BaseDBModel(ABC):
-    def __init__(self, document: BaseDocument) -> None:
+    def __init__(self, document: Document) -> None:
         self.document = document
 
     @property
     def dataobj(self) -> DataModel:
         document = self.document
 
+        metadata = document.metadata.model_dump()
+        doc_type = metadata.pop("doc_type")
+
         return DataModel(
-            entity_type=document.entity_type,
-            id=document.id,
+            entity_type=doc_type,
+            id=document.uid,
             relations=document.relations,
-            fields=document.metadata,
+            fields=metadata,
         )
 
     @property
@@ -42,10 +45,6 @@ class BaseDBModel(ABC):
         fields = obj.pop("fields")
         obj.update(fields)
         return obj
-
-    # @property
-    # def json(self) -> str:
-    #     return self.dataobj.model_dump_json()
 
 
 class GraphModel(BaseDBModel):

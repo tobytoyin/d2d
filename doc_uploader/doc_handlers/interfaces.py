@@ -1,13 +1,9 @@
-from abc import ABC, abstractmethod
-from typing import Any, Callable, Protocol, Set, runtime_checkable
+from abc import abstractmethod
+from typing import Protocol, Set, runtime_checkable
 
 from pydantic import BaseModel, ConfigDict
 
-from .types import DocID, DocTypeKT, MetadataKVPair, NormalisedContents
-
-RelationsProcessorFn = Callable[[str], set]
-MetadataProcessorFn = Callable[[str], dict]
-ContentsNormaliserFn = Callable[[str], str]
+from .types import DocID, MetadataKVPair, NormalisedContents
 
 
 class DocMetadata(BaseModel):
@@ -23,6 +19,12 @@ class DocMetadata(BaseModel):
 
 
 class Document(BaseModel):
+    """Final datamodel to represent a Document
+
+    Args:
+        BaseModel (_type_): _description_
+    """
+
     uid: DocID
     contents: NormalisedContents
     metadata: DocMetadata
@@ -31,13 +33,6 @@ class Document(BaseModel):
 
 @runtime_checkable
 class DocumentAdapter(Protocol):
-    text: str
-    kwargs: dict
-
-    def __init__(self, text: str, **kwargs) -> None:
-        self.text = text
-        self.kwargs = kwargs
-
     @abstractmethod
     def id_processor(self) -> DocID:
         """Method to define how Document ID should be created"""
@@ -88,7 +83,3 @@ class DocumentProps:
     @property
     def contents(self) -> NormalisedContents:
         return self.adapter.contents_normaliser()
-
-    @property
-    def entity_type(self) -> str:
-        return self.metadata.doc_type
