@@ -9,10 +9,9 @@ from doc_uploader.common.factory import FactoryRegistry
 from .interfaces import DocMetadata, Document, DocumentAdapter, DocumentProps
 
 
-class DocumentAdapterContainer(FactoryRegistry[DocumentAdapter]):
+class DocumentAdapterContainer(FactoryRegistry):
     _map = {}
-    import_loc = "doc_uploader.doc_handlers.adapters"
-    import_name_pattern = "adapter.py"
+    import_pattern = "doc_handlers/adapters/obsidian/adapter.py"
 
 
 def get_adapter(name: str, *args, **kwargs):

@@ -3,7 +3,7 @@ import logging
 from doc_uploader.models.datamodels import BaseDBModel
 
 from ...factory import DocToDBAdapters
-from ..protocols import DocumentToDB
+from ...protocols import DocumentToDB
 
 
 @DocToDBAdapters.register(name="mock")
