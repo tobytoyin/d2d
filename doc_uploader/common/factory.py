@@ -43,6 +43,8 @@ class FactoryRegistry(Generic[T]):
         """run import once to invoke all the registration of the class"""
         import doc_uploader
 
+        # since this will be installed at python/libs as root directory
+        # it needs to find the other modules relative to this root
         root_module = doc_uploader.__path__[0]
         found_modules = glob.glob(cls.import_pattern, root_dir=root_module)
         print("Found: ", found_modules)
