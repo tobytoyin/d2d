@@ -8,9 +8,10 @@ from doc_uploader.utils import invalid_key_fix, no_quotes_object
 from ...factory import DocToDBAdapters
 from ...protocols import DocumentToDB
 
-logger = logging.getLogger("root")
+logger = logging.getLogger("app")
 
 
+# neo4j needs " to be \\" within the contents
 def _escape_double_quote(s: str):
     return s.replace('"', '\\"')
 
