@@ -19,6 +19,7 @@ class DataModel(BaseModel):
     id: str
     entity_type: str
     relations: Set[str]
+    contents: str
     fields: Dict[str, Any]
 
 
@@ -37,6 +38,7 @@ class BaseDBModel(ABC):
             entity_type=doc_type,
             id=document.uid,
             relations=document.relations,
+            contents=document.contents,
             fields=metadata,
         )
 
