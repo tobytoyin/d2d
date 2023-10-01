@@ -3,7 +3,7 @@ import os
 
 from neo4j import GraphDatabase
 
-from ..factory import ConnectorsContainer
+from doc_uploader.connectors.factory import ConnectorsContainer
 
 
 @ConnectorsContainer.register(name="neo4j")
