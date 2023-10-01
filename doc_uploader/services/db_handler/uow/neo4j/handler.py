@@ -30,7 +30,7 @@ class _Neo4JUoW:
         """Unpacking model's attribs into Cypher's node property syntax"""
         props = {
             "uid": self.node_id,  # custom node id
-            "contents": bytes(self.model.dataobj.contents, "utf-8").decode("unicode_escape"),
+            "contents": f"apoc.text.bytes( {self.model.dataobj.contents} )",
             **self.model.dataobj.fields,  # other optional documents metadata
         }
         props = invalid_key_fix(props, invalid_sym="-", valid_sym="_")
