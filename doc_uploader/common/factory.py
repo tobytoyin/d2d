@@ -1,9 +1,7 @@
 # common Protocol for factory
 import glob
 import importlib
-import os
 from functools import cache
-from importlib import resources
 from typing import Dict, Generic, Protocol, TypeVar
 
 T = TypeVar("T", contravariant=True)
@@ -43,15 +41,19 @@ class FactoryRegistry(Generic[T]):
     @cache
     def register_from_adapters(cls) -> int:
         """run import once to invoke all the registration of the class"""
-        root_dir = "doc_uploader"
+        import doc_uploader
 
-        found_modules = glob.glob(cls.import_pattern, root_dir=root_dir)
+        root_module = doc_uploader.__path__[0]
+        found_modules = glob.glob(cls.import_pattern, root_dir=root_module)
         print("Found: ", found_modules)
 
         for path in found_modules:
-            fullpath = f"{root_dir}/{path}"
-            module_name = fullpath.replace("/", ".")
+            # create the in-module package path
+            module_name = f"{doc_uploader.__name__}/{path}"
+            module_name = module_name.replace("/", ".")
             module_name = module_name.replace(".py", "")
+            print(module_name)
+
             importlib.import_module(module_name)
 
             print(f"Registered {module_name}")
