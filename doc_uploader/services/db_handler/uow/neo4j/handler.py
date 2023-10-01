@@ -24,6 +24,8 @@ class _Neo4JUoW:
     @property
     def _node_props(self) -> str:
         obj = {"id": self._id, **self.model.dataobj.fields}
+        # change keys with "-" to "_"
+        obj = {k.replace("-", "_"): v for k, v in obj.items()}
         return no_quotes_object(obj)
 
     @property
@@ -42,7 +44,7 @@ class _Neo4JUoW:
 
     def create_one_to_many_rel(self, tx, rel_ids):
         existing_nodes_query = f"""
-        MATCH (n {self._node_match_props})
+        MATCH ( n {self._node_match_props} )
         MATCH (target) WHERE target.id IN {rel_ids}
         MERGE (n)-[:LINK]->(target)
         """
@@ -56,7 +58,7 @@ class Neo4JUoW(_Neo4JUoW, DocumentToDB):
         """create or update a node"""
 
         query = f"""
-        MERGE (n {self._node_match_props})
+        MERGE ( n {self._node_match_props} )
         SET 
             n:{self.node_label},
             n = {self._node_props},
