@@ -10,9 +10,9 @@ from ..factory import ConnectorsContainer
 class Neo4JConnector:
     def __init__(self) -> None:
         uri = os.environ.get("NEO4J_URI")
+        print(uri)
         username = os.environ.get("NEO4J_USER")
         password = os.environ.get("NEO4J_PW")
-
         self.driver = GraphDatabase.driver(uri, auth=(username, password))
 
     def close(self):
