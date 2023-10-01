@@ -23,13 +23,13 @@ class _Neo4JUoW:
     @property
     def _node_match_props(self) -> str:
         """cypher MATCH query for matching the node with this.node_id"""
-        return no_quotes_object({"id": self.node_id})
+        return no_quotes_object({"uid": self.node_id})
 
     @property
     def _node_properties(self) -> str:
         """Unpacking model's attribs into Cypher's node property syntax"""
         props = {
-            "id": self.node_id,  # custom node id
+            "uid": self.node_id,  # custom node id
             "contents": "hello world",
             **self.model.dataobj.fields,  # other optional documents metadata
         }
