@@ -1,4 +1,5 @@
 import logging
+import os
 
 from neo4j import GraphDatabase
 
@@ -7,7 +8,11 @@ from ..factory import ConnectorsContainer
 
 @ConnectorsContainer.register(name="neo4j")
 class Neo4JConnector:
-    def __init__(self, uri, username, password) -> None:
+    def __init__(self) -> None:
+        uri = os.environ.get("NEO4J_URI")
+        username = os.environ.get("NEO4J_USER")
+        password = os.environ.get("NEO4J_PW")
+
         self.driver = GraphDatabase.driver(uri, auth=(username, password))
 
     def close(self):
