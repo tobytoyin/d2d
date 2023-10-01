@@ -18,7 +18,7 @@ class _Neo4JUoW:
 
     @property
     def node_id(self):
-        return self.model.dict["uid"]
+        return self.model.dataobj.uid
 
     @property
     def _node_match_props(self) -> str:
