@@ -11,6 +11,10 @@ from ...protocols import DocumentToDB
 logger = logging.getLogger("root")
 
 
+def _escape_double_quote(s: str):
+    return s.replace('"', '\\"')
+
+
 class _Neo4JUoW:
     """Unit of Work converts a GrapDocumentModel into equivalent Cypher queries"""
 
@@ -31,7 +35,7 @@ class _Neo4JUoW:
         """Unpacking model's attribs into Cypher's node property syntax"""
         props = {
             "uid": self.node_id,  # custom node id
-            "contents": self.model.dataobj.contents.encode("utf-8"),
+            "contents": _escape_double_quote(self.model.dataobj.contents),
             **self.model.dataobj.fields,  # other optional documents metadata
         }
         props = invalid_key_fix(props, invalid_sym="-", valid_sym="_")
