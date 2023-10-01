@@ -1,8 +1,7 @@
 # common Protocol for factory
 import glob
 import importlib
-import logging
-from abc import ABC
+import os
 from functools import cache
 from importlib import resources
 from typing import Dict, Generic, Protocol, TypeVar
@@ -45,7 +44,10 @@ class FactoryRegistry(Generic[T]):
     def register_from_adapters(cls) -> int:
         """run import once to invoke all the registration of the class"""
         root_dir = "doc_uploader"
+
         found_modules = glob.glob(cls.import_pattern, root_dir=root_dir)
+        print("Found: ", found_modules)
+
         for path in found_modules:
             fullpath = f"{root_dir}/{path}"
             module_name = fullpath.replace("/", ".")
