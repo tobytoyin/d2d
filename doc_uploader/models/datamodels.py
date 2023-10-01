@@ -16,7 +16,7 @@ from doc_uploader.doc_handlers.interfaces import Document
 
 
 class DataModel(BaseModel):
-    id: str
+    uid: str
     entity_type: str
     relations: Set[str]
     contents: str
@@ -36,7 +36,7 @@ class BaseDBModel(ABC):
 
         return DataModel(
             entity_type=doc_type,
-            id=document.uid,
+            uid=document.uid,
             relations=document.relations,
             contents=document.contents,
             fields=metadata,
