@@ -1,5 +1,4 @@
-from app.logger import setup_custom_logger
-
+from doc_uploader.app.logger import setup_custom_logger
 from doc_uploader.connectors.factory import get_connector
 from doc_uploader.doc_handlers.factory import create_document
 from doc_uploader.services.db_handler.factory import get_uow
