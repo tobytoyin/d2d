@@ -28,9 +28,9 @@ class ObsidianAdapter(DocumentAdapter):
         out = []
         links = links_processor(self.text)
         for link in links:
-            doc_id = link.pop("doc_id")
+            doc_id = link.pop("rel_uid")
             rel_type = link.pop("rel_type")
-            new_obj = {"doc_id": doc_id, "rel_type": rel_type, "properties": link}
+            new_obj = {"rel_uid": doc_id, "rel_type": rel_type, "properties": link}
             out.append(new_obj)
 
         return out

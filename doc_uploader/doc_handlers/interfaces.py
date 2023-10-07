@@ -1,12 +1,12 @@
 from abc import abstractmethod
 from typing import Any, Dict, Iterable, Optional, Protocol, Set, runtime_checkable
 
-from pydantic import BaseModel, ConfigDict
+from pydantic import BaseModel
 
 from .types import DocID, MetadataKVPair, NormalisedContents
 
 
-class DocMetadata(BaseModel):
+class MetadataProps(BaseModel):
     """A Struct for the metadata in a document
 
     `DocMetadata` represents a set of key-value pair which:
@@ -14,15 +14,14 @@ class DocMetadata(BaseModel):
     - extra keys
     """
 
-    model_config = ConfigDict(extra="allow")
     doc_type: str = "document"  # required field
+    properties: Dict[str, Any] = {}
 
 
-class DocRelations(BaseModel):
-    doc_id: DocID
+class RelationProps(BaseModel):
+    rel_uid: DocID
     rel_type: str
     properties: Optional[Dict[str, Any]] = {}
-    # other extra fields all relational properties
 
     def __hash__(self) -> int:
         # return the hash of an immutable dictionary
@@ -32,14 +31,16 @@ class DocRelations(BaseModel):
 class Document(BaseModel):
     """Final datamodel to represent a Document
 
+    This provides a structure to create the
+
     Args:
         BaseModel (_type_): _description_
     """
 
     uid: DocID
+    metadata: MetadataProps
+    relations: Set[RelationProps]
     contents: NormalisedContents
-    metadata: DocMetadata
-    relations: Set[DocRelations]
 
 
 @runtime_checkable
@@ -88,27 +89,25 @@ class DocumentProps:
         self.adapter = doc_adapter
 
     @property
-    def id(self) -> DocID:
+    def uid(self) -> DocID:
         return self.adapter.id_processor()
 
     @property
-    def metadata(self) -> DocMetadata:
+    def metadata(self) -> MetadataProps:
         """Returns the metadata of a document as a key-value pair map
 
         Returns:
             DocMetadata: struct for a valid document's metadata
         """
         metadata_map = self.adapter.metadata_processor()
-        return DocMetadata(**metadata_map)
+        return MetadataProps(**metadata_map)
 
     @property
-    def relations(self) -> Set[DocRelations]:
+    def relations(self) -> Set[RelationProps]:
         relations_props = self.adapter.relations_processor()
-        iter_props = (DocRelations(**prop) for prop in relations_props)
+        iter_props = (RelationProps(**prop) for prop in relations_props)
         return set(iter_props)
 
     @property
     def contents(self) -> NormalisedContents:
-        return self.adapter.contents_normaliser()
-        return self.adapter.contents_normaliser()
         return self.adapter.contents_normaliser()

@@ -1,51 +1,37 @@
 from abc import ABC
 from functools import cached_property
-from typing import Any, Dict, Iterable, Set
+from typing import Any, Dict, Iterable, Sequence, Set
 
-from pydantic import BaseModel
+from pydantic import BaseModel, ConfigDict
 
-from doc_uploader.doc_handlers.interfaces import DocRelations, Document
+from doc_uploader.doc_handlers.interfaces import Document, RelationProps
 
 # Subclasses of BaseDBModel are used to formalised how different Document are translated
 # into different types of databases models, e.g.,
 # - Relational Database model
 # - Graph Database model
 
+
 # These databases models provides an standardised interface to reconstruct into queries/ uow
 # based on different query languages
-
-
-class DataModel(BaseModel):
+class GraphDataModel(BaseModel):
     uid: str
-    entity_type: str
-    relations: Set[DocRelations]
+    node_type: str
     contents: str
+    relations: Sequence[RelationProps]
     fields: Dict[str, Any]
 
 
-class BaseDBModel(ABC):
-    def __init__(self, document: Document) -> None:
-        self.document = document
+class Row(BaseModel):
+    class _RelationsFields(BaseModel):
+        model_config = ConfigDict(extra="allow")
 
-    @cached_property
-    def dataobj(self) -> DataModel:
-        document = self.document
+    class _MetadataFields(BaseModel):
+        model_config = ConfigDict(extra="allow")
 
-        metadata = document.metadata.model_dump()
-        doc_type = metadata.pop("doc_type")
-
-        return DataModel(
-            entity_type=doc_type,
-            uid=document.uid,
-            relations=document.relations,
-            contents=document.contents,
-            fields=metadata,
-        )
+    uid: str
+    rel_uid: str
 
 
-class GraphModel(BaseDBModel):
-    pass
-
-
-class RDBModel(BaseDBModel):
-    pass
+class TabularDataModel(BaseModel):
+    rows: Iterable[Row]

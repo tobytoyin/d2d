@@ -1,5 +1,5 @@
 from doc_uploader.doc_handlers.adapters.obsidian import *
-from doc_uploader.doc_handlers.interfaces import DocRelations
+from doc_uploader.doc_handlers.interfaces import RelationProps
 from tests.doc_handlers.obsidian.load_test_files import *
 
 
@@ -10,13 +10,19 @@ def test_document_id(doc_with_frontmatter):
 
 
 def test_frontmatter_processor_hv_meta(doc_with_frontmatter):
-    expected = {"doc_type": "test", "name": "my-dummy-doc"}
+    expected = {
+        "doc_type": "test",
+        "properties": {"name": "my-dummy-doc"},
+    }
     result = doc_with_frontmatter.metadata.model_dump()
     assert result == expected
 
 
 def test_frontmatter_processor_no_meta(doc_without_frontmatter):
-    expected = {"doc_type": "unknown"}
+    expected = {
+        "doc_type": "unknown",
+        "properties": {},
+    }
     result = doc_without_frontmatter.metadata.model_dump()
     assert result == expected
 
@@ -24,14 +30,26 @@ def test_frontmatter_processor_no_meta(doc_without_frontmatter):
 def test_links_processor_hv_links(doc_with_links):
     expected = set(
         [
-            DocRelations(
-                doc_id="document-id-1", rel_type="LINK", properties={"ref_text": ["alias 1"]}
+            RelationProps(
+                rel_uid="document-id-1",
+                rel_type="LINK",
+                properties={"ref_text": ["alias 1"]},
             ),
-            DocRelations(
-                doc_id="document-id-2", rel_type="LINK", properties={"ref_text": ["alias 2"]}
+            RelationProps(
+                rel_uid="document-id-2",
+                rel_type="LINK",
+                properties={"ref_text": ["alias 2"]},
             ),
-            DocRelations(doc_id="document-id-3", rel_type="LINK", properties={"ref_text": []}),
-            DocRelations(doc_id="document-id-4", rel_type="LINK", properties={"ref_text": ["ID"]}),
+            RelationProps(
+                rel_uid="document-id-3",
+                rel_type="LINK",
+                properties={"ref_text": []},
+            ),
+            RelationProps(
+                rel_uid="document-id-4",
+                rel_type="LINK",
+                properties={"ref_text": ["ID"]},
+            ),
         ]
     )
     result = doc_with_links.relations
