@@ -24,7 +24,7 @@ class FakeDocumentAdapaterWithMeta(DocumentAdapter):
         }
 
     def relations_processor(self):
-        return set(["doc-1", "doc-2"])
+        return [{"doc_id": "doc-1", "rel_type": "LINK"}, {"doc_id": "doc-2", "rel_type": "LINK"}]
 
     def contents_normaliser(self):
         return "normalised hello world"

@@ -1,13 +1,17 @@
 from pytest import fixture
 
-from doc_uploader.doc_handlers.interfaces import DocMetadata, DocumentAdapter, DocumentProps
+from doc_uploader.doc_handlers.interfaces import (
+    DocMetadata,
+    DocRelations,
+    DocumentAdapter,
+    DocumentProps,
+)
 from doc_uploader.doc_handlers.types import NormalisedContents
+
 
 # Assuming the adapter logics in parsing self.text are correct
 # we test the interfaces is accessing the correct data provided
 # by the adapter
-
-
 class FakeDocumentAdapaterWithMeta(DocumentAdapter):
     def __init__(self, text="hello world") -> None:
         super().__init__(text)
@@ -22,7 +26,10 @@ class FakeDocumentAdapaterWithMeta(DocumentAdapter):
         }
 
     def relations_processor(self):
-        return set(["doc-1", "doc-2"])
+        return [
+            {"doc_id": "doc-1", "rel_type": "LINK"},
+            {"doc_id": "doc-2", "rel_type": "LINK"},
+        ]
 
     def contents_normaliser(self) -> NormalisedContents:
         return "normalised hello world"
@@ -39,7 +46,10 @@ class FakeDocumentAdapaterWithoutMeta(DocumentAdapter):
         return {}
 
     def relations_processor(self):
-        return set(["doc-1", "doc-2"])
+        return [
+            {"doc_id": "doc-1", "rel_type": "LINK", "extra_field": "1"},
+            {"doc_id": "doc-2", "rel_type": "LINK", "extra_field": "2"},
+        ]
 
     def contents_normaliser(self) -> NormalisedContents:
         return "normalised hello world"
@@ -76,7 +86,24 @@ def test_prop_no_metadata(mock_document_adapter_no_meta):
 
 def test_prop_relations(mock_document_adapter_meta):
     props = DocumentProps(mock_document_adapter_meta)
-    assert props.relations == set(["doc-1", "doc-2"])
+    expected_props = set(
+        [
+            DocRelations(doc_id="doc-1", rel_type="LINK"),
+            DocRelations(doc_id="doc-2", rel_type="LINK"),
+        ]
+    )
+    assert props.relations == expected_props
+
+
+def test_prop_relations_wtih_extras(mock_document_adapter_no_meta):
+    props = DocumentProps(mock_document_adapter_no_meta)
+    expected_props = set(
+        [
+            DocRelations(doc_id="doc-1", rel_type="LINK", extra_field="1"),
+            DocRelations(doc_id="doc-2", rel_type="LINK", extra_field="2"),
+        ]
+    )
+    assert props.relations == expected_props
 
 
 def test_prop_contents(mock_document_adapter_meta):

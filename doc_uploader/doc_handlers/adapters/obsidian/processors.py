@@ -52,7 +52,8 @@ def links_processor(doc: str) -> List[dict]:
         extracted_link_id = _extract_link_id(link)
 
         # extract alias within [[links|alias]] into prop
-        extracted_alias = re.findall("\|(.*)", link)[0]
+        extracted_alias = re.findall("\|(.*)", link)
+        extracted_alias = extracted_alias[0] if extracted_alias else ""
 
         out.append(
             {
