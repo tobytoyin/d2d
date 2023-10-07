@@ -1,10 +1,10 @@
 from abc import ABC
 from functools import cached_property
-from typing import Any, Dict, Set
+from typing import Any, Dict, Iterable, Set
 
 from pydantic import BaseModel
 
-from doc_uploader.doc_handlers.interfaces import Document
+from doc_uploader.doc_handlers.interfaces import DocRelations, Document
 
 # Subclasses of BaseDBModel are used to formalised how different Document are translated
 # into different types of databases models, e.g.,
@@ -18,7 +18,7 @@ from doc_uploader.doc_handlers.interfaces import Document
 class DataModel(BaseModel):
     uid: str
     entity_type: str
-    relations: Set[str]
+    relations: Set[DocRelations]
     contents: str
     fields: Dict[str, Any]
 
@@ -27,7 +27,7 @@ class BaseDBModel(ABC):
     def __init__(self, document: Document) -> None:
         self.document = document
 
-    @property
+    @cached_property
     def dataobj(self) -> DataModel:
         document = self.document
 
@@ -41,13 +41,6 @@ class BaseDBModel(ABC):
             contents=document.contents,
             fields=metadata,
         )
-
-    @cached_property
-    def dict(self) -> dict:
-        obj = self.dataobj.model_dump()
-        fields = obj.pop("fields")
-        obj.update(fields)
-        return obj
 
 
 class GraphModel(BaseDBModel):

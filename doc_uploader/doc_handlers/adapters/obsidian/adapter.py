@@ -24,8 +24,16 @@ class ObsidianAdapter(DocumentAdapter):
     def metadata_processor(self) -> MetadataKVPair:
         return frontmatter_processor(self.text)
 
-    def relations_processor(self) -> Set[DocID]:
-        return links_processor(self.text)
+    def relations_processor(self):
+        out = []
+        links = links_processor(self.text)
+        for link in links:
+            doc_id = link.pop("doc_id")
+            rel_type = link.pop("rel_type")
+            new_obj = {"doc_id": doc_id, "rel_type": rel_type, "properties": link}
+            out.append(new_obj)
+
+        return out
 
     def contents_normaliser(self) -> NormalisedContents:
         return self.text

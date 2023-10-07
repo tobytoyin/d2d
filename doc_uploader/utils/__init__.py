@@ -25,3 +25,11 @@ def no_quotes_object(obj: dict) -> str:
 def invalid_key_fix(obj: dict, invalid_sym: str, valid_sym: str) -> dict:
     """convert invalid key symbol into a valid symbol"""
     return {k.replace(invalid_sym, valid_sym): v for k, v in obj.items()}
+
+
+def append_dict_iterable(target: dict, new: dict, append_keys: Iterable) -> dict:
+    target = target.copy()
+    for key in append_keys:
+        target[key] += new[key]
+
+    return target
