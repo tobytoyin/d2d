@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "doc_uploader"
-version = "0.1.0"
+version = "0.1.1"
 description = ""
 authors = ["Toby <40096033+tobytoyin@users.noreply.github.com>"]
 packages = [{include = "doc_uploader"}]
