@@ -1,6 +1,6 @@
 import re
 from dataclasses import dataclass
-from typing import Set
+from typing import List
 
 import yaml
 
@@ -25,7 +25,14 @@ def frontmatter_processor(doc: str) -> dict:
     return metadata
 
 
-def links_processor(doc: str) -> Set[dict]:
+def _extract_link_id(link_str: str) -> str:
+    extracted_link_id = re.sub(ObsidianMarkdownRegex.links, "\1", link_str)
+    extracted_link_id = re.sub("\|.*", "", extracted_link_id)  # remove alias
+    extracted_link_id = re.sub("#.*", "", extracted_link_id)  # remove header references
+    return extracted_link_id
+
+
+def links_processor(doc: str) -> List[dict]:
     """extract all mentioned links
 
     Links such as would extract into:
@@ -33,7 +40,7 @@ def links_processor(doc: str) -> Set[dict]:
     - [[document-id]] --> "document-id"
 
     """
-    out = set()
+    out = []
     link_type = "LINK"  # obisidian only has a single link type
     links_match = set(re.findall(ObsidianMarkdownRegex.links, doc))
 
@@ -42,15 +49,12 @@ def links_processor(doc: str) -> Set[dict]:
 
     for link in links_match:
         # extract id within [[links]]
-        extracted_link_id = re.sub(ObsidianMarkdownRegex.links, "\1", link)
+        extracted_link_id = _extract_link_id(link)
 
         # extract alias within [[links|alias]] into prop
-        extracted_alias = re.findall("\|(.*)", extracted_link_id)[0]
+        extracted_alias = re.findall("\|(.*)", link)[0]
 
-        extracted_link_id = re.sub("\|.*", "", extracted_link_id)  # remove alias
-        extracted_link_id = re.sub("#.*", "", extracted_link_id)  # remove header references
-
-        out.add(
+        out.append(
             {
                 "doc_id": extracted_link_id,
                 "rel_type": link_type,

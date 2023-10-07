@@ -24,7 +24,7 @@ class ObsidianAdapter(DocumentAdapter):
     def metadata_processor(self) -> MetadataKVPair:
         return frontmatter_processor(self.text)
 
-    def relations_processor(self) -> Set[DocID]:
+    def relations_processor(self):
         return links_processor(self.text)
 
     def contents_normaliser(self) -> NormalisedContents:
