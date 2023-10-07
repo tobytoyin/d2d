@@ -1,6 +1,6 @@
 from abc import ABC
 from functools import cached_property
-from typing import Any, Dict, Iterable
+from typing import Any, Dict, Iterable, List
 
 from pydantic import BaseModel
 
@@ -18,7 +18,7 @@ from doc_uploader.doc_handlers.interfaces import Document
 class DataModel(BaseModel):
     uid: str
     entity_type: str
-    relations: Iterable[dict]
+    relations: List[dict]
     contents: str
     fields: Dict[str, Any]
 
@@ -37,7 +37,7 @@ class BaseDBModel(ABC):
         return DataModel(
             entity_type=doc_type,
             uid=document.uid,
-            relations=document.relations,
+            relations=[rel.model_dump() for rel in document.relations],
             contents=document.contents,
             fields=metadata,
         )

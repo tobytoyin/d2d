@@ -24,18 +24,13 @@ def test_frontmatter_processor_no_meta(doc_without_frontmatter):
 def test_links_processor_hv_links(doc_with_links):
     expected = set(
         [
-            DocRelations(
-                doc_id="document-id-1",
-                rel_type="LINK",
-                ref_text=["alias 1", "ID"],
-            ),
+            DocRelations(doc_id="document-id-1", rel_type="LINK", ref_text=["alias 1"]),
             DocRelations(doc_id="document-id-2", rel_type="LINK", ref_text=["alias 2"]),
             DocRelations(doc_id="document-id-3", rel_type="LINK", ref_text=[]),
+            DocRelations(doc_id="document-id-4", rel_type="LINK", ref_text=["ID"]),
         ]
     )
     result = doc_with_links.relations
-    print(result)
-    print(expected)
 
     assert result == expected
 
