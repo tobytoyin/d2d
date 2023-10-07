@@ -4,6 +4,8 @@ from typing import List
 
 import yaml
 
+from doc_uploader.utils import append_dict_iterable
+
 
 @dataclass
 class ObsidianMarkdownRegex:
@@ -40,12 +42,12 @@ def links_processor(doc: str) -> List[dict]:
     - [[document-id]] --> "document-id"
 
     """
-    out = []
+    collection = {}
     link_type = "LINK"  # obisidian only has a single link type
     links_match = set(re.findall(ObsidianMarkdownRegex.links, doc))
 
     if not links_match:
-        return out
+        return []
 
     for link in links_match:
         # extract id within [[links]]
@@ -53,14 +55,23 @@ def links_processor(doc: str) -> List[dict]:
 
         # extract alias within [[links|alias]] into prop
         extracted_alias = re.findall("\|(.*)", link)
-        extracted_alias = extracted_alias[0] if extracted_alias else ""
 
-        out.append(
-            {
-                "doc_id": extracted_link_id,
-                "rel_type": link_type,
-                "ref_text": extracted_alias,
-            }
-        )
+        update_obj = {
+            "doc_id": extracted_link_id,
+            "rel_type": link_type,
+            "ref_text": set(extracted_alias) if extracted_alias else set(),
+        }
 
-    return out
+        # find if the collection contains the relational dict
+        # if there's one, append the new fields into the existing fields
+        # if there's none, put the new object into the collection
+        hash_key = f"{extracted_link_id}-{link_type}"
+        target = collection.get(hash_key)
+
+        if target:
+            new_obj = append_dict_iterable(target, update_obj, append_keys=["ref_text"])
+            collection[hash_key] = new_obj
+        else:
+            collection[hash_key] = update_obj
+
+    return list(collection.values())
