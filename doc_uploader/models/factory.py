@@ -1,4 +1,4 @@
-from doc_uploader.doc_handlers.interfaces import Document
+from doc_uploader.doc_processor.interfaces import Document
 from doc_uploader.models.datamodels import GraphDataModel
 
 

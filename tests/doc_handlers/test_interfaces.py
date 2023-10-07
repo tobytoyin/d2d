@@ -1,12 +1,12 @@
 from pytest import fixture
 
-from doc_uploader.doc_handlers.interfaces import (
+from doc_uploader.doc_processor.interfaces import (
     DocumentAdapter,
     DocumentProps,
     MetadataProps,
     RelationProps,
 )
-from doc_uploader.doc_handlers.types import NormalisedContents
+from doc_uploader.doc_processor.types import NormalisedContents
 
 
 # Assuming the adapter logics in parsing self.text are correct

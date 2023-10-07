@@ -1,5 +1,5 @@
-from doc_uploader.doc_handlers.factory import DocumentAdapterContainer
-from doc_uploader.doc_handlers.interfaces import DocumentAdapter
+from doc_uploader.doc_processor.factory import DocumentAdapterContainer
+from doc_uploader.doc_processor.interfaces import DocumentAdapter
 
 # adapter.py - is the lookup folder for the factory
 # define new Adapters using the below template

@@ -1,7 +1,7 @@
 from pprint import PrettyPrinter
 
-from doc_uploader.doc_handlers.factory import create_document_runtime
-from doc_uploader.doc_handlers.interfaces import RelationProps
+from doc_uploader.doc_processor.factory import create_document_runtime
+from doc_uploader.doc_processor.interfaces import RelationProps
 from doc_uploader.models.factory import create_graph_model
 
 pprint = PrettyPrinter().pprint

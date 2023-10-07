@@ -1,8 +1,8 @@
 from typing import Set
 
-from doc_uploader.doc_handlers.factory import DocumentAdapterContainer
-from doc_uploader.doc_handlers.interfaces import DocumentAdapter
-from doc_uploader.doc_handlers.types import DocID, MetadataKVPair, NormalisedContents
+from doc_uploader.doc_processor.factory import DocumentAdapterContainer
+from doc_uploader.doc_processor.interfaces import DocumentAdapter
+from doc_uploader.doc_processor.types import DocID, MetadataKVPair, NormalisedContents
 
 from .processors import frontmatter_processor, links_processor
 

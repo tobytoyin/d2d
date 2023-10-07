@@ -7,7 +7,7 @@ from .interfaces import Document, DocumentAdapter, DocumentProps, MetadataProps,
 
 class DocumentAdapterContainer(FactoryRegistry[DocumentAdapter]):
     _map = {}
-    import_pattern = "doc_handlers/adapters/*/adapter.py"
+    import_pattern = "doc_processor/adapters/*/adapter.py"
 
 
 def get_adapter(name: str, *args, **kwargs):
