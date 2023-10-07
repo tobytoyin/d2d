@@ -59,7 +59,7 @@ def links_processor(doc: str) -> List[dict]:
         update_obj = {
             "doc_id": extracted_link_id,
             "rel_type": link_type,
-            "ref_text": set(extracted_alias) if extracted_alias else set(),
+            "ref_text": extracted_alias if extracted_alias else [],
         }
 
         # find if the collection contains the relational dict

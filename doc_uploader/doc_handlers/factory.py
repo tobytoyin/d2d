@@ -2,7 +2,7 @@ from typing import Type
 
 from doc_uploader.common.factory import FactoryRegistry
 
-from .interfaces import DocMetadata, Document, DocumentAdapter, DocumentProps
+from .interfaces import DocMetadata, DocRelations, Document, DocumentAdapter, DocumentProps
 
 
 class DocumentAdapterContainer(FactoryRegistry[DocumentAdapter]):
@@ -42,5 +42,5 @@ def create_document_runtime(uid, doc_type, contents, relations, **fields):
         doc_type=doc_type,
         contents=contents,
         metadata=DocMetadata(doc_type=doc_type, **fields),
-        relations=relations,
+        relations=set([DocRelations(**rel) for rel in relations]),
     )
