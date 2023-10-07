@@ -1,5 +1,6 @@
 import re
 from dataclasses import dataclass
+from typing import Set
 
 import yaml
 
@@ -24,26 +25,37 @@ def frontmatter_processor(doc: str) -> dict:
     return metadata
 
 
-def links_processor(doc: str) -> set:
+def links_processor(doc: str) -> Set[dict]:
     """extract all mentioned links
 
     Links such as would extract into:
     - [[document-id|alias]] --> "document-id"
     - [[document-id]] --> "document-id"
+
     """
     out = set()
+    link_type = "LINK"  # obisidian only has a single link type
     links_match = set(re.findall(ObsidianMarkdownRegex.links, doc))
 
     if not links_match:
         return out
 
     for link in links_match:
-        extracted_link_id = re.sub(
-            ObsidianMarkdownRegex.links, "\1", link
-        )  # extract id within [[links]]
+        # extract id within [[links]]
+        extracted_link_id = re.sub(ObsidianMarkdownRegex.links, "\1", link)
+
+        # extract alias within [[links|alias]] into prop
+        extracted_alias = re.findall("\|(.*)", extracted_link_id)[0]
+
         extracted_link_id = re.sub("\|.*", "", extracted_link_id)  # remove alias
         extracted_link_id = re.sub("#.*", "", extracted_link_id)  # remove header references
 
-        out.add(extracted_link_id)
+        out.add(
+            {
+                "doc_id": extracted_link_id,
+                "rel_type": link_type,
+                "ref_text": extracted_alias,
+            }
+        )
 
     return out
