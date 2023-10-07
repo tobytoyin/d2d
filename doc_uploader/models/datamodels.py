@@ -4,7 +4,7 @@ from typing import Any, Dict, Iterable, Sequence, Set
 
 from pydantic import BaseModel, ConfigDict
 
-from doc_uploader.doc_handlers.interfaces import Document, RelationProps
+from doc_uploader.doc_processor.interfaces import Document, RelationProps
 
 # Subclasses of BaseDBModel are used to formalised how different Document are translated
 # into different types of databases models, e.g.,

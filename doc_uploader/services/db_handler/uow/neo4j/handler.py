@@ -1,7 +1,7 @@
 import logging
 from typing import Set
 
-from doc_uploader.doc_handlers.interfaces import Document, RelationProps
+from doc_uploader.doc_processor.interfaces import Document, RelationProps
 from doc_uploader.models.factory import create_graph_model
 from doc_uploader.utils import invalid_key_fix, no_quotes_object
 

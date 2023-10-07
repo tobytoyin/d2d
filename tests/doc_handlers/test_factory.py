@@ -1,10 +1,10 @@
-from doc_uploader.doc_handlers.factory import (
+from doc_uploader.doc_processor.factory import (
     DocumentAdapterContainer,
     create_document,
     create_props,
     get_adapter,
 )
-from doc_uploader.doc_handlers.interfaces import Document, DocumentAdapter, DocumentProps
+from doc_uploader.doc_processor.interfaces import Document, DocumentAdapter, DocumentProps
 
 ALL_BUILDIN_ADAPTERS = set(["obsidian"])
 

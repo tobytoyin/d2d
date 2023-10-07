@@ -1,5 +1,5 @@
-from doc_uploader.doc_handlers.adapters.obsidian import *
-from doc_uploader.doc_handlers.interfaces import RelationProps
+from doc_uploader.doc_processor.adapters.obsidian import *
+from doc_uploader.doc_processor.interfaces import RelationProps
 from tests.doc_handlers.obsidian.load_test_files import *
 
 
