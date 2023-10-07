@@ -47,8 +47,8 @@ class FakeDocumentAdapaterWithoutMeta(DocumentAdapter):
 
     def relations_processor(self):
         return [
-            {"doc_id": "doc-1", "rel_type": "LINK", "extra_field": "1"},
-            {"doc_id": "doc-2", "rel_type": "LINK", "extra_field": "2"},
+            {"doc_id": "doc-1", "rel_type": "LINK", "properties": {"extra_field": "1"}},
+            {"doc_id": "doc-2", "rel_type": "LINK", "properties": {"extra_field": "2"}},
         ]
 
     def contents_normaliser(self) -> NormalisedContents:
@@ -99,8 +99,8 @@ def test_prop_relations_wtih_extras(mock_document_adapter_no_meta):
     props = DocumentProps(mock_document_adapter_no_meta)
     expected_props = set(
         [
-            DocRelations(doc_id="doc-1", rel_type="LINK", extra_field="1"),
-            DocRelations(doc_id="doc-2", rel_type="LINK", extra_field="2"),
+            DocRelations(doc_id="doc-1", rel_type="LINK", properties={"extra_field": "1"}),
+            DocRelations(doc_id="doc-2", rel_type="LINK", properties={"extra_field": "2"}),
         ]
     )
     assert props.relations == expected_props

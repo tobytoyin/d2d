@@ -1,7 +1,7 @@
-import array
 import logging
+from typing import Set
 
-from doc_uploader.doc_handlers.interfaces import Document
+from doc_uploader.doc_handlers.interfaces import DocRelations, Document
 from doc_uploader.models.datamodels import GraphModel
 from doc_uploader.utils import invalid_key_fix, no_quotes_object
 
@@ -47,7 +47,7 @@ class _Neo4JUoW:
         return self.model.dict["entity_type"].capitalize()
 
     def detach_all_relationships(self, tx):
-        q = f"MATCH (n {self._node_match_props})-[r:LINK]->() DELETE r"
+        q = f"MATCH (n {self._node_match_props})-[r]->() DELETE r"
         tx.run(q)
 
     def create_dep_nodes(self, tx, rel_ids):
@@ -55,13 +55,27 @@ class _Neo4JUoW:
             q = f"MERGE (n {no_quotes_object({'id': link_id})})"
             tx.run(q)
 
-    def create_one_to_many_rel(self, tx, rel_ids):
-        existing_nodes_query = f"""
-        MATCH ( n {self._node_match_props} )
-        MATCH (target) WHERE target.id IN {rel_ids}
-        MERGE (n)-[:LINK]->(target)
+    def create_one_to_many_rel(self, tx, relations: Set[DocRelations]):
+        match_root_query = f"MATCH ( n {self._node_match_props} )"
+        match_rels_queries = []
+
+        for idx, rel in enumerate(relations):
+            link_props = no_quotes_object(rel.properties)
+            q = f"""
+            MATCH (target{idx}) WHERE target{idx}.id = {rel.doc_id}
+            MERGE (n)-[ :{rel.rel_type} {link_props} ]->(target{idx})
+            """
+            match_rels_queries.append(q)
+
+        relations_merge_q = "\n".join(match_rels_queries)
+
+        final_query = f"""
+        {match_root_query}
+        {relations_merge_q}
         """
-        tx.run(existing_nodes_query)
+
+        logging.debug(final_query)
+        tx.run(final_query)
 
 
 @DocToDBAdapters.register(name="neo4j")
@@ -91,7 +105,7 @@ class Neo4JUoW(_Neo4JUoW, DocumentToDB):
         tx.run(query)
 
     def update_or_create_relationships(self, tx):
-        relationships = self.model.dict["relations"]
+        relationships = self.model.dataobj.relations
 
         self.detach_all_relationships(tx)
 
@@ -99,7 +113,7 @@ class Neo4JUoW(_Neo4JUoW, DocumentToDB):
             return
 
         self.create_dep_nodes(tx, list(relationships))
-        self.create_one_to_many_rel(tx, list(relationships))
+        self.create_one_to_many_rel(tx, relationships)
 
     def delete_document(self, *args, **kwargs) -> bool:
         return

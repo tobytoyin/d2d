@@ -1,7 +1,7 @@
 from abc import abstractmethod
-from typing import Iterable, Protocol, Set, runtime_checkable
+from typing import Any, Dict, Iterable, Optional, Protocol, Set, runtime_checkable
 
-from pydantic import BaseModel, ConfigDict, dataclasses
+from pydantic import BaseModel, ConfigDict
 
 from .types import DocID, MetadataKVPair, NormalisedContents
 
@@ -19,9 +19,9 @@ class DocMetadata(BaseModel):
 
 
 class DocRelations(BaseModel):
-    model_config = ConfigDict(extra="allow")
     doc_id: DocID
     rel_type: str
+    properties: Optional[Dict[str, Any]] = {}
     # other extra fields all relational properties
 
     def __hash__(self) -> int:
@@ -77,6 +77,13 @@ class DocumentAdapter(Protocol):
 
 
 class DocumentProps:
+    """DocumentProps uses an DocumentAdapter as an Interface to:
+    - extract relations via `self.relations`
+    - extract metadata  via `self.metadata`
+
+    Each of the property invoke the implemented method within DocumentAdapter
+    """
+
     def __init__(self, doc_adapter: DocumentAdapter) -> None:
         self.adapter = doc_adapter
 
@@ -102,4 +109,6 @@ class DocumentProps:
 
     @property
     def contents(self) -> NormalisedContents:
+        return self.adapter.contents_normaliser()
+        return self.adapter.contents_normaliser()
         return self.adapter.contents_normaliser()

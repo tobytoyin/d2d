@@ -1,6 +1,7 @@
 from pprint import PrettyPrinter
 
 from doc_uploader.doc_handlers.factory import create_document_runtime
+from doc_uploader.doc_handlers.interfaces import DocRelations
 from doc_uploader.models.datamodels import DataModel, GraphModel
 
 pprint = PrettyPrinter().pprint
@@ -23,10 +24,12 @@ def test_graphmodel_with_extra_fields():
     expected_model = DataModel(
         uid="hello-0",
         entity_type="document",
-        relations=[
-            {"doc_id": "hello-1", "rel_type": "LINK"},
-            {"doc_id": "hello-2", "rel_type": "LINK"},
-        ],
+        relations=set(
+            [
+                DocRelations(doc_id="hello-1", rel_type="LINK"),
+                DocRelations(doc_id="hello-2", rel_type="LINK"),
+            ]
+        ),
         contents="hello world",
         fields={"tags": set(["tag1", "tag2"]), "authors": set(["someone1", "someone2"])},
     )
@@ -46,7 +49,7 @@ def test_graphmodel_empty_fields():
     expected_model = DataModel(
         uid="hello-0",
         entity_type="document",
-        relations=[],
+        relations=set([]),
         contents="hello world",
         fields={},
     )
