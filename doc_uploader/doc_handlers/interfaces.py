@@ -1,7 +1,7 @@
 from abc import abstractmethod
-from typing import Protocol, Set, runtime_checkable
+from typing import Iterable, Protocol, Set, runtime_checkable
 
-from pydantic import BaseModel, ConfigDict
+from pydantic import BaseModel, ConfigDict, dataclasses
 
 from .types import DocID, MetadataKVPair, NormalisedContents
 
@@ -18,10 +18,12 @@ class DocMetadata(BaseModel):
     doc_type: str = "document"  # required field
 
 
-class DocRelations(BaseModel):
+@dataclasses.dataclass(frozen=True)
+class DocRelations:
     model_config = ConfigDict(extra="allow")
     doc_id: DocID
     rel_type: str
+    # other extra fields all relational properties
 
 
 class Document(BaseModel):
@@ -56,7 +58,14 @@ class DocumentAdapter(Protocol):
         ...
 
     @abstractmethod
-    def relations_processor(self) -> Set[DocRelations]:
+    def relations_processor(self) -> Iterable[dict]:
+        """_summary_
+
+        Returns:
+            Set[DocRelations]: \
+                returns an Iterable dictionarys containing \
+                relational properties
+        """
         ...
 
     @abstractmethod
@@ -84,7 +93,9 @@ class DocumentProps:
 
     @property
     def relations(self) -> Set[DocRelations]:
-        return self.adapter.relations_processor()
+        relations_props = self.adapter.relations_processor()
+        iter_props = (DocRelations(**prop) for prop in relations_props)
+        return set(iter_props)
 
     @property
     def contents(self) -> NormalisedContents:
