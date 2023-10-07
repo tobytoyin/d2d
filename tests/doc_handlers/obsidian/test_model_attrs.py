@@ -1,4 +1,5 @@
 from doc_uploader.doc_handlers.adapters.obsidian import *
+from doc_uploader.doc_handlers.interfaces import DocRelations
 from tests.doc_handlers.obsidian.load_test_files import *
 
 
@@ -21,8 +22,20 @@ def test_frontmatter_processor_no_meta(doc_without_frontmatter):
 
 
 def test_links_processor_hv_links(doc_with_links):
-    expected = set(["document-id-1", "document-id-2", "document-id-3"])
+    expected = set(
+        [
+            DocRelations(
+                doc_id="document-id-1", rel_type="LINK", properties={"ref_text": ["alias 1"]}
+            ),
+            DocRelations(
+                doc_id="document-id-2", rel_type="LINK", properties={"ref_text": ["alias 2"]}
+            ),
+            DocRelations(doc_id="document-id-3", rel_type="LINK", properties={"ref_text": []}),
+            DocRelations(doc_id="document-id-4", rel_type="LINK", properties={"ref_text": ["ID"]}),
+        ]
+    )
     result = doc_with_links.relations
+
     assert result == expected
 
 

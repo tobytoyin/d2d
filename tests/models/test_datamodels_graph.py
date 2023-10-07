@@ -1,42 +1,57 @@
+from pprint import PrettyPrinter
+
 from doc_uploader.doc_handlers.factory import create_document_runtime
-from doc_uploader.models.datamodels import GraphModel
+from doc_uploader.doc_handlers.interfaces import DocRelations
+from doc_uploader.models.datamodels import DataModel, GraphModel
+
+pprint = PrettyPrinter().pprint
 
 
 def test_graphmodel_with_extra_fields():
     mock_document = create_document_runtime(
         contents="hello world",
         uid="hello-0",
-        relations=set(["hello-1", "hello-2"]),
+        relations=[
+            {"doc_id": "hello-1", "rel_type": "LINK"},
+            {"doc_id": "hello-2", "rel_type": "LINK"},
+        ],
         doc_type="document",
         tags=set(["tag1", "tag2"]),
         authors=set(["someone1", "someone2"]),
     )
     graphmodel = GraphModel(document=mock_document)
 
-    expected = {
-        "entity_type": "document",
-        "id": "hello-0",
-        "relations": set(["hello-1", "hello-2"]),
-        "tags": set(["tag1", "tag2"]),
-        "authors": set(["someone1", "someone2"]),
-    }
-
-    assert graphmodel.dict == expected
+    expected_model = DataModel(
+        uid="hello-0",
+        entity_type="document",
+        relations=set(
+            [
+                DocRelations(doc_id="hello-1", rel_type="LINK"),
+                DocRelations(doc_id="hello-2", rel_type="LINK"),
+            ]
+        ),
+        contents="hello world",
+        fields={"tags": set(["tag1", "tag2"]), "authors": set(["someone1", "someone2"])},
+    )
+    pprint(graphmodel.dataobj)
+    assert graphmodel.dataobj == expected_model
 
 
 def test_graphmodel_empty_fields():
     mock_document = create_document_runtime(
         contents="hello world",
         uid="hello-0",
-        relations=set(["hello-1", "hello-2"]),
+        relations=[],
         doc_type="document",
     )
     graphmodel = GraphModel(document=mock_document)
 
-    expected = {
-        "entity_type": "document",
-        "id": "hello-0",
-        "relations": set(["hello-1", "hello-2"]),
-    }
+    expected_model = DataModel(
+        uid="hello-0",
+        entity_type="document",
+        relations=set([]),
+        contents="hello world",
+        fields={},
+    )
 
-    assert graphmodel.dict == expected
+    assert graphmodel.dataobj == expected_model

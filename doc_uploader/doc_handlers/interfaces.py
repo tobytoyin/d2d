@@ -1,5 +1,5 @@
 from abc import abstractmethod
-from typing import Protocol, Set, runtime_checkable
+from typing import Any, Dict, Iterable, Optional, Protocol, Set, runtime_checkable
 
 from pydantic import BaseModel, ConfigDict
 
@@ -18,6 +18,17 @@ class DocMetadata(BaseModel):
     doc_type: str = "document"  # required field
 
 
+class DocRelations(BaseModel):
+    doc_id: DocID
+    rel_type: str
+    properties: Optional[Dict[str, Any]] = {}
+    # other extra fields all relational properties
+
+    def __hash__(self) -> int:
+        # return the hash of an immutable dictionary
+        return frozenset(self.model_dump()).__hash__()
+
+
 class Document(BaseModel):
     """Final datamodel to represent a Document
 
@@ -28,7 +39,7 @@ class Document(BaseModel):
     uid: DocID
     contents: NormalisedContents
     metadata: DocMetadata
-    relations: Set[DocID]
+    relations: Set[DocRelations]
 
 
 @runtime_checkable
@@ -50,7 +61,14 @@ class DocumentAdapter(Protocol):
         ...
 
     @abstractmethod
-    def relations_processor(self) -> Set[DocID]:
+    def relations_processor(self) -> Iterable[dict]:
+        """_summary_
+
+        Returns:
+            Set[DocRelations]: \
+                returns an Iterable dictionarys containing \
+                relational properties
+        """
         ...
 
     @abstractmethod
@@ -59,6 +77,13 @@ class DocumentAdapter(Protocol):
 
 
 class DocumentProps:
+    """DocumentProps uses an DocumentAdapter as an Interface to:
+    - extract relations via `self.relations`
+    - extract metadata  via `self.metadata`
+
+    Each of the property invoke the implemented method within DocumentAdapter
+    """
+
     def __init__(self, doc_adapter: DocumentAdapter) -> None:
         self.adapter = doc_adapter
 
@@ -77,9 +102,13 @@ class DocumentProps:
         return DocMetadata(**metadata_map)
 
     @property
-    def relations(self) -> Set[DocID]:
-        return self.adapter.relations_processor()
+    def relations(self) -> Set[DocRelations]:
+        relations_props = self.adapter.relations_processor()
+        iter_props = (DocRelations(**prop) for prop in relations_props)
+        return set(iter_props)
 
     @property
     def contents(self) -> NormalisedContents:
+        return self.adapter.contents_normaliser()
+        return self.adapter.contents_normaliser()
         return self.adapter.contents_normaliser()

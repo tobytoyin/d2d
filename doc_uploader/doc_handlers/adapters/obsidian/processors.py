@@ -1,7 +1,10 @@
 import re
 from dataclasses import dataclass
+from typing import List
 
 import yaml
+
+from doc_uploader.utils import append_dict_iterable
 
 
 @dataclass
@@ -24,26 +27,51 @@ def frontmatter_processor(doc: str) -> dict:
     return metadata
 
 
-def links_processor(doc: str) -> set:
+def _extract_link_id(link_str: str) -> str:
+    extracted_link_id = re.sub(ObsidianMarkdownRegex.links, "\1", link_str)
+    extracted_link_id = re.sub("\|.*", "", extracted_link_id)  # remove alias
+    extracted_link_id = re.sub("#.*", "", extracted_link_id)  # remove header references
+    return extracted_link_id
+
+
+def links_processor(doc: str) -> List[dict]:
     """extract all mentioned links
 
     Links such as would extract into:
     - [[document-id|alias]] --> "document-id"
     - [[document-id]] --> "document-id"
+
     """
-    out = set()
+    collection = {}
+    link_type = "LINK"  # obisidian only has a single link type
     links_match = set(re.findall(ObsidianMarkdownRegex.links, doc))
 
     if not links_match:
-        return out
+        return []
 
     for link in links_match:
-        extracted_link_id = re.sub(
-            ObsidianMarkdownRegex.links, "\1", link
-        )  # extract id within [[links]]
-        extracted_link_id = re.sub("\|.*", "", extracted_link_id)  # remove alias
-        extracted_link_id = re.sub("#.*", "", extracted_link_id)  # remove header references
+        # extract id within [[links]]
+        extracted_link_id = _extract_link_id(link)
 
-        out.add(extracted_link_id)
+        # extract alias within [[links|alias]] into prop
+        extracted_alias = re.findall("\|(.*)", link)
 
-    return out
+        update_obj = {
+            "doc_id": extracted_link_id,
+            "rel_type": link_type,
+            "ref_text": extracted_alias if extracted_alias else [],
+        }
+
+        # find if the collection contains the relational dict
+        # if there's one, append the new fields into the existing fields
+        # if there's none, put the new object into the collection
+        hash_key = f"{extracted_link_id}-{link_type}"
+        target = collection.get(hash_key)
+
+        if target:
+            new_obj = append_dict_iterable(target, update_obj, append_keys=["ref_text"])
+            collection[hash_key] = new_obj
+        else:
+            collection[hash_key] = update_obj
+
+    return list(collection.values())
