@@ -18,12 +18,15 @@ class DocMetadata(BaseModel):
     doc_type: str = "document"  # required field
 
 
-@dataclasses.dataclass(frozen=True)
-class DocRelations:
+class DocRelations(BaseModel):
     model_config = ConfigDict(extra="allow")
     doc_id: DocID
     rel_type: str
     # other extra fields all relational properties
+
+    def __hash__(self) -> int:
+        # return the hash of an immutable dictionary
+        return frozenset(self.model_dump()).__hash__()
 
 
 class Document(BaseModel):
