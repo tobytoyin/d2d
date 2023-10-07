@@ -44,37 +44,41 @@ class _Neo4JUoW:
 
     @property
     def node_label(self) -> str:
-        return self.model.dict["entity_type"].capitalize()
+        return self.model.dataobj.entity_type.capitalize()
 
     def detach_all_relationships(self, tx):
         q = f"MATCH (n {self._node_match_props})-[r]->() DELETE r"
         tx.run(q)
 
-    def create_dep_nodes(self, tx, rel_ids):
-        for link_id in rel_ids:
-            q = f"MERGE (n {no_quotes_object({'id': link_id})})"
+    def create_dep_nodes(self, tx, relations: Set[DocRelations]):
+        for link in relations:
+            q = f"MERGE (n {no_quotes_object({'uid': link.doc_id})})"
             tx.run(q)
 
     def create_one_to_many_rel(self, tx, relations: Set[DocRelations]):
         match_root_query = f"MATCH ( n {self._node_match_props} )"
         match_rels_queries = []
+        merge_rels_queries = []
 
         for idx, rel in enumerate(relations):
             link_props = no_quotes_object(rel.properties)
-            q = f"""
-            MATCH (target{idx}) WHERE target{idx}.id = {rel.doc_id}
-            MERGE (n)-[ :{rel.rel_type} {link_props} ]->(target{idx})
-            """
-            match_rels_queries.append(q)
+            rel_node_id = no_quotes_object({"uid": rel.doc_id})
 
-        relations_merge_q = "\n".join(match_rels_queries)
+            match_q = f"MATCH (target{idx} {rel_node_id})"
+            merge_q = f"MERGE (n)-[ :{rel.rel_type} {link_props} ]->(target{idx})"
+
+            match_rels_queries.append(match_q)
+            merge_rels_queries.append(merge_q)
+
+        relations_match_q = "\n".join(match_rels_queries)
+        relations_merge_q = "\n".join(merge_rels_queries)
 
         final_query = f"""
         {match_root_query}
+        {relations_match_q}
         {relations_merge_q}
         """
-
-        logging.debug(final_query)
+        print(final_query)
         tx.run(final_query)
 
 
@@ -112,7 +116,7 @@ class Neo4JUoW(_Neo4JUoW, DocumentToDB):
         if not relationships:
             return
 
-        self.create_dep_nodes(tx, list(relationships))
+        self.create_dep_nodes(tx, relationships)
         self.create_one_to_many_rel(tx, relationships)
 
     def delete_document(self, *args, **kwargs) -> bool:

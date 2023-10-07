@@ -27,7 +27,7 @@ class BaseDBModel(ABC):
     def __init__(self, document: Document) -> None:
         self.document = document
 
-    @property
+    @cached_property
     def dataobj(self) -> DataModel:
         document = self.document
 
@@ -41,13 +41,6 @@ class BaseDBModel(ABC):
             contents=document.contents,
             fields=metadata,
         )
-
-    @cached_property
-    def dict(self) -> dict:
-        obj = self.dataobj.model_dump()
-        fields = obj.pop("fields")
-        obj.update(fields)
-        return obj
 
 
 class GraphModel(BaseDBModel):
