@@ -22,3 +22,10 @@ class UploaderAPI:
             conn.run(db_uow.update_or_create_document)
             conn.run(db_uow.update_or_create_relationships)
             print(f"uploaded - {f}")
+
+
+# class VectorStoreAPI:
+#     def __init__(self, source: str, files: list) -> None:
+#         self.source = source
+#         self.destination = destination
+#         self.files = iter(files)
