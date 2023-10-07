@@ -2,7 +2,7 @@ import logging
 from typing import Set
 
 from doc_uploader.doc_handlers.interfaces import Document, RelationProps
-from doc_uploader.models.datamodels import GraphModel
+from doc_uploader.models.factory import create_graph_model
 from doc_uploader.utils import invalid_key_fix, no_quotes_object
 
 from ...factory import DocToDBAdapters
@@ -20,11 +20,11 @@ class _Neo4JUoW:
     """Unit of Work converts a GrapDocumentModel into equivalent Cypher queries"""
 
     def __init__(self, document: Document) -> None:
-        self.model = GraphModel(document)
+        self.model = create_graph_model(document)
 
     @property
     def node_id(self):
-        return self.model.dataobj.uid
+        return self.model.uid
 
     @property
     def _node_match_props(self) -> str:
@@ -36,15 +36,15 @@ class _Neo4JUoW:
         """Unpacking model's attribs into Cypher's node property syntax"""
         props = {
             "uid": self.node_id,  # custom node id
-            "contents": _escape_double_quote(self.model.dataobj.contents),
-            **self.model.dataobj.fields,  # other optional documents metadata
+            "contents": _escape_double_quote(self.model.contents),
+            **self.model.fields,  # other optional documents metadata
         }
         props = invalid_key_fix(props, invalid_sym="-", valid_sym="_")
         return no_quotes_object(props)
 
     @property
     def node_label(self) -> str:
-        return self.model.dataobj.entity_type.capitalize()
+        return self.model.node_type.capitalize()
 
     def detach_all_relationships(self, tx):
         q = f"MATCH (n {self._node_match_props})-[r]->() DELETE r"
@@ -109,7 +109,7 @@ class Neo4JUoW(_Neo4JUoW, DocumentToDB):
         tx.run(query)
 
     def update_or_create_relationships(self, tx):
-        relationships = self.model.dataobj.relations
+        relationships = self.model.relations
 
         self.detach_all_relationships(tx)
 

@@ -21,7 +21,7 @@ class MetadataProps(BaseModel):
 class RelationProps(BaseModel):
     rel_uid: DocID
     rel_type: str
-    properties: Optional[Dict[str, Any]] = {}
+    properties: Dict[str, Any] = {}
 
     def __hash__(self) -> int:
         # return the hash of an immutable dictionary
