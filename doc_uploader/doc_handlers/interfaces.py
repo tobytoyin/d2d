@@ -18,6 +18,12 @@ class DocMetadata(BaseModel):
     doc_type: str = "document"  # required field
 
 
+class DocRelations(BaseModel):
+    model_config = ConfigDict(extra="allow")
+    doc_id: DocID
+    rel_type: str
+
+
 class Document(BaseModel):
     """Final datamodel to represent a Document
 
@@ -28,7 +34,7 @@ class Document(BaseModel):
     uid: DocID
     contents: NormalisedContents
     metadata: DocMetadata
-    relations: Set[DocID]
+    relations: Set[DocRelations]
 
 
 @runtime_checkable
@@ -50,7 +56,7 @@ class DocumentAdapter(Protocol):
         ...
 
     @abstractmethod
-    def relations_processor(self) -> Set[DocID]:
+    def relations_processor(self) -> Set[DocRelations]:
         ...
 
     @abstractmethod
@@ -77,7 +83,7 @@ class DocumentProps:
         return DocMetadata(**metadata_map)
 
     @property
-    def relations(self) -> Set[DocID]:
+    def relations(self) -> Set[DocRelations]:
         return self.adapter.relations_processor()
 
     @property
