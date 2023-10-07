@@ -1,7 +1,7 @@
 import logging
 from typing import Set
 
-from doc_uploader.doc_handlers.interfaces import DocRelations, Document
+from doc_uploader.doc_handlers.interfaces import Document, RelationProps
 from doc_uploader.models.datamodels import GraphModel
 from doc_uploader.utils import invalid_key_fix, no_quotes_object
 
@@ -50,19 +50,19 @@ class _Neo4JUoW:
         q = f"MATCH (n {self._node_match_props})-[r]->() DELETE r"
         tx.run(q)
 
-    def create_dep_nodes(self, tx, relations: Set[DocRelations]):
+    def create_dep_nodes(self, tx, relations: Set[RelationProps]):
         for link in relations:
-            q = f"MERGE (n {no_quotes_object({'uid': link.doc_id})})"
+            q = f"MERGE (n {no_quotes_object({'uid': link.rel_uid})})"
             tx.run(q)
 
-    def create_one_to_many_rel(self, tx, relations: Set[DocRelations]):
+    def create_one_to_many_rel(self, tx, relations: Set[RelationProps]):
         match_root_query = f"MATCH ( n {self._node_match_props} )"
         match_rels_queries = []
         merge_rels_queries = []
 
         for idx, rel in enumerate(relations):
             link_props = no_quotes_object(rel.properties)
-            rel_node_id = no_quotes_object({"uid": rel.doc_id})
+            rel_node_id = no_quotes_object({"uid": rel.rel_uid})
 
             match_q = f"MATCH (target{idx} {rel_node_id})"
             merge_q = f"MERGE (n)-[ :{rel.rel_type} {link_props} ]->(target{idx})"

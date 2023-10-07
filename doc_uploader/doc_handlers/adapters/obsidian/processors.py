@@ -23,8 +23,11 @@ def frontmatter_processor(doc: str) -> dict:
     yamml_str = metayamml_match.groups()[0]
 
     metadata = yaml.safe_load(yamml_str)
-    metadata["doc_type"] = metadata.pop("type")
-    return metadata
+
+    return {
+        "doc_type": metadata.pop("type"),
+        "properties": metadata,
+    }
 
 
 def _extract_link_id(link_str: str) -> str:
@@ -57,7 +60,7 @@ def links_processor(doc: str) -> List[dict]:
         extracted_alias = re.findall("\|(.*)", link)
 
         update_obj = {
-            "doc_id": extracted_link_id,
+            "rel_uid": extracted_link_id,
             "rel_type": link_type,
             "ref_text": extracted_alias if extracted_alias else [],
         }

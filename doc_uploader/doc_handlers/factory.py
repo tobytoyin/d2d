@@ -2,7 +2,7 @@ from typing import Type
 
 from doc_uploader.common.factory import FactoryRegistry
 
-from .interfaces import DocMetadata, DocRelations, Document, DocumentAdapter, DocumentProps
+from .interfaces import Document, DocumentAdapter, DocumentProps, MetadataProps, RelationProps
 
 
 class DocumentAdapterContainer(FactoryRegistry[DocumentAdapter]):
@@ -12,7 +12,6 @@ class DocumentAdapterContainer(FactoryRegistry[DocumentAdapter]):
 
 def get_adapter(name: str, *args, **kwargs):
     adapters = DocumentAdapterContainer.get(name)
-    print(DocumentAdapterContainer._map)
     if not adapters:
         raise ValueError
 
@@ -29,7 +28,7 @@ def create_document(adapter_name: str, *args, **kwargs):
 
     # use the prop to return as a document
     return Document(
-        uid=props.id,
+        uid=props.uid,
         contents=props.contents,
         metadata=props.metadata,
         relations=props.relations,
@@ -39,8 +38,7 @@ def create_document(adapter_name: str, *args, **kwargs):
 def create_document_runtime(uid, doc_type, contents, relations, **fields):
     return Document(
         uid=uid,
-        doc_type=doc_type,
         contents=contents,
-        metadata=DocMetadata(doc_type=doc_type, **fields),
-        relations=set([DocRelations(**rel) for rel in relations]),
+        metadata=MetadataProps(doc_type=doc_type, properties=fields),
+        relations=set([RelationProps(**rel) for rel in relations]),
     )

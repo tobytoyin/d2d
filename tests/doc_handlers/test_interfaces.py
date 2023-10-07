@@ -1,10 +1,10 @@
 from pytest import fixture
 
 from doc_uploader.doc_handlers.interfaces import (
-    DocMetadata,
-    DocRelations,
     DocumentAdapter,
     DocumentProps,
+    MetadataProps,
+    RelationProps,
 )
 from doc_uploader.doc_handlers.types import NormalisedContents
 
@@ -13,9 +13,6 @@ from doc_uploader.doc_handlers.types import NormalisedContents
 # we test the interfaces is accessing the correct data provided
 # by the adapter
 class FakeDocumentAdapaterWithMeta(DocumentAdapter):
-    def __init__(self, text="hello world") -> None:
-        super().__init__(text)
-
     def id_processor(self):
         return "doc-100"
 
@@ -27,8 +24,8 @@ class FakeDocumentAdapaterWithMeta(DocumentAdapter):
 
     def relations_processor(self):
         return [
-            {"doc_id": "doc-1", "rel_type": "LINK"},
-            {"doc_id": "doc-2", "rel_type": "LINK"},
+            {"rel_uid": "doc-1", "rel_type": "LINK"},
+            {"rel_uid": "doc-2", "rel_type": "LINK"},
         ]
 
     def contents_normaliser(self) -> NormalisedContents:
@@ -36,9 +33,6 @@ class FakeDocumentAdapaterWithMeta(DocumentAdapter):
 
 
 class FakeDocumentAdapaterWithoutMeta(DocumentAdapter):
-    def __init__(self, text="hello world") -> None:
-        super().__init__(text)
-
     def id_processor(self):
         return "doc-100"
 
@@ -47,8 +41,16 @@ class FakeDocumentAdapaterWithoutMeta(DocumentAdapter):
 
     def relations_processor(self):
         return [
-            {"doc_id": "doc-1", "rel_type": "LINK", "properties": {"extra_field": "1"}},
-            {"doc_id": "doc-2", "rel_type": "LINK", "properties": {"extra_field": "2"}},
+            {
+                "rel_uid": "doc-1",
+                "rel_type": "LINK",
+                "properties": {"extra_field": "1"},
+            },
+            {
+                "rel_uid": "doc-2",
+                "rel_type": "LINK",
+                "properties": {"extra_field": "2"},
+            },
         ]
 
     def contents_normaliser(self) -> NormalisedContents:
@@ -65,22 +67,29 @@ def mock_document_adapter_no_meta():
     return FakeDocumentAdapaterWithoutMeta()
 
 
+### Below tests that the DocumentAdapter subclass can be interfaced with DocumentProps
+### and generate the correct structure of the DocumentProps attributes
+
+
 def test_prop_id(mock_document_adapter_meta):
     props = DocumentProps(mock_document_adapter_meta)
-    assert props.id == "doc-100"
+    assert props.uid == "doc-100"
 
 
 def test_prop_metadata(mock_document_adapter_meta):
     props = DocumentProps(mock_document_adapter_meta)
 
-    expected_meta = DocMetadata(doc_type="test_document", tags=["a", "b", "c"])
+    expected_meta = MetadataProps(
+        doc_type="test_document",
+        tags=["a", "b", "c"],
+    )
     assert props.metadata == expected_meta
 
 
 def test_prop_no_metadata(mock_document_adapter_no_meta):
     props = DocumentProps(mock_document_adapter_no_meta)
 
-    expected_meta = DocMetadata()
+    expected_meta = MetadataProps()
     assert props.metadata == expected_meta
 
 
@@ -88,8 +97,8 @@ def test_prop_relations(mock_document_adapter_meta):
     props = DocumentProps(mock_document_adapter_meta)
     expected_props = set(
         [
-            DocRelations(doc_id="doc-1", rel_type="LINK"),
-            DocRelations(doc_id="doc-2", rel_type="LINK"),
+            RelationProps(rel_uid="doc-1", rel_type="LINK"),
+            RelationProps(rel_uid="doc-2", rel_type="LINK"),
         ]
     )
     assert props.relations == expected_props
@@ -97,10 +106,11 @@ def test_prop_relations(mock_document_adapter_meta):
 
 def test_prop_relations_wtih_extras(mock_document_adapter_no_meta):
     props = DocumentProps(mock_document_adapter_no_meta)
+
     expected_props = set(
         [
-            DocRelations(doc_id="doc-1", rel_type="LINK", properties={"extra_field": "1"}),
-            DocRelations(doc_id="doc-2", rel_type="LINK", properties={"extra_field": "2"}),
+            RelationProps(rel_uid="doc-1", rel_type="LINK", properties={"extra_field": "1"}),
+            RelationProps(rel_uid="doc-2", rel_type="LINK", properties={"extra_field": "2"}),
         ]
     )
     assert props.relations == expected_props
