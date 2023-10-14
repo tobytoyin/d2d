@@ -1,17 +1,14 @@
 from abc import ABC, abstractmethod
-from typing import Set
+from typing import Generic, Protocol, Set, TypeVar
 
-from ._source import DocumentSource, ImageSource
+from .document import DocumentContent
+from .source import ImageSource
+
+T = TypeVar("T", bound=DocumentContent, contravariant=True)
 
 
-class ImageRefExtractor(ABC):
-    def __init__(self, source: DocumentSource) -> None:
-        self._source = source
-
+class ImageRefExtractor(Protocol, Generic[T]):
     @abstractmethod
-    def _reference_extractor(self) -> Set[ImageSource]:
+    def image_sources(self, content: T) -> Set[ImageSource]:
         """Method to extract ImageSource from DocumentSource"""
-        ...
-
-    def image_sources(self):
         ...
