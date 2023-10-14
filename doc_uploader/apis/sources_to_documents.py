@@ -19,7 +19,7 @@ class SourcesToDocuments:
         self.sources = sources
 
     def docs_iter(self) -> DocumentIterable:
-        for source in self.sources
+        for source in self.sources:
             doc = create_document(source=source)
             yield (doc.uid, doc)  # type: ignore
 

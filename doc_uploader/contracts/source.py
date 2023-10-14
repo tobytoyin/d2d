@@ -1,7 +1,7 @@
 from abc import ABC, abstractmethod
 from pathlib import Path
 
-from pydantic import BaseModel
+from pydantic import BaseModel, ConfigDict
 
 # Source is the first Contact Point of an object going through the pipeline
 
@@ -28,6 +28,7 @@ class ObjectSource(BaseModel):
 
     path: Path
     source_type: str
+    model_config = ConfigDict(extra="allow")  # for adapter specific keywords
 
     def __hash__(self) -> int:
         return hash(self.path)

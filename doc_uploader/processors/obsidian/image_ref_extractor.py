@@ -5,19 +5,18 @@ from pathlib import Path
 from typing import List, Set
 
 from doc_uploader.contracts._image_ref_protocols import ImageRefExtractor
+from doc_uploader.contracts.document import DocumentContent
 from doc_uploader.contracts.source import ImageSource
-
-from .document import Contents
 
 IMG_PATTERN = r"\!\[\[(.*)\]\](\^.*)?"
 
 
-class ObsidianRefExtractor(ImageRefExtractor[Contents]):
+class ObsidianRefExtractor(ImageRefExtractor[DocumentContent]):
     def __init__(self, root: Path = Path(".")) -> None:
         super().__init__()
         self._root = root
 
-    def image_sources(self, content: Contents) -> Set[ImageSource]:
+    def image_sources(self, content: DocumentContent) -> Set[ImageSource]:
         all_refs = self._get_all_img_refs(content.contents)
         all_refs = filter(self._filter_file_reference, all_refs)
         all_refs = map(self._cleanup_with_only_image_path, all_refs)
