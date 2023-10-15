@@ -2,20 +2,22 @@ from pathlib import Path
 
 from pytest import fixture
 
-from doc_uploader.apis.sources_to_documents import SourcesToDocuments
 from doc_uploader.contracts.document import DocUID, Document
-from doc_uploader.contracts.source import ObjectSource
+from doc_uploader.contracts.source import Source
+from doc_uploader.source_handlers.sources_to_documents import (
+    sources_to_documents,
+    sources_to_documents_batches,
+)
 
 
 @fixture
 def random_source():
     # create 10 randoms doc
-    return [ObjectSource(path=Path("."), source_type="mock") for _ in range(10)]
+    return [Source(path=Path("."), source_type="mock") for _ in range(10)]
 
 
 def test_endpoint_yield_correct_type(random_source):
-    endpoint = SourcesToDocuments(sources=random_source)
-    docs_iter = endpoint.docs_iter()
+    docs_iter = sources_to_documents(sources=random_source)
     doc_instance = list(docs_iter)[0]
 
     # 1st element is the index
@@ -25,8 +27,7 @@ def test_endpoint_yield_correct_type(random_source):
 
 
 def test_document_parser_batch(random_source):
-    endpoint = SourcesToDocuments(sources=random_source)
-    docs_batch = list(endpoint.docs_batch(batch_size=5))
+    docs_batch = list(sources_to_documents_batches(sources=random_source, batch_size=5))
 
     assert len(docs_batch) == 2  # 10 docs with 5  batch = 2 docs
 

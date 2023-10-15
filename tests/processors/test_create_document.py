@@ -1,10 +1,10 @@
 from pathlib import Path
 
-from doc_uploader.contracts.source import ObjectSource
-from doc_uploader.processors import create_document
+from doc_uploader.adapters.factory import create_document
+from doc_uploader.contracts.source import Source
 
 
 def test_create_document():
-    doc = create_document(ObjectSource(path=Path("."), source_type="mock"))
+    doc = create_document(Source(path=Path("."), source_type="mock"))
 
     assert doc.source.source_type == "mock"

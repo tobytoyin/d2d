@@ -1,0 +1,1 @@
+`protocols/` contains all the abstract process of a single workflow

@@ -1,9 +1,9 @@
 import inspect
 from typing import List, Sequence, Type
 
-from doc_uploader.contracts._image_ref_protocols import ImageRefExtractor
 from doc_uploader.contracts.document import Document
-from doc_uploader.contracts.source import ObjectSource
+from doc_uploader.contracts.source import Source
+from doc_uploader.protocols._extract_image_sources import ImageRefExtractor
 
 
 # Take all the Documents at the beginning and convert them into iterator
@@ -43,9 +43,7 @@ class DocumentsToImageSource:
         params = inspect.signature(self.extractor).parameters.keys()
         return list(params)
 
-    def _retrieve_extra_arguments_from_source(
-        self, source: ObjectSource, keys: Sequence
-    ):
+    def _retrieve_extra_arguments_from_source(self, source: Source, keys: Sequence):
         try:
             return {key: getattr(source, key) for key in keys}
         except KeyError:

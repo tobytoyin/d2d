@@ -1,4 +1,3 @@
-from abc import ABC, abstractmethod
 from pathlib import Path
 
 from pydantic import BaseModel, ConfigDict
@@ -6,20 +5,7 @@ from pydantic import BaseModel, ConfigDict
 # Source is the first Contact Point of an object going through the pipeline
 
 
-class ImageSource(BaseModel):
-    """Input model for an Image source
-
-    Image source can be local, cloud-base, internet
-    """
-
-    path: Path
-    source_type: str
-
-    def __hash__(self) -> int:
-        return hash(self.path)
-
-
-class ObjectSource(BaseModel):
+class Source(BaseModel):
     """_summary_
 
     :param BaseModel: _description_
@@ -28,7 +14,9 @@ class ObjectSource(BaseModel):
 
     path: Path
     source_type: str
-    model_config = ConfigDict(extra="allow")  # for adapter specific keywords
+
+    model_config = ConfigDict(extra="allow")
+    # attribute can be expanded dynamically based on each adapter own usages
 
     def __hash__(self) -> int:
         return hash(self.path)
