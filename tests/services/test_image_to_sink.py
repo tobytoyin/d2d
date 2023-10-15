@@ -1,1 +1,0 @@
-from doc_uploader.services.imgs_to_sinks import ImageFromDocsToSink
