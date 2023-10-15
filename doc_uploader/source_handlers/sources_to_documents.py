@@ -2,11 +2,8 @@ import itertools
 from typing import Iterable, List, Tuple, TypeAlias
 
 from doc_uploader.adapters.factory import create_document
-from doc_uploader.contracts.document import DocUID, Document
+from doc_uploader.contracts._types import DocumentIterable
 from doc_uploader.contracts.source import Source
-
-IdDocumentPair: TypeAlias = Tuple[DocUID, Document]
-DocumentIterable: TypeAlias = Iterable[IdDocumentPair]
 
 
 def sources_to_documents(sources: List[Source]) -> DocumentIterable:

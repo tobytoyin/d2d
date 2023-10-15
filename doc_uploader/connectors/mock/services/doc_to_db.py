@@ -8,7 +8,7 @@ class MockHandler:
         self.document = document
 
     def update_or_create_document(self):
-        return 1
+        return self.document.uid
 
     def update_or_create_relationships(self):
         return len(self.document.relations)

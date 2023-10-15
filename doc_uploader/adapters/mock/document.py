@@ -5,9 +5,9 @@ from doc_uploader.contracts.source import Source
 
 
 class MockAdapter:
-    @classmethod
-    def create_document(cls, source: Source) -> Document:
-        uid = str(uuid.uuid1())
+    @staticmethod
+    def create_document(source: Source) -> Document:
+        uid = str(uuid.uuid4())
 
         content = DocumentContent(
             contents="hello world",

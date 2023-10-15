@@ -28,7 +28,7 @@ def setup_service_logger(service_name: str):
     logger = logging.getLogger(service_name)
     logger.setLevel(logging.INFO)
 
-    fmt = "[%(levelname)s]@%(module)s\n%(message)s\n"
+    fmt = "[%(levelname)s]@SERVICE:%(module)s\n%(message)s\n"
     handler = logging.StreamHandler()
     handler.setFormatter(PrettyPrintFormatter(fmt=fmt))
     logger.addHandler(handler)
