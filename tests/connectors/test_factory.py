@@ -1,7 +1,8 @@
 from doc_uploader.connectors.factory import get_connector
+from doc_uploader.connectors.mock.services.session import MockConnector
+from doc_uploader.connectors.neo4j.services.session import Neo4JConnector
 
-# def test_factory():
-#     from doc_uploader.connectors.providers.neo4j import Neo4JConnector
 
-#     connector = get_connector("neo4j")
-#     assert isinstance(connector, Neo4JConnector)
+def test_get_mock():
+    connector = get_connector("mock")
+    assert isinstance(connector, MockConnector)

@@ -1,8 +1,8 @@
 from pprint import PrettyPrinter
 
-from doc_uploader.doc_processor.factory import create_document_runtime
-from doc_uploader.doc_processor.interfaces import RelationProps
-from doc_uploader.models.factory import create_graph_model
+from doc_uploader.connectors._doc_to_db_model import create_graph_model
+from doc_uploader.contracts.document import DocumentRelations
+from doc_uploader.source_handlers._utils import create_document_runtime
 
 pprint = PrettyPrinter().pprint
 
@@ -26,24 +26,17 @@ def test_graphmodel_with_extra_fields():
     assert graphmodel.fields["tags"] == set(["tag1", "tag2"])
     assert graphmodel.fields["authors"] == set(["someone1", "someone2"])
     assert graphmodel.node_type == "document"
-    assert isinstance(graphmodel.relations[0], RelationProps)
+    assert isinstance(graphmodel.relations[0], DocumentRelations)
 
 
-# def test_graphmodel_empty_fields():
-#     mock_document = create_document_runtime(
-#         contents="hello world",
-#         uid="hello-0",
-#         relations=[],
-#         doc_type="document",
-#     )
-#     graphmodel = GraphModel(document=mock_document)
+def test_graphmodel_empty_fields():
+    mock_document = create_document_runtime(
+        contents="hello world",
+        uid="hello-0",
+        relations=[],
+        doc_type="document",
+    )
+    graphmodel = create_graph_model(document=mock_document)
 
-#     expected_model = DataModel(
-#         uid="hello-0",
-#         entity_type="document",
-#         relations=set([]),
-#         contents="hello world",
-#         fields={},
-#     )
-
-#     assert graphmodel.dataobj == expected_model
+    assert graphmodel.relations == []
+    assert graphmodel.fields == {}

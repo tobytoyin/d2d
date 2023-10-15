@@ -3,14 +3,12 @@ import os
 
 from neo4j import GraphDatabase
 
-from doc_uploader.connectors.factory import ConnectorsContainer
 
-
-@ConnectorsContainer.register(name="neo4j")
 class Neo4JConnector:
+    """Connector uses for running a uow of a service"""
+
     def __init__(self) -> None:
         uri = os.environ.get("NEO4J_URI")
-        print(uri)
         username = os.environ.get("NEO4J_USER")
         password = os.environ.get("NEO4J_PW")
         self.driver = GraphDatabase.driver(uri, auth=(username, password))

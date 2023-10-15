@@ -1,18 +1,15 @@
-from doc_uploader.app.profile import Profile
-from doc_uploader.common.factory import FactoryRegistry
+from .mock.services.session import MockConnector
+from .neo4j.services.session import Neo4JConnector
 
-
-class ConnectorsContainer(FactoryRegistry):
-    _map = {}
-    import_pattern = "connectors/providers/*.py"
-
-
-def get_profile(connector_name: str):
-    profile = Profile()
-    return profile.storage(connector_name)
+# class ConnectorsContainer(FactoryRegistry):
+#     _map = {}
+#     import_pattern = "connectors/providers/*.py"
 
 
 def get_connector(name: str, *args, **kwargs):
-    connector = ConnectorsContainer.get(name=name)
-    # profile = get_profile(name)
-    return connector()
+    map_ = {
+        "neo4j": Neo4JConnector,
+        "mock": MockConnector,
+    }
+    conn = map_.get(name)(*args, **kwargs)
+    return conn
