@@ -1,5 +1,8 @@
 # Doc Uploader 
 
+## Overall Designs
+![image](https://github.com/tobytoyin/document-graph-processor/assets/40096033/9535a883-c494-4cf8-951f-d371054f394d)
+
 ## CLI Usage
 
 ```shell
