@@ -17,7 +17,7 @@ xargs -I "{}" python3 -m doc_uploader.cli --src obsidian --dst neo4j --files "{}
 ```
 
 ## Overall Designs
-![image](https://github.com/tobytoyin/document-graph-processor/assets/40096033/9535a883-c494-4cf8-951f-d371054f394d)
+<img width="1108" alt="image" src="https://github.com/tobytoyin/document-graph-processor/assets/40096033/d3332a04-6c81-49e9-86e7-d370fa1b3dc3">
 
 
 ## Connectors Service Catalogs 
