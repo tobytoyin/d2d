@@ -1,9 +1,9 @@
 # example usage
 from pathlib import Path
 
-from doc_uploader.contracts.source import Source
-from doc_uploader.source_handlers.sources_to_documents import sources_to_documents
-from doc_uploader.tasks.document_to_database import DocumentToDatabase
+from d2d.contracts.source import Source
+from d2d.source_handlers.sources_to_documents import sources_to_documents
+from d2d.tasks.document_to_database import DocumentToDatabase
 
 
 def test_endpoint():

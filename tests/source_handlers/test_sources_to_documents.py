@@ -2,9 +2,9 @@ from pathlib import Path
 
 from pytest import fixture
 
-from doc_uploader.contracts.document import DocUID, Document
-from doc_uploader.contracts.source import Source
-from doc_uploader.source_handlers.sources_to_documents import (
+from d2d.contracts.document import DocUID, Document
+from d2d.contracts.source import Source
+from d2d.source_handlers.sources_to_documents import (
     sources_to_documents,
     sources_to_documents_batches,
 )

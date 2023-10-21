@@ -3,9 +3,9 @@ from pathlib import Path
 
 import pytest
 
-from doc_uploader.adapters.factory import create_document
-from doc_uploader.adapters.obsidian.extract_image_sources import ObsidianRefExtractor
-from doc_uploader.contracts.source import Source
+from d2d.adapters.factory import create_document
+from d2d.adapters.obsidian.extract_image_sources import ObsidianRefExtractor
+from d2d.contracts.source import Source
 
 
 @pytest.fixture

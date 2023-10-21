@@ -1,7 +1,7 @@
 from pathlib import Path
 
-from doc_uploader.adapters.factory import create_document
-from doc_uploader.contracts.source import Source
+from d2d.adapters.factory import create_document
+from d2d.contracts.source import Source
 
 
 def test_create_document():

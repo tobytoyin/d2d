@@ -1,8 +1,8 @@
 from pprint import PrettyPrinter
 
-from doc_uploader.connectors._doc_to_db_model import create_graph_model
-from doc_uploader.contracts.document import DocumentRelations
-from doc_uploader.source_handlers._utils import create_document_runtime
+from d2d.connectors._doc_to_db_model import create_graph_model
+from d2d.contracts.document import DocumentRelations
+from d2d.source_handlers._utils import create_document_runtime
 
 pprint = PrettyPrinter().pprint
 

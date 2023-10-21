@@ -1,6 +1,6 @@
 import pytest
 
-from doc_uploader.utils import append_dict_iterable, no_quotes_object
+from d2d.utils import append_dict_iterable, no_quotes_object
 
 
 def test_no_quotes_object():
