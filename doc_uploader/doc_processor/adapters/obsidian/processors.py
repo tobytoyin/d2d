@@ -34,6 +34,7 @@ def _extract_link_id(link_str: str) -> str:
     extracted_link_id = re.sub(ObsidianMarkdownRegex.links, "\1", link_str)
     extracted_link_id = re.sub("\|.*", "", extracted_link_id)  # remove alias
     extracted_link_id = re.sub("#.*", "", extracted_link_id)  # remove header references
+    extracted_link_id = extracted_link_id.split('/')[-1]  # only keep the last part of the path
     return extracted_link_id
 
 
