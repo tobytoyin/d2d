@@ -7,15 +7,31 @@ from pydantic import BaseModel
 
 from .source import Source
 
-DocUID: TypeAlias = str
+
+class DocumentComponent(BaseModel):
+    """Type of components that compose a `Document`"""
+
+    ...
 
 
-class DocumentContent(BaseModel):
+class DocumentContent(DocumentComponent):
     contents: str
     bytes: bytes
 
     def __hash__(self) -> int:
         return hash(self.bytes)
+
+
+class DocUID(str, DocumentComponent):
+    ...
+
+
+class DocumentSummary(str, DocumentComponent):
+    ...
+
+
+class DocumentKeywords(Set, DocumentComponent):
+    ...
 
 
 class DocumentMetadata(BaseModel):
@@ -30,7 +46,7 @@ class DocumentMetadata(BaseModel):
     properties: Dict[str, Any] = {}
 
 
-class DocumentRelations(BaseModel):
+class DocumentRelation(BaseModel):
     rel_uid: DocUID
     rel_type: str
     properties: Dict[str, Any] = {}
@@ -40,9 +56,20 @@ class DocumentRelations(BaseModel):
         return frozenset(self.model_dump()).__hash__()
 
 
+class DocumentRelations(
+    Set[DocumentRelation],
+    DocumentComponent,
+):
+    ...
+
+
 class Document(BaseModel):
     uid: DocUID
     source: Source
     content: DocumentContent
     metadata: DocumentMetadata = DocumentMetadata()
-    relations: Set[DocumentRelations] = set()
+    relations: DocumentRelations = DocumentRelations()
+
+    # optional fields
+    summary: DocumentSummary = DocumentSummary()
+    keywords: DocumentKeywords = DocumentKeywords()

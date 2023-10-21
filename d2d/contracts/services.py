@@ -1,6 +1,11 @@
 from typing import Callable, Protocol, Set, TextIO
 
-from .document import DocumentMetadata, DocumentRelations
+from .document import (
+    DocumentKeywords,
+    DocumentMetadata,
+    DocumentRelation,
+    DocumentSummary,
+)
 from .source import Source
 
 
@@ -23,5 +28,7 @@ class SourceTasks(ServicesCatalog):
     SourceIO: Callable[[Source], TextIO]  # use Source to return Reader Object
 
     # Services below preferrably should use SourceIO internally
-    LinksTask: Callable[[Source], Set[DocumentRelations]]
+    LinksTask: Callable[[Source], Set[DocumentRelation]]
     MetadataTask: Callable[[Source], DocumentMetadata]
+    SummaryTask: Callable[[Source], DocumentSummary]
+    KeywordsTask: Callable[[Source], DocumentKeywords]
