@@ -64,18 +64,22 @@ def test_relation_contract():
     assert "properties" in fields
 
 
+###### DocRelations Tests ######
 def test_relationships_contract():
     # test correct subtyping
     assert issubclass(DocRelations, set)
     assert issubclass(DocRelations, DocumentComponent)
 
-    # test correct usage
+
+def test_relationships_rejects_wrong_types():
     with pytest.raises(TypeError):
         DocRelations("incorrect input type")  # type: ignore
 
     with pytest.raises(TypeError):
         DocRelations(["incorrect element type"])  # type: ignore
 
+
+def test_relationships_usage():
     # test proper set creation
     rel1_1 = DocRelation(rel_uid=DocUID("1"), rel_type="test")
     rel1_2 = DocRelation(rel_uid=DocUID("1"), rel_type="test")
