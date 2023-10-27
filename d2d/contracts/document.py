@@ -1,20 +1,22 @@
 from __future__ import annotations
 
 from abc import ABC, abstractmethod
-from typing import Any, Dict, Set, TypeAlias
+from typing import Any, Dict, Iterable, Sequence, Type, TypeAlias
 
-from pydantic import BaseModel
+from pydantic import BaseModel, ConfigDict
 
 from .source import Source
 
+CompatibleDictValues: TypeAlias = str | list | int | float
 
-class DocumentComponent(BaseModel):
+
+class DocumentComponent:
     """Type of components that compose a `Document`"""
 
     ...
 
 
-class DocumentContent(DocumentComponent):
+class DocContent(DocumentComponent, BaseModel):
     contents: str
     bytes: bytes
 
@@ -26,15 +28,15 @@ class DocUID(str, DocumentComponent):
     ...
 
 
-class DocumentSummary(str, DocumentComponent):
+class DocSummary(str, DocumentComponent):
     ...
 
 
-class DocumentKeywords(Set, DocumentComponent):
+class DocKeywords(set, DocumentComponent):
     ...
 
 
-class DocumentMetadata(BaseModel):
+class DocMetadata(BaseModel, DocumentComponent):
     """A Struct for the metadata in a document
 
     `DocMetadata` represents a set of key-value pair which:
@@ -43,33 +45,53 @@ class DocumentMetadata(BaseModel):
     """
 
     doc_type: str = "document"  # required field
-    properties: Dict[str, Any] = {}
+    properties: Dict[str, CompatibleDictValues] = {}
 
 
-class DocumentRelation(BaseModel):
+class DocRelation(BaseModel, DocumentComponent):
     rel_uid: DocUID
     rel_type: str
-    properties: Dict[str, Any] = {}
+    properties: Dict[str, CompatibleDictValues] = {}
+
+    model_config = ConfigDict(arbitrary_types_allowed=True)
 
     def __hash__(self) -> int:
         # return the hash of an immutable dictionary
         return frozenset(self.model_dump()).__hash__()
 
 
-class DocumentRelations(
-    Set[DocumentRelation],
-    DocumentComponent,
-):
-    ...
+class DocRelations(set[DocRelation], DocumentComponent):
+    def __new__(cls, /, doc_relations=None):
+        if not doc_relations:
+            return set()
+
+        cls._check_input_type(doc_relations)
+        return super().__new__(cls)
+
+    # check input types
+    @classmethod
+    def _check_input_type(cls, arg):
+        if not isinstance(arg, Iterable):
+            raise TypeError("input is not of a Iterable type")
+
+        for el in arg:
+            cls._check_element(el)
+
+    @classmethod
+    def _check_element(cls, element):
+        if not isinstance(element, DocRelation):
+            raise TypeError("input element is not a DocRelation type")
 
 
 class Document(BaseModel):
-    uid: DocUID
     source: Source
-    content: DocumentContent
-    metadata: DocumentMetadata = DocumentMetadata()
-    relations: DocumentRelations = DocumentRelations()
+    uid: DocUID
+    content: DocContent
 
     # optional fields
-    summary: DocumentSummary = DocumentSummary()
-    keywords: DocumentKeywords = DocumentKeywords()
+    metadata: DocMetadata = DocMetadata()
+    relations: DocRelations = DocRelations()
+    summary: DocSummary = DocSummary()
+    keywords: DocKeywords = DocKeywords()
+
+    model_config = ConfigDict(arbitrary_types_allowed=True)
