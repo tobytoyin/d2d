@@ -76,9 +76,15 @@ def test_relationships_contract():
     with pytest.raises(TypeError):
         DocRelations(["incorrect element type"])  # type: ignore
 
-    rel1 = DocRelation(rel_uid=DocUID("1"), rel_type="test")
-    rel2 = DocRelation(rel_uid=DocUID("1"), rel_type="test")
-    rel3 = DocRelation(rel_uid=DocUID("2"), rel_type="test")
+    # test proper set creation
+    rel1_1 = DocRelation(rel_uid=DocUID("1"), rel_type="test")
+    rel1_2 = DocRelation(rel_uid=DocUID("1"), rel_type="test")
+    rel2 = DocRelation(rel_uid=DocUID("2"), rel_type="test")
 
-    relations = DocRelations([rel1, rel2, rel3])
+    relations = DocRelations([rel1_1, rel1_2, rel2])
+    assert isinstance(relations, set)
     assert len(relations) == 2
+
+    # test empty set creation
+    relations = DocRelations()
+    assert relations == set()
