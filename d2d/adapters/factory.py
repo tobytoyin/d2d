@@ -1,30 +1,20 @@
 import d2d.adapters.mock as mock
-import d2d.adapters.obsidian as obsidian
-from d2d.contracts.source import Source
-
-from .mock.document import MockAdapter as MockDocument
-from .obsidian.document import ObsidianAdapter as ObsidianDocument
 
 
-def create_document(source: Source):
+def get_adapter_service(
+    adapter_name: str,
+    service_name: str,
+):
     adapter = {
-        "mock": MockDocument,
-        "obsidian": ObsidianDocument,
-    }.get(source.source_type)
+        "mock_all": mock.MockSourceTasks_All,
+        "mock_partial": mock.MockSourceTasks_Partial,
+        # "obsidian": obsidian.SourceHandlers,
+    }.get(adapter_name.lower())
 
-    return adapter.create_document(source)  # type: ignore
-
-
-def get_adapter_service(source: Source, service_name: str):
-    adapter = {
-        "mock": mock.SourceHandlers,
-        "obsidian": obsidian.SourceHandlers,
-    }.get(source.source_type)
-
-    service = {
-        "source_reader": adapter.SOURCE_READER,
-        "relations_extraction": adapter.LINK_PROCESSOR,
-        "metadata_extraction": adapter.META_PROCESSOR,
-    }.get(service_name)
+    try:
+        service = getattr(adapter, service_name.lower())
+    except AttributeError as e1:
+        err_msg = f'"{adapter_name}" adapter does not have a "{service_name}" task'
+        raise AttributeError(err_msg) from e1
 
     return service

@@ -1,6 +1,6 @@
 import uuid
 
-from d2d.contracts.document import Document, DocumentContent
+from d2d.contracts.document import DocContent, Document
 from d2d.contracts.source import Source
 
 
@@ -9,7 +9,7 @@ class MockAdapter:
     def create_document(source: Source) -> Document:
         uid = str(uuid.uuid4())
 
-        content = DocumentContent(
+        content = DocContent(
             contents="hello world",
             bytes="hellow world".encode(),
         )

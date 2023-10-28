@@ -1,12 +1,20 @@
 from abc import abstractmethod
-from typing import Callable, LiteralString, Optional, Protocol, Set, TextIO, TypeAlias
-
-from .document import (
-    DocumentKeywords,
-    DocumentMetadata,
-    DocumentRelation,
-    DocumentSummary,
+from enum import Enum
+from io import IOBase
+from typing import (
+    Callable,
+    ClassVar,
+    LiteralString,
+    Optional,
+    Protocol,
+    Set,
+    TextIO,
+    TypeAlias,
 )
+
+from pydantic import BaseModel, ConfigDict
+
+from .document import DocKeywords, DocMetadata, DocRelations, DocSummary
 from .source import Source
 
 IS_COMPATIBLE: TypeAlias = bool
@@ -28,16 +36,21 @@ class SourceTasks(ServicesCatalog):
     - `MetadataTask` - task that extracts metadata within a Document
     """
 
-    _compatible_source: Optional[Set[LiteralString]] = None
+    compatible_source: Optional[Set[LiteralString]] = set()
 
     # use Source to return Reader Object
-    SourceIO: Callable[[Source], TextIO]
+    source_io: Callable[[Source], IOBase]
 
     # Services below preferrably should use SourceIO internally
-    LinksTask: Callable[[Source], Set[DocumentRelation]]
-    MetadataTask: Callable[[Source], DocumentMetadata]
-    SummaryTask: Callable[[Source], DocumentSummary]
-    KeywordsTask: Callable[[Source], DocumentKeywords]
+    links: Callable[[Source], DocRelations]
+    metadata: Callable[[Source], DocMetadata]
+    summary: Callable[[Source], DocSummary]
+    keywords: Callable[[Source], DocKeywords]
+
+    @classmethod
+    def _validate_source_io_exists(cls) -> None:
+        if not cls.source_io:
+            raise NotImplementedError
 
     @classmethod
     def _check_compatible(cls, source: Source) -> IS_COMPATIBLE:
@@ -47,10 +60,10 @@ class SourceTasks(ServicesCatalog):
         :type source: Source
         """
 
-        if not cls._compatible_source:
+        if not cls.compatible_source:
             return True
 
-        if source.source_type in cls._compatible_source:
+        if source.source_type in cls.compatible_source:
             return True
 
         return False
