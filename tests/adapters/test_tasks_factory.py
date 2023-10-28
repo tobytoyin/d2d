@@ -54,4 +54,4 @@ def test_keywords_getter(source):
 ## Test if ServiceCatalog is partially implemented
 def test_partial_catalog_no_task_to_get(source):
     with pytest.raises(AttributeError):
-        service = get_adapter_service(adapter_name="mock_partial", service_name="links")
+        _ = get_adapter_service(adapter_name="mock_partial", service_name="links")
