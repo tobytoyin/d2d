@@ -4,6 +4,7 @@ import d2d.adapters.mock as mock
 def get_adapter_service(
     adapter_name: str,
     service_name: str,
+    service_options: dict | None = None,
 ):
     adapter = {
         "mock_all": mock.MockSourceTasks_All,
