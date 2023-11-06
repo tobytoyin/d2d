@@ -1,9 +1,9 @@
 [tool.poetry]
-name = "doc_uploader"
+name = "d2d"
 version = "0.1.1"
 description = ""
 authors = ["Toby <40096033+tobytoyin@users.noreply.github.com>"]
-packages = [{include = "doc_uploader"}]
+packages = [{include = "d2d"}]
 
 [tool.poetry.dependencies]
 python = "^3.11"
