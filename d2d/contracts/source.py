@@ -1,7 +1,8 @@
+from pathlib import Path
+
 from pydantic import BaseModel
 
 
 class Source(BaseModel):
-    path: str
-    type: str
-    options: dict
+    path: Path
+    options: dict[str, str] = {}
