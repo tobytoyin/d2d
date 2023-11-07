@@ -12,27 +12,20 @@ def test_source_parser():
 
     source = source_parser(payload)
 
-    assert source.path == Path("hello.txt")
+    assert source == payload
 
 
-def test_source_parser_path_is_url():
-    payload = {"path": "https://www.cloud.com/my-file.txt"}
-
-    source = source_parser(payload)
-
-    assert source.path == Path("https://www.cloud.com/my-file.txt")
-    logging.debug(source)
-
-
-def test_source_parser_accept_options():
+def test_source_parser_returns_valid_keys_only():
     payload = {
         "path": ".",
         "options": {"option1": "value1"},
+        "invalid": "invalid keyed value",
     }
 
     source = source_parser(payload)
 
-    assert source.options == {"option1": "value1"}
+    del payload["invalid"]
+    assert source == payload
 
 
 def test_source_parser_invalid():

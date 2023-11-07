@@ -1,18 +1,23 @@
 import logging
+from typing import TypeAlias
 
 from pydantic import ValidationError
 
 from d2d.contracts.documents import Summary
 from d2d.contracts.source import Source
 
+SourcePayload: TypeAlias = dict[str, str]
+
 
 class IncompatiblePayload(Exception):
     ...
 
 
-def source_parser(d: dict[str, str]) -> Source:
+def source_parser(d: SourcePayload) -> SourcePayload:
     try:
-        return Source.model_validate(d)
+        # check if dict payload is validat with model
+        _ = Source.model_validate(d)
+        return d
     except ValidationError as e1:
         logging.warning("source input is not compatible")
         raise IncompatiblePayload("source input is not compatible") from e1
