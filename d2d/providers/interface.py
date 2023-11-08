@@ -14,8 +14,6 @@ class ProviderInterface(Protocol):
     :type Protocol: _type_
     """
 
-    ...
-
 
 class SourceTextTasks(ProviderInterface):
     """Interface for Storing Text-related Tasks
