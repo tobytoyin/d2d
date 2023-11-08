@@ -1,14 +1,14 @@
-from providers.mock import TaskCatalog
+# from providers.mock import TaskCatalog
 
-from d2d.contracts.providers_interface import SourceTasks
+# from d2d.contracts.providers_interface import SourceTasks
 
 
-def get_provider(name: str) -> type[SourceTasks]:
-    provider_catalog = {
-        "mock": TaskCatalog,
-    }.get(name, None)
+# def get_provider(name: str) -> type[SourceTasks]:
+#     provider_catalog = {
+#         "mock": TaskCatalog,
+#     }.get(name, None)
 
-    if not provider_catalog:
-        raise ValueError
+#     if not provider_catalog:
+#         raise ValueError
 
-    return provider_catalog
+#     return provider_catalog

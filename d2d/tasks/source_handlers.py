@@ -5,10 +5,9 @@ from typing import Any, Callable
 
 from pydantic import ValidationError
 
-from d2d.contracts.documents import Summary
 from d2d.contracts.source import Source, SourcePayload
 from d2d.providers import mock
-from d2d.providers.interface import SourceIO, SourceTextTasks
+from d2d.providers.interface import SourceTextTasks
 
 from .types import IncompatiblePayload, ResourceNotFound
 
