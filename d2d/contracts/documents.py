@@ -1,11 +1,9 @@
 from pydantic import BaseModel
 
 
-class DocumentComponent:
+class DocumentComponent(BaseModel):
     """Type of components that compose a `Document`"""
 
-    ...
 
-
-class Summary(DocumentComponent, BaseModel):
+class Summary(DocumentComponent):
     content: str = ""

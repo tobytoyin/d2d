@@ -5,7 +5,7 @@ import pydantic
 import pytest
 
 from d2d.tasks import types
-from d2d.tasks.source_handlers import get_source_io, source_validate, with_source_io
+from d2d.tasks.source_handlers import get_source_text, source_validate, with_source_text
 
 
 @pytest.fixture
@@ -51,20 +51,20 @@ def test_source_parser_invalid(invalid_payload):
 
 def test_source_io(valid_payload):
     payload = valid_payload
-    reader = get_source_io(provider_name="mock", d=payload)
-    assert reader.read() == "mock io contents"
+    reader = get_source_text(provider_name="mock", d=payload)
+    assert reader == "mock io contents"
 
 
 def test_source_io_no_provider(valid_payload):
     payload = valid_payload
     with pytest.raises(types.ResourceNotFound):
-        _ = get_source_io(provider_name="none", d=payload)
+        _ = get_source_text(provider_name="none", d=payload)
 
 
 def test_with_source_io_decorator(valid_payload):
     # this can be any functions that follow providers.interface.SourceTask
     mock_task_fn = lambda s: {"result": s.upper()}
 
-    content = with_source_io(mock_task_fn)(provider_name="mock", d=valid_payload)
+    content = with_source_text(mock_task_fn)(provider_name="mock", d=valid_payload)
 
     assert content == {"result": "MOCK IO CONTENTS"}

@@ -1,15 +1,14 @@
 import logging
 from functools import lru_cache
 from io import IOBase
-from typing import Any, Callable
+from typing import Callable
 
 from pydantic import ValidationError
 
-from d2d.contracts.source import Source, SourcePayload
-from d2d.providers import mock
-from d2d.providers.interface import SourceTextTasks
+from d2d.contracts.payload import Source, SourcePayload
+from d2d.providers import interface, mock
 
-from .types import IncompatiblePayload, ResourceNotFound
+from . import types
 
 
 def source_validate(d: SourcePayload) -> SourcePayload:
@@ -19,10 +18,10 @@ def source_validate(d: SourcePayload) -> SourcePayload:
         return d
     except ValidationError as e1:
         logging.warning("source input is not compatible")
-        raise IncompatiblePayload("source input is not compatible") from e1
+        raise types.IncompatiblePayload("source input is not compatible") from e1
 
 
-def get_source_io(provider_name: str, d: SourcePayload) -> IOBase:
+def get_source_text(provider_name: str, d: SourcePayload) -> str:
     source = source_validate(d)
 
     catalog = {"mock": mock.IOCatalog}
@@ -30,15 +29,15 @@ def get_source_io(provider_name: str, d: SourcePayload) -> IOBase:
     provider = catalog.get(provider_name, None)
 
     if not provider:
-        raise ResourceNotFound("provider not found")
+        raise types.ResourceNotFound("provider not found")
 
-    return provider.source_io(source)
+    return provider.source_text(source)
 
 
 @lru_cache()
-def with_source_io(
-    fn: SourceTextTasks.TaskSignature,
-) -> Callable[[str, SourcePayload], SourceTextTasks.TaskResult]:
+def with_source_text(
+    fn: interface.SourceTextTasks.TaskSignature,
+) -> Callable[[str, SourcePayload], interface.SourceTextTasks.TaskResult]:
     """source_io decorator to cache and wrap around other task functions.
 
     This allows only runtime defined or non-packaged functions to follow the\
@@ -48,8 +47,10 @@ def with_source_io(
     :type fn: function
     """
 
-    def _wrapper(provider_name: str, d: SourcePayload) -> SourceTextTasks.TaskResult:
-        io_string = get_source_io(provider_name, d).read()
+    def _wrapper(
+        provider_name: str, d: SourcePayload
+    ) -> interface.SourceTextTasks.TaskResult:
+        io_string = get_source_text(provider_name, d)
         return fn(io_string)
 
     return _wrapper

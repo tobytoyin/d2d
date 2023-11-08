@@ -1,7 +1,7 @@
 from io import IOBase
 from typing import Any, Callable, Protocol, TypeAlias
 
-from d2d.contracts.source import SourcePayload
+from d2d.contracts.payload import SourcePayload
 
 
 class ProviderInterface(Protocol):
@@ -36,4 +36,4 @@ class SourceIO(ProviderInterface):
     :type Protocol: _type_
     """
 
-    source_io = Callable[[SourcePayload], IOBase]
+    source_text = Callable[[SourcePayload], str]

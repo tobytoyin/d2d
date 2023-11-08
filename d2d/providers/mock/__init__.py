@@ -1,9 +1,6 @@
-import io
-
-
 # follows the services.SourceIO interface
 class IOCatalog:
-    source_io = lambda d: io.StringIO("mock io contents")
+    source_text = lambda d: "mock io contents"
 
 
 # follows the services.SourceTasks interface
