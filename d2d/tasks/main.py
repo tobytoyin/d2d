@@ -1,6 +1,6 @@
 from providers.mock import TaskCatalog
 
-from d2d.contracts.services import SourceTasks
+from d2d.contracts.providers_interface import SourceTasks
 
 
 def get_provider(name: str) -> type[SourceTasks]:

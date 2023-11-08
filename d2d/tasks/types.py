@@ -1,0 +1,6 @@
+class IncompatiblePayload(Exception):
+    ...
+
+
+class ResourceNotFound(Exception):
+    ...
