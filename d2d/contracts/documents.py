@@ -22,4 +22,4 @@ class Summary(DocumentComponent):
 
 class Document(BaseModel):
     uid: str
-    summary: Summary
+    summary: Summary = Summary()

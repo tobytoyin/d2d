@@ -8,7 +8,7 @@ from d2d.contracts.documents import Document, DocumentComponent
 from d2d.contracts.payload import SourcePayload, TaskFunctionResult
 from d2d.providers.factory import get_task_fn
 
-from ._parsers import PROVIDER_INTERFACE_MAPPER
+from ._component_convertors import CONVERTORS_MAPPER
 from ._source_handler import get_source_text, get_source_uid
 
 SourceMetaItems = namedtuple("SourceMetaItems", "source_uid source_text")
@@ -74,7 +74,7 @@ def convert_to_document_component(task_result: TaskFunctionResult) -> DocumentCo
     task_kind = task_result.kind
     task_result = task_result.result
 
-    component_convertor = PROVIDER_INTERFACE_MAPPER[task_kind]
+    component_convertor = CONVERTORS_MAPPER[task_kind]
     return component_convertor(task_result)
 
 
