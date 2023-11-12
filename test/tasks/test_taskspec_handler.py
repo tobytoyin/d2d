@@ -4,12 +4,13 @@ import pytest
 
 from d2d.contracts.documents import Document, Summary
 from d2d.contracts.payload import TaskFunctionResult
-from d2d.tasks.taskspec_handler import (
+from d2d.tasks._taskspec_handler import (
+    components_to_document,
     convert_to_document_component,
-    document_composer,
     payload_validator,
     run_tasks,
 )
+from d2d.tasks.document_composer import DocumentComposer
 
 from .payload_fixtures import *
 
@@ -74,11 +75,20 @@ def test_convert_to_document_component(valid_payload):
 
 def test_document_composer():
     components = [Summary(content="hello world")]
-    document = document_composer(uid="100", components=components)
+    document = components_to_document(uid="100", components=components)
 
     expected_doc = Document(
         uid="100",
         summary=Summary(content="hello world"),
     )
 
+    assert document == expected_doc
+
+
+def test_document_composer_endpoint(valid_payload):
+    document = DocumentComposer().run(valid_payload)
+    expected_doc = Document(
+        uid="mock-id-000",
+        summary=Summary(content="hello world"),
+    )
     assert document == expected_doc

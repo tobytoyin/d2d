@@ -31,6 +31,9 @@ class SourcePayload(BaseModel):
     source_reader: SourceReader
     tasks: dict[str, TaskPayload]
 
+    def __hash__(self) -> int:
+        return hash(self.source)
+
 
 class TaskFunctionResult(BaseModel):
     source_uid: str

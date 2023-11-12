@@ -29,7 +29,7 @@ class SourceTextTasks(ProviderInterface):
     summary = TaskSignature
 
 
-class SourceIO(ProviderInterface):
+class SourceMetaTasks(ProviderInterface):
     """Responsible to convert source payload into internal IO
 
     :param Protocol: _description_

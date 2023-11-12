@@ -1,3 +1,5 @@
+from collections import namedtuple
+from functools import cache
 from typing import Generator, Iterable
 
 from pydantic import ValidationError
@@ -6,8 +8,10 @@ from d2d.contracts.documents import Document, DocumentComponent
 from d2d.contracts.payload import SourcePayload, TaskFunctionResult
 from d2d.providers.factory import get_task_fn
 
-from .parsers import PROVIDER_INTERFACE_MAPPER
-from .source_handler import get_source_text, get_source_uid
+from ._parsers import PROVIDER_INTERFACE_MAPPER
+from ._source_handler import get_source_text, get_source_uid
+
+SourceMetaItems = namedtuple("SourceMetaItems", "source_uid source_text")
 
 
 def payload_validator(payload: dict) -> SourcePayload:
@@ -22,12 +26,24 @@ def payload_validator(payload: dict) -> SourcePayload:
     return SourcePayload.model_validate(payload)
 
 
-def run_tasks(spec: SourcePayload) -> Generator[TaskFunctionResult, None, None]:
-    # source
+@cache
+def unpack_source_items(spec: SourcePayload) -> SourceMetaItems:
     source = spec.source
     source_reader = spec.source_reader
     source_text = get_source_text(provider_name=source_reader.provider, d=source)
     source_uid = get_source_uid(provider_name=source_reader.provider, d=source)
+    return SourceMetaItems(source_uid, source_text)
+
+
+def run_tasks(spec: SourcePayload) -> Generator[TaskFunctionResult, None, None]:
+    """With the Source contents, interact with Providers' interface's task functions
+
+    :param spec: _description_
+    :type spec: SourcePayload
+    :yield: _description_
+    :rtype: Generator[TaskFunctionResult, None, None]
+    """
+    source_uid, source_text = unpack_source_items(spec)
 
     # get the task functions from registry
     for task_name, task_spec in spec.tasks.items():
@@ -48,6 +64,13 @@ def run_tasks(spec: SourcePayload) -> Generator[TaskFunctionResult, None, None]:
 
 
 def convert_to_document_component(task_result: TaskFunctionResult) -> DocumentComponent:
+    """Convert task_function dictionary results into DcoumentComponent object
+
+    :param task_result: _description_
+    :type task_result: TaskFunctionResult
+    :return: _description_
+    :rtype: DocumentComponent
+    """
     task_kind = task_result.kind
     task_result = task_result.result
 
@@ -55,7 +78,10 @@ def convert_to_document_component(task_result: TaskFunctionResult) -> DocumentCo
     return component_convertor(task_result)
 
 
-def document_composer(uid: str, components: Iterable[DocumentComponent]) -> Document:
+def components_to_document(
+    uid: str,
+    components: Iterable[DocumentComponent],
+) -> Document:
     components_map = {"uid": uid}
 
     for component in components:

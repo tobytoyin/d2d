@@ -6,7 +6,7 @@ import pytest
 
 from d2d.contracts.payload import Source
 from d2d.tasks import types
-from d2d.tasks.source_handler import get_source_text, get_source_uid, source_validate
+from d2d.tasks._source_handler import get_source_text, get_source_uid, source_validate
 
 
 @pytest.fixture
