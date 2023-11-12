@@ -3,7 +3,7 @@ from __future__ import annotations
 from pathlib import Path
 from typing import Any, Optional, TypeAlias
 
-from pydantic import BaseModel
+from pydantic import BaseModel, ConfigDict
 
 SourcePayloadDict: TypeAlias = dict[str, str]
 

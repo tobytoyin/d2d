@@ -1,11 +1,10 @@
 import logging
 from functools import cache
-from typing import Callable
 
 from pydantic import ValidationError
 
 from d2d.contracts.payload import Source, SourcePayload, SourcePayloadDict
-from d2d.providers import interface, mock
+from d2d.providers import mock
 
 from . import types
 

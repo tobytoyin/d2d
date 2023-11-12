@@ -1,16 +1,14 @@
 import logging
 
 from . import mock
-from .interface import SourceTextTasks
+from .interface import SourceTextTasks, TaskFunction
 
 _CATALOG = {
     "mock": mock.TaskCatalog,
 }
 
 
-def get_task_fn(
-    provider_name: str, task_name: str
-) -> SourceTextTasks.TaskSignature | None:
+def get_task_fn(provider_name: str, task_name: str) -> TaskFunction | None:
     try:
         provider = _CATALOG.get(provider_name)
         return getattr(provider, task_name)
