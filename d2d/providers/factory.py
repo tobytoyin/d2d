@@ -1,3 +1,5 @@
+import logging
+
 from . import mock
 from .interface import SourceTextTasks
 
@@ -6,6 +8,16 @@ _CATALOG = {
 }
 
 
-def get_task_fn(provider_name: str, task_name: str) -> SourceTextTasks.TaskSignature:
-    provider = _CATALOG.get(provider_name)
-    return getattr(provider, task_name)
+def get_task_fn(
+    provider_name: str, task_name: str
+) -> SourceTextTasks.TaskSignature | None:
+    try:
+        provider = _CATALOG.get(provider_name)
+        return getattr(provider, task_name)
+    except AttributeError:
+        logging.warning(
+            "'%s' does not exist in '%s' provider",
+            task_name,
+            provider_name,
+        )
+        return None

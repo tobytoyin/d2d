@@ -22,7 +22,7 @@ def source_validate(d: SourcePayloadDict) -> SourcePayloadDict:
 
 @cache
 def get_source_text(provider_name: str, d: SourcePayload) -> str:
-    catalog = {"mock": mock.IOCatalog}
+    catalog = {"mock": mock.SourceCatalog}
     provider = catalog.get(provider_name, None)
 
     if not provider:
@@ -33,7 +33,7 @@ def get_source_text(provider_name: str, d: SourcePayload) -> str:
 
 @cache
 def get_source_uid(provider_name: str, d: SourcePayload) -> str:
-    catalog = {"mock": mock.IOCatalog}
+    catalog = {"mock": mock.SourceCatalog}
     provider = catalog.get(provider_name, None)
 
     if not provider:
