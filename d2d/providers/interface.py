@@ -37,3 +37,4 @@ class SourceIO(ProviderInterface):
     """
 
     source_text = Callable[[SourcePayloadDict], str]
+    uid_gen = Callable[[SourcePayloadDict], str]

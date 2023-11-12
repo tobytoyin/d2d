@@ -27,6 +27,15 @@ def get_source_text(provider_name: str, d: SourcePayload) -> str:
 
     if not provider:
         raise types.ResourceNotFound("provider not found")
-    print(d.model_dump())
     result = provider.source_text(d.model_dump())
     return result
+
+
+@cache
+def get_source_uid(provider_name: str, d: SourcePayload) -> str:
+    catalog = {"mock": mock.IOCatalog}
+    provider = catalog.get(provider_name, None)
+
+    if not provider:
+        raise types.ResourceNotFound("provider not found")
+    return provider.uid_gen(d.model_dump())
