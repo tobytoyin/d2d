@@ -5,9 +5,4 @@ class IOCatalog:
 
 # follows the services.SourceTasks interface
 class TaskCatalog:
-    summary = lambda s: {
-        "result": {
-            "content": "hello world",
-        },
-        "kind": "summary",
-    }
+    summary = lambda s: {"content": "hello world"}

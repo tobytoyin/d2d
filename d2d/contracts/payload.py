@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 from pathlib import Path
-from typing import Optional, TypeAlias
+from typing import Any, Optional, TypeAlias
 
 from pydantic import BaseModel
 
@@ -33,5 +33,5 @@ class SourcePayload(BaseModel):
 
 
 class TaskFunctionResult(BaseModel):
-    result: dict
+    result: Any
     kind: str

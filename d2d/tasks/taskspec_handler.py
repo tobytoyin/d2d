@@ -27,11 +27,7 @@ def run_tasks(payload: dict) -> Generator[TaskFunctionResult, None, None]:
         task_fn = get_task_fn(provider_name=task_spec.provider, task_name=task_name)
         task_result = task_fn(source_text)
 
-        # check task_result follows model
-        try:
-            yield TaskFunctionResult.model_validate(task_result)
-        except ValidationError:
-            continue
+        yield TaskFunctionResult(result=task_result, kind=task_name)
 
 
 def convert_to_document_component(task_result: TaskFunctionResult) -> DocumentComponent:
