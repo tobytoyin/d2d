@@ -14,3 +14,4 @@ def test_get_task_fn_not_exist():
 
 def test_get_task_fn_none_provider():
     task_fn = get_task_fn("none", "summary")
+    assert task_fn is None

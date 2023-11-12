@@ -26,6 +26,12 @@ def run_tasks(payload: dict) -> Generator[TaskFunctionResult, None, None]:
     # get the task functions from registry
     for task_name, task_spec in spec.tasks.items():
         task_fn = get_task_fn(provider_name=task_spec.provider, task_name=task_name)
+
+        # skip the execution when task_fn cannot be called
+        if task_fn is None:
+            # TODO write logs
+            continue
+
         task_result = task_fn(source_text)
 
         yield TaskFunctionResult(

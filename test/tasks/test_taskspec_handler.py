@@ -1,3 +1,5 @@
+import logging
+
 import pytest
 
 from d2d.contracts.documents import Document, Summary
@@ -9,58 +11,22 @@ from d2d.tasks.taskspec_handler import (
     run_tasks,
 )
 
-
-@pytest.fixture
-def valid_spec():
-    return {
-        "source": {
-            "path": ".",
-        },
-        "source_reader": {"provider": "mock"},
-        "tasks": {
-            "summary": {"provider": "mock"},
-        },
-    }
+from .payload_fixtures import *
 
 
-@pytest.fixture
-def invalid_spec():
-    return {
-        "sources": {
-            "path": ".",
-        },
-        "tasks": {
-            "source_reader": {"provider": "mock"},
-            "summary": {"provider": "mock"},
-        },
-    }
+#### Test on taskspec_validator on handling JSON payload ####
+def test_tasksepc_validator(valid_payload):
+    _ = payload_validator(valid_payload)
 
 
-@pytest.fixture
-def extra_invalid_tasks():
-    return {
-        "source": {
-            "path": ".",
-        },
-        "source_reader": {"provider": "mock"},
-        "tasks": {
-            "summary": {"provider": "mock"},
-            "invalid": {"provider": "none"},
-        },
-    }
-
-
-def test_tasksepc_validator(valid_spec):
-    _ = payload_validator(valid_spec)
-
-
-def test_taskspec_validator_rejects(invalid_spec):
+def test_taskspec_validator_rejects(invalid_payload):
     with pytest.raises(Exception):
-        _ = payload_validator(invalid_spec)
+        _ = payload_validator(invalid_payload)
 
 
-def test_run_tasks(valid_spec):
-    results = list(run_tasks(valid_spec))
+#### Test on run_tasks can execute task functions ####
+def test_run_tasks(valid_payload):
+    results = list(run_tasks(valid_payload))
 
     assert results[0] == TaskFunctionResult(
         source_uid="mock-id-000",
@@ -70,8 +36,30 @@ def test_run_tasks(valid_spec):
     assert len(results) == 1
 
 
-def test_convert_to_document_component(valid_spec):
-    results = run_tasks(valid_spec)
+def test_run_tasks_with_invalid_tasks(payload_with_invalid_task):
+    results = list(run_tasks(payload_with_invalid_task))
+    logging.info(results)
+
+    assert len(results) == 1
+
+
+def test_run_tasks_with_invalid_provider(payload_with_invalid_provider):
+    results = list(run_tasks(payload_with_invalid_provider))
+    logging.info(results)
+
+    assert len(results) == 0
+
+
+def test_run_tasks_with_duplicate_tasks(payload_with_repeated_task_indicator):
+    results = list(run_tasks(payload_with_repeated_task_indicator))
+    logging.info(results)
+
+    # should keep the first one only
+    assert len(results) == 1
+
+
+def test_convert_to_document_component(valid_payload):
+    results = run_tasks(valid_payload)
     doc_components = map(convert_to_document_component, results)
     doc_components = list(doc_components)
 

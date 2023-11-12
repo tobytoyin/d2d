@@ -14,6 +14,7 @@ def get_task_fn(
     try:
         provider = _CATALOG.get(provider_name)
         return getattr(provider, task_name)
+
     except AttributeError:
         logging.warning(
             "'%s' does not exist in '%s' provider",
