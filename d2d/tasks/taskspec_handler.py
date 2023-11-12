@@ -7,7 +7,7 @@ from d2d.contracts.payload import SourcePayload, TaskFunctionResult
 from d2d.providers.factory import get_task_fn
 
 from .parsers import PROVIDER_INTERFACE_MAPPER
-from .source_handler import get_source_text
+from .source_handler import get_source_text, get_source_uid
 
 
 def payload_validator(payload: dict) -> SourcePayload:
@@ -20,14 +20,19 @@ def run_tasks(payload: dict) -> Generator[TaskFunctionResult, None, None]:
     # source
     source = spec.source
     source_reader = spec.source_reader
+    source_text = get_source_text(provider_name=source_reader.provider, d=source)
+    source_uid = get_source_uid(provider_name=source_reader.provider, d=source)
 
     # get the task functions from registry
     for task_name, task_spec in spec.tasks.items():
-        source_text = get_source_text(provider_name=source_reader.provider, d=source)
         task_fn = get_task_fn(provider_name=task_spec.provider, task_name=task_name)
         task_result = task_fn(source_text)
 
-        yield TaskFunctionResult(result=task_result, kind=task_name)
+        yield TaskFunctionResult(
+            source_uid=source_uid,
+            result=task_result,
+            kind=task_name,
+        )
 
 
 def convert_to_document_component(task_result: TaskFunctionResult) -> DocumentComponent:

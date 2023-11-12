@@ -33,5 +33,6 @@ class SourcePayload(BaseModel):
 
 
 class TaskFunctionResult(BaseModel):
+    source_uid: str
     result: Any
     kind: str

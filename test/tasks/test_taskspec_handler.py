@@ -62,6 +62,7 @@ def test_run_tasks(valid_spec):
     results = list(run_tasks(valid_spec))
 
     assert results[0] == TaskFunctionResult(
+        source_uid="mock-id-000",
         result={"content": "hello world"},
         kind="summary",
     )
