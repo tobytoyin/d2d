@@ -1,9 +1,10 @@
 import pytest
 
-from d2d.contracts.documents import Summary
+from d2d.contracts.documents import Document, Summary
 from d2d.contracts.payload import TaskFunctionResult
 from d2d.tasks.taskspec_handler import (
     convert_to_document_component,
+    document_composer,
     payload_validator,
     run_tasks,
 )
@@ -76,3 +77,15 @@ def test_convert_to_document_component(valid_spec):
 
     assert len(doc_components) == 1
     assert doc_components[0] == Summary(content="hello world")
+
+
+def test_document_composer():
+    components = [Summary(content="hello world")]
+    document = document_composer(uid="100", components=components)
+
+    expected_doc = Document(
+        uid="100",
+        summary=Summary(content="hello world"),
+    )
+
+    assert document == expected_doc

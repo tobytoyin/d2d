@@ -1,8 +1,8 @@
-from typing import Generator
+from typing import Generator, Iterable
 
 from pydantic import ValidationError
 
-from d2d.contracts.documents import DocumentComponent
+from d2d.contracts.documents import Document, DocumentComponent
 from d2d.contracts.payload import SourcePayload, TaskFunctionResult
 from d2d.providers.factory import get_task_fn
 
@@ -41,3 +41,12 @@ def convert_to_document_component(task_result: TaskFunctionResult) -> DocumentCo
 
     component_convertor = PROVIDER_INTERFACE_MAPPER[task_kind]
     return component_convertor(task_result)
+
+
+def document_composer(uid: str, components: Iterable[DocumentComponent]) -> Document:
+    components_map = {"uid": uid}
+
+    for component in components:
+        components_map[component.key] = component
+
+    return Document.model_validate(components_map)
