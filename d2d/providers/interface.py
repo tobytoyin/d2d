@@ -1,7 +1,7 @@
 from io import IOBase
 from typing import Any, Callable, Protocol, TypeAlias
 
-from d2d.contracts.payload import SourcePayload
+from d2d.contracts.payload import SourcePayloadDict
 
 
 class ProviderInterface(Protocol):
@@ -26,7 +26,7 @@ class SourceTextTasks(ProviderInterface):
     TaskSignature: TypeAlias = Callable[[str], TaskResult]
 
     # all function in this interface follows TaskSignature
-    summary_task = TaskSignature
+    summary = TaskSignature
 
 
 class SourceIO(ProviderInterface):
@@ -36,4 +36,4 @@ class SourceIO(ProviderInterface):
     :type Protocol: _type_
     """
 
-    source_text = Callable[[SourcePayload], str]
+    source_text = Callable[[SourcePayloadDict], str]

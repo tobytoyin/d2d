@@ -6,6 +6,8 @@ from d2d.contracts.documents import Summary
 
 from .types import IncompatiblePayload
 
+# def source_reader_parser(d: dict[str, str]):
+
 
 def summary_composer(d: dict[str, str]) -> Summary:
     """Convert a input dictionary into structural Summary
@@ -21,3 +23,8 @@ def summary_composer(d: dict[str, str]) -> Summary:
         err = IncompatiblePayload("summary input is not compatible")
         logging.warning(err)
         return Summary()
+
+
+PROVIDER_INTERFACE_MAPPER = {
+    "summary": summary_composer,
+}
