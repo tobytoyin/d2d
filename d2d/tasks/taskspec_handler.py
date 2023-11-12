@@ -11,12 +11,18 @@ from .source_handler import get_source_text, get_source_uid
 
 
 def payload_validator(payload: dict) -> SourcePayload:
+    """To validate the raw incoming JSON payload matches the format\
+        and return it as Pydantic model
+
+    :param payload: _description_
+    :type payload: dict
+    :return: _description_
+    :rtype: SourcePayload
+    """
     return SourcePayload.model_validate(payload)
 
 
-def run_tasks(payload: dict) -> Generator[TaskFunctionResult, None, None]:
-    spec = payload_validator(payload)
-
+def run_tasks(spec: SourcePayload) -> Generator[TaskFunctionResult, None, None]:
     # source
     source = spec.source
     source_reader = spec.source_reader

@@ -26,7 +26,8 @@ def test_taskspec_validator_rejects(invalid_payload):
 
 #### Test on run_tasks can execute task functions ####
 def test_run_tasks(valid_payload):
-    results = list(run_tasks(valid_payload))
+    payload = payload_validator(valid_payload)
+    results = list(run_tasks(payload))
 
     assert results[0] == TaskFunctionResult(
         source_uid="mock-id-000",
@@ -37,21 +38,24 @@ def test_run_tasks(valid_payload):
 
 
 def test_run_tasks_with_invalid_tasks(payload_with_invalid_task):
-    results = list(run_tasks(payload_with_invalid_task))
+    payload = payload_validator(payload_with_invalid_task)
+    results = list(run_tasks(payload))
     logging.info(results)
 
     assert len(results) == 1
 
 
 def test_run_tasks_with_invalid_provider(payload_with_invalid_provider):
-    results = list(run_tasks(payload_with_invalid_provider))
+    payload = payload_validator(payload_with_invalid_provider)
+    results = list(run_tasks(payload))
     logging.info(results)
 
     assert len(results) == 0
 
 
 def test_run_tasks_with_duplicate_tasks(payload_with_repeated_task_indicator):
-    results = list(run_tasks(payload_with_repeated_task_indicator))
+    payload = payload_validator(payload_with_repeated_task_indicator)
+    results = list(run_tasks(payload))
     logging.info(results)
 
     # should keep the first one only
@@ -59,7 +63,8 @@ def test_run_tasks_with_duplicate_tasks(payload_with_repeated_task_indicator):
 
 
 def test_convert_to_document_component(valid_payload):
-    results = run_tasks(valid_payload)
+    payload = payload_validator(valid_payload)
+    results = run_tasks(payload)
     doc_components = map(convert_to_document_component, results)
     doc_components = list(doc_components)
 
