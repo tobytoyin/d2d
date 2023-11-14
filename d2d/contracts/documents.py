@@ -7,7 +7,7 @@ class DocumentComponent(BaseModel):
     model_config = ConfigDict(frozen=True)
 
     @property
-    def key(self):
+    def key(self) -> str:
         """The reference key in `Document` class"""
         raise NotImplementedError
 
@@ -16,7 +16,7 @@ class Summary(DocumentComponent):
     content: str = ""
 
     @property
-    def key(self):
+    def key(self) -> str:
         return "summary"
 
 

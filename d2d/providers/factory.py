@@ -9,13 +9,14 @@ _CATALOG = {
 
 
 def get_provider(provider_name: str) -> type[SourceTextTasks] | None:
-    provider = _CATALOG.get(provider_name, None)
+    provider = _CATALOG.get(provider_name)
+
     if provider is None:
         logging.warning(
             "'%s' does not exist",
             provider_name,
         )
-    return provider
+    return provider  # type: ignore
 
 
 def get_task_fn(provider_name: str, task_name: str) -> TaskFunction | None:

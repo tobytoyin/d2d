@@ -1,11 +1,12 @@
+import logging
 from collections import namedtuple
 from functools import cache
-from typing import Generator, Iterable
+from typing import Any, Generator, Iterable
 
 from pydantic import ValidationError
 
 from d2d.contracts.documents import Document, DocumentComponent
-from d2d.contracts.payload import SourcePayload, TaskFunctionResult
+from d2d.contracts.payload import SourcePayload, TaskFunctionResult, TaskPayload
 from d2d.providers.factory import get_task_fn
 
 from ._component_convertors import ConvertorsMapper
@@ -35,6 +36,20 @@ def unpack_source_items(spec: SourcePayload) -> SourceMetaItems:
     return SourceMetaItems(source_uid, source_text)
 
 
+def execute_task_func(fn, *fn_args, task_spec: TaskPayload):
+    """Function to separate the execution step with run_tasks to allow unitest"""
+    # unpack options to function
+    if task_spec.options_expand:
+        return fn(*fn_args, **task_spec.options)
+
+    # function doesn't accept kwargs
+    if task_spec.options_receiver is None:
+        return fn(*fn_args)
+
+    passdown_kwarg = {task_spec.options_receiver: task_spec.options}
+    return fn(*fn_args, **passdown_kwarg)
+
+
 def run_tasks(spec: SourcePayload) -> Generator[TaskFunctionResult, None, None]:
     """With the Source contents, interact with Providers' interface's task functions
 
@@ -54,7 +69,11 @@ def run_tasks(spec: SourcePayload) -> Generator[TaskFunctionResult, None, None]:
             # TODO write logs
             continue
 
-        task_result = task_fn(source_text)
+        try:
+            task_result = execute_task_func(task_fn, source_text, task_spec=task_spec)
+        except Exception as e:
+            logging.warning(e)
+            continue
 
         yield TaskFunctionResult(
             source_uid=source_uid,

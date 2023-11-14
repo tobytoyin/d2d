@@ -68,3 +68,36 @@ def payload_with_repeated_task_indicator():
         },
     }
     # pylint: enable=W0109
+
+
+@pytest.fixture
+def payload_with_options():
+    return {
+        "source": {
+            "path": ".",
+        },
+        "source_reader": {"provider": "mock"},
+        "tasks": {
+            "summary": {
+                "provider": "mock",
+                "options": {"option1": "val1"},
+            },
+        },
+    }
+
+
+@pytest.fixture
+def payload_with_options_unpacked():
+    return {
+        "source": {
+            "path": ".",
+        },
+        "source_reader": {"provider": "mock"},
+        "tasks": {
+            "summary": {
+                "provider": "mock",
+                "options": {"option1": "val1"},
+                "options_expand": True,
+            },
+        },
+    }
