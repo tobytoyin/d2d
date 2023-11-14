@@ -1,5 +1,7 @@
 import logging
 
+from d2d.contracts.interfaces import ProviderSourceMetaHandlers
+
 from . import mock
 from .interface import SourceTextTasks, TaskFunction
 
@@ -16,6 +18,8 @@ def get_provider(provider_name: str) -> type[SourceTextTasks] | None:
             "'%s' does not exist",
             provider_name,
         )
+        return
+
     return provider  # type: ignore
 
 
@@ -31,3 +35,37 @@ def get_task_fn(provider_name: str, task_name: str) -> TaskFunction | None:
             provider_name,
         )
         return None
+
+
+###### Source Catalog ######
+# This is functions where the Providers provides some functionality which
+# would interact with 3rd party data source
+
+_SOURCE_CATALOG = {
+    "mock": mock.SourceCatalog,
+}
+
+
+def get_source_handling_provider(
+    provider_name: str,
+) -> type[ProviderSourceMetaHandlers]:
+    """Retrieve the selected provider to interact with source
+
+    :param provider_name: _description_
+    :type provider_name: str
+    :raises TypeError: when provider
+    :raises TypeError: _description_
+    :return: _description_
+    :rtype: type[ProviderSourceMetaHandlers]
+    """
+    provider = _SOURCE_CATALOG.get(provider_name)
+
+    if provider is None:
+        logging.warning("provider '%s' does not exist", provider_name)
+        raise TypeError
+
+    # ensure interface
+    if issubclass(provider, ProviderSourceMetaHandlers):
+        return provider
+
+    raise TypeError

@@ -4,13 +4,13 @@ import pytest
 
 from d2d.contracts.documents import Document, Summary
 from d2d.contracts.payload import TaskFunctionResult
+from d2d.tasks._document_composer import DocumentComposer
 from d2d.tasks._taskspec_handler import (
     components_to_document,
     convert_to_document_component,
     payload_validator,
     run_tasks,
 )
-from d2d.tasks.document_composer import DocumentComposer
 
 from .payload_fixtures import *
 

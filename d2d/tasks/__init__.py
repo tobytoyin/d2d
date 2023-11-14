@@ -1,1 +1,1 @@
-from .document_composer import DocumentComposer
+from d2d.tasks._document_composer import DocumentComposer

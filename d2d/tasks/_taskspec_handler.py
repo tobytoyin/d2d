@@ -10,7 +10,8 @@ from d2d.contracts.payload import SourcePayload, TaskFunctionResult, TaskPayload
 from d2d.providers.factory import get_task_fn
 
 from ._component_convertors import ConvertorsMapper
-from ._source_handler import get_source_text, get_source_uid
+from .document_composer._source_handler import get_source_text, get_source_uid
+from .document_composer._task_func_handlers import execute_task_func
 
 SourceMetaItems = namedtuple("SourceMetaItems", "source_uid source_text")
 
@@ -34,20 +35,6 @@ def unpack_source_items(spec: SourcePayload) -> SourceMetaItems:
     source_text = get_source_text(provider_name=source_reader.provider, d=source)
     source_uid = get_source_uid(provider_name=source_reader.provider, d=source)
     return SourceMetaItems(source_uid, source_text)
-
-
-def execute_task_func(fn, *fn_args, task_spec: TaskPayload):
-    """Function to separate the execution step with run_tasks to allow unitest"""
-    # unpack options to function
-    if task_spec.options_expand:
-        return fn(*fn_args, **task_spec.options)
-
-    # function doesn't accept kwargs
-    if task_spec.options_receiver is None:
-        return fn(*fn_args)
-
-    passdown_kwarg = {task_spec.options_receiver: task_spec.options}
-    return fn(*fn_args, **passdown_kwarg)
 
 
 def run_tasks(spec: SourcePayload) -> Generator[TaskFunctionResult, None, None]:

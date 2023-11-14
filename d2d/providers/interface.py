@@ -1,6 +1,6 @@
 from typing import Any, Callable, Generic, Literal, Protocol, TypeAlias, TypeVar
 
-from d2d.contracts.interfaces import ProviderTaskHandlers
+from d2d.contracts.interfaces import ProviderSourceMetaHandlers, ProviderTaskHandlers
 from d2d.contracts.payload import SourcePayloadDict
 
 T = TypeVar("T")
