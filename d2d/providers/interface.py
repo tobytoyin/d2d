@@ -27,5 +27,5 @@ class SourceTextTasks(ProviderTaskHandlers[str, TaskResultDict], Protocol):
 
     # all function in this interface follows TaskSignature
     @staticmethod
-    def summary(text: str) -> TaskResultDict:
+    def summary(_: str) -> TaskResultDict:
         ...
