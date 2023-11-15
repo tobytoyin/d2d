@@ -1,32 +1,32 @@
+import logging
+
 import pytest
 
 from d2d.contracts.payload import Source, SourceHandler
 from d2d.tasks.document_composer._source_handler import (
-    filter_and_validate_sources,
-    get_source_text,
-    get_source_uid,
+    _get_source_text,
+    _get_source_uid,
+    payload_handler,
 )
 
-
-@pytest.fixture
-def valid_sources():
-    # under "sources: [...]"
-    return [{"path": "hello1.txt"}, {"path": "hello2.txt"}]
+from ..payload_fixtures import *
 
 
-@pytest.fixture
-def partial_valid_sources():
-    return [{"path": "hello1.txt"}, {"paths": "hello2.txt"}]
+def test_payload(valid_payload):
+    """All Payload contents pass through
+
+    :param valid_payload: _description_
+    :type valid_payload: _type_
+    """
+    payload = payload_handler(valid_payload)
+    assert len(payload.sources) == 2
 
 
-def test_valid_sources(valid_sources):
-    sources = filter_and_validate_sources(valid_sources)
-    assert len(list(sources)) == 2
-
-
-def test_partial_valid_sources(partial_valid_sources):
-    sources = filter_and_validate_sources(partial_valid_sources)
-    assert len(list(sources)) == 1
+def test_payload_with_invalid_sources(invalid_payload_sources):
+    """Invald Payload's sources is skipped"""
+    payload = payload_handler(invalid_payload_sources)
+    assert len(payload.sources) == 1
+    logging.info(payload)
 
 
 ### Assuming upstream validates SourceHanlder
@@ -35,12 +35,12 @@ def test_partial_valid_sources(partial_valid_sources):
 def test_get_source_text():
     handler_payload = SourceHandler(provider="mock")
     source = Source(path="dummy.txt")  # type: ignore
-    reader = get_source_text(source, handler_payload)
+    reader = _get_source_text(source, handler_payload)
     assert reader == "mock io contents"
 
 
 def test_source_uid():
     handler_payload = SourceHandler(provider="mock")
     source = Source(path="dummy.txt")  # type: ignore
-    reader = get_source_uid(source, handler_payload)
+    reader = _get_source_uid(source, handler_payload)
     assert reader == "mock-id-000"

@@ -9,10 +9,11 @@ class SourceCatalog:
     uid_gen = lambda d: "mock-id-000"
 
 
-def _summary(_: str) -> dict[str, str]:
-    return {"content": "hello world"}
+from ..interface import SourceTextTasks
 
 
 # follows the services.SourceTasks interface
 class TaskCatalog:
-    summary = _summary
+    @staticmethod
+    def summary(text: str) -> dict[str, str]:
+        return {"content": "hello world"}

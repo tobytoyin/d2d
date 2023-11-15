@@ -1,4 +1,13 @@
-from typing import Any, Callable, Generic, Literal, Protocol, TypeAlias, TypeVar
+from typing import (
+    Any,
+    Callable,
+    Generic,
+    Literal,
+    Protocol,
+    TypeAlias,
+    TypeVar,
+    runtime_checkable,
+)
 
 from d2d.contracts.interfaces import ProviderSourceMetaHandlers, ProviderTaskHandlers
 from d2d.contracts.payload import SourceDict
@@ -8,7 +17,8 @@ TaskResultDict: TypeAlias = dict[str, Any]
 TaskFunction: TypeAlias = Callable[[T], TaskResultDict]
 
 
-class SourceTextTasks(ProviderTaskHandlers[str, TaskResultDict]):
+@runtime_checkable
+class SourceTextTasks(ProviderTaskHandlers[str, TaskResultDict], Protocol):
     """Interface for Storing Text-related Tasks
 
     :param Protocol: _description_
@@ -17,7 +27,5 @@ class SourceTextTasks(ProviderTaskHandlers[str, TaskResultDict]):
 
     # all function in this interface follows TaskSignature
     @staticmethod
-    def summary(_: str) -> TaskResultDict:
+    def summary(text: str) -> TaskResultDict:
         ...
-
-    # summary: TaskFunction[str]

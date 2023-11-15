@@ -18,10 +18,14 @@ def get_tasks_provider(provider_name: str) -> type[SourceTextTasks] | None:
         return
 
     # ensure interface
-    if issubclass(provider, SourceTextTasks):
-        return provider
+    if not issubclass(provider, SourceTextTasks):
+        logging.warning(
+            "provider '%s' has implemented incorrect interface",
+            provider_name,
+        )
+        return
 
-    return
+    return provider
 
 
 def get_task_fn(provider_name: str, task_name: str) -> TaskFunction | None:
@@ -66,7 +70,7 @@ def get_source_handling_provider(
         raise TypeError
 
     # ensure interface
-    if issubclass(provider, ProviderSourceMetaHandlers):
-        return provider
+    if not issubclass(provider, ProviderSourceMetaHandlers):
+        raise TypeError
 
-    raise TypeError
+    return provider

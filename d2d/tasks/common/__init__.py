@@ -6,7 +6,7 @@ from d2d.contracts.payload import Options
 
 def transform_function_with_options(
     fn: Callable,
-    options: Options,
+    options: Options | None,
 ) -> Callable:
     """Inject the Options payload into a function
 
@@ -15,6 +15,9 @@ def transform_function_with_options(
     :param options: _description_
     :type options: _type_
     """
+    if not options:
+        return partial(fn)
+
     if options.mapping is None:
         return partial(fn)
 
