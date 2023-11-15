@@ -1,27 +1,38 @@
 import pytest
 
-# Below contains functions with signature that is acceptable
-# for the providers. They should be executable by execute_spec_with_task_fnc
-
-
-def _func_with_single_arg(s):
-    return s
+# We expect the Providers to be provider functions that follows the
+# below function signature when passing down options
+# for the providers. They should be executable by execute_spec_with_task_fncs
 
 
 @pytest.fixture
 def func_with_single_arg():
-    return _func_with_single_arg
+    def f(s):
+        return s
 
-
-def _func_accept_options(s, options: dict):
-    _ = options
-    return s
+    return f
 
 
 @pytest.fixture
-def func_accept_options():
-    return _func_accept_options
+def func_with_args():
+    def f(a, b):
+        return f"{a}-{b}"
+
+    return f
 
 
-def func_with_n_args(a, b, c):
-    return f"{a}, {b}, {c}"
+@pytest.fixture
+def func_with_kwrd_receiver():
+    def f(s, keyword: dict):
+        val = keyword["key"]
+        return f"{s}-{val}"
+
+    return f
+
+
+@pytest.fixture
+def func_with_kwrd_expand():
+    def f(s, key=""):
+        return f"{s}-{key}"
+
+    return f

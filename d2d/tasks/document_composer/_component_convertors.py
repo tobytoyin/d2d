@@ -1,21 +1,18 @@
 from __future__ import annotations
 
 import logging
-from typing import Callable, Generic, TypeAlias, TypeVar
 
 from pydantic import ValidationError
 
 from d2d.contracts.documents import DocumentComponent, Summary
 from d2d.providers.interface import ProviderTaskHandlers
 
-from .types import IncompatiblePayload
+from ..types import IncompatiblePayload
+
 
 # We use these functions to convert the JSON/ dict objects returned from
 # different Prvoiders' functions to its equalavent Pydantic model
-ConvertorFn: TypeAlias = Callable[[dict[str, str]], DocumentComponent]
-
-
-def summary_convertor(d: dict[str, str]) -> Summary:
+def summary_convertor(d: dict) -> Summary:
     """Convert a input dictionary into structural Summary
 
     :param d: payload object
@@ -31,7 +28,7 @@ def summary_convertor(d: dict[str, str]) -> Summary:
         return Summary()
 
 
-class ConvertorsMapper(ProviderTaskHandlers[ConvertorFn]):
+class ConvertorsMapper(ProviderTaskHandlers[dict, DocumentComponent]):
     """Mapper between provider tasks functions to the eqv pydantic object convertors
 
     :param ProviderInterface: _description_

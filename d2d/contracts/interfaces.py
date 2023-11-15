@@ -1,12 +1,13 @@
-from typing import Callable, Generic, Optional, Protocol, TypeVar, runtime_checkable
+from typing import Callable, Generic, Protocol, TypeVar, runtime_checkable
 
-from d2d.contracts.payload import SourcePayloadDict
+from d2d.contracts.payload import SourceDict
 
-T = TypeVar("T", bound=Callable)
+T = TypeVar("T", contravariant=True)
+R = TypeVar("R", covariant=True)
 
 
 @runtime_checkable
-class ProviderTaskHandlers(Protocol, Generic[T]):
+class ProviderTaskHandlers(Protocol, Generic[T, R]):
     """
     A Provider can implement a package by implement at least one type of Protocol
 
@@ -14,7 +15,9 @@ class ProviderTaskHandlers(Protocol, Generic[T]):
     :type Protocol: _type_
     """
 
-    summary: T
+    @staticmethod
+    def summary(_: T, /) -> R:
+        ...
 
 
 @runtime_checkable
@@ -26,7 +29,7 @@ class ProviderSourceMetaHandlers(Protocol):
     """
 
     @staticmethod
-    def source_text(payload: SourcePayloadDict) -> str:
+    def source_text(source: SourceDict) -> str:
         """function to interact with 3rd party source and return string contents
 
         :param payload: _description_
@@ -37,7 +40,7 @@ class ProviderSourceMetaHandlers(Protocol):
         ...
 
     @staticmethod
-    def uid_gen(payload: SourcePayloadDict) -> str:
+    def uid_gen(source: SourceDict) -> str:
         """function to interact with 3rd party source and return string UID
 
         :param payload: _description_

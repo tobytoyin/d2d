@@ -5,42 +5,45 @@ from typing import Any, Optional, TypeAlias
 
 from pydantic import BaseModel
 
-SourcePayloadDict: TypeAlias = dict[str, str]
+
+class Options(BaseModel):
+    mapping: dict[str, Any] | None = None  # the kwarg-value pair
+    expand: bool = False  # whether options should send by unpacking
+    receiver: str | None = None  # the key to map to
+
+
+SourceDict: TypeAlias = dict[str, str]
 
 
 class Source(BaseModel):
     path: Path
-    options: Optional[dict[str, str]] = {}
 
     def __hash__(self) -> int:
         return hash(self.path)
 
 
-class SourceReader(BaseModel):
+class SourceHandler(BaseModel):
     provider: str
-    options: Optional[dict[str, str]] = {}
+    options: Optional[Options] = Options()
+
+    def __hash__(self) -> int:
+        # this is singular per payload
+        # so just hashing the provider
+        return hash(self.provider)
 
 
 class TaskPayload(BaseModel):
     provider: str
-
-    # the kwargs for the task function, in addition to the required param
-    options: Optional[dict[str, str]] = {}
-
-    # whether options should send by unpacking
-    options_expand: bool = False
-
-    # the key within the function that accept the options dict
-    options_receiver: str | None = None
+    options: Optional[Options] = Options()
 
 
 class SourcePayload(BaseModel):
-    source: Source
-    source_reader: SourceReader
+    sources: list[Source]
+    source_handler: SourceHandler
     tasks: dict[str, TaskPayload]
 
     def __hash__(self) -> int:
-        return hash(self.source)
+        return hash(self.sources[0])
 
 
 class TaskFunctionResult(BaseModel):

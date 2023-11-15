@@ -1,4 +1,4 @@
-from d2d.tasks import _component_convertors
+from d2d.tasks.document_composer import _component_convertors
 
 
 def test_summary_composer():

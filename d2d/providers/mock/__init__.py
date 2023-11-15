@@ -1,10 +1,15 @@
 # follows the services.SourceIO interface
 class SourceCatalog:
-    source_text = lambda d: "mock io contents"
+    @staticmethod
+    def source_text(d: dict):
+        print(f"receive {d}")
+        print(f"read from {d['path']}")
+        return "mock io contents"
+
     uid_gen = lambda d: "mock-id-000"
 
 
-def _summary(s: str) -> dict[str, str]:
+def _summary(_: str) -> dict[str, str]:
     return {"content": "hello world"}
 
 
