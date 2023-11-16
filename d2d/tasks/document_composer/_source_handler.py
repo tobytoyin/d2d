@@ -7,6 +7,7 @@ from typing import Generator
 
 from pydantic import ValidationError
 
+import d2d.contracts.exceptions as exc
 from d2d.contracts.payload import Source, SourceDict, SourcePayload, SourceSpec
 from d2d.providers.factory import get_source_handling_provider
 from d2d.tasks.common import transform_function_with_options
@@ -23,7 +24,10 @@ def payload_handler(payload: dict) -> SourcePayload:
     :return: _description_
     :rtype: SourcePayload
     """
-    return SourcePayload.model_validate(payload)
+    try:
+        return SourcePayload.model_validate(payload)
+    except ValidationError as e:
+        raise exc.IncompatiblePayload from e
 
 
 @cache

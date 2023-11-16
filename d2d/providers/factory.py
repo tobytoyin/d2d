@@ -1,5 +1,6 @@
 import logging
 
+import d2d.contracts.exceptions as exc
 from d2d.contracts.interfaces import ProviderSourceMetaHandlers
 
 from . import mock
@@ -67,7 +68,7 @@ def get_source_handling_provider(
 
     if provider is None:
         logging.warning("provider '%s' does not exist", provider_name)
-        raise NotImplementedError
+        raise exc.ProviderNotFound
 
     # ensure interface
     if not issubclass(provider, ProviderSourceMetaHandlers):
@@ -75,6 +76,6 @@ def get_source_handling_provider(
             "provider '%s' has implemented incorrect interface",
             provider_name,
         )
-        raise NotImplementedError
+        raise exc.ProviderNotFound
 
     return provider

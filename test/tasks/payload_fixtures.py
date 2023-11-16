@@ -36,7 +36,7 @@ def invalid_payload():
 
 
 @pytest.fixture
-def payload_with_invalid_task():
+def payload_with_invalid_task_name():
     return {
         "sources": [{"path": "."}],
         "source_spec": {"provider": "mock"},
@@ -48,7 +48,7 @@ def payload_with_invalid_task():
 
 
 @pytest.fixture
-def payload_with_invalid_provider():
+def payload_with_invalid_task_provider():
     return {
         "sources": [{"path": "."}],
         "source_spec": {"provider": "mock"},
@@ -75,7 +75,7 @@ def payload_with_repeated_task_indicator():
 @pytest.fixture
 def payload_with_options():
     return {
-        "sources": [{"path": "."}],
+        "sources": [{"path": "."}, {"path": "."}, {"path": "."}],
         "source_spec": {"provider": "mock"},
         "tasks": {
             "summary": {
@@ -89,7 +89,7 @@ def payload_with_options():
 @pytest.fixture
 def payload_with_options_unpacked():
     return {
-        "sources": [{"path": "."}],
+        "sources": [{"path": "."}, {"path": "."}, {"path": "."}],
         "source_spec": {"provider": "mock"},
         "tasks": {
             "summary": {

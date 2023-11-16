@@ -4,10 +4,9 @@ import logging
 
 from pydantic import ValidationError
 
+import d2d.contracts.exceptions as exc
 from d2d.contracts.documents import DocumentComponent, Summary
 from d2d.providers.interface import ProviderTaskHandlers
-
-from ..types import IncompatiblePayload
 
 
 # We use these functions to convert the JSON/ dict objects returned from
@@ -23,7 +22,7 @@ def summary_adapter(d: dict) -> Summary:
     try:
         return Summary.model_validate(d)
     except ValidationError:
-        err = IncompatiblePayload("summary input is not compatible")
+        err = exc.IncompatibleProviderOutputs("summary input is not compatible")
         logging.warning(err)
         return Summary()
 
