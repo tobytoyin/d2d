@@ -44,8 +44,8 @@ class SourcePayload(BaseModel):
     source_handler: SourceHandler
     tasks: dict[TaskKeyword, TaskSpec]
 
-    def __hash__(self) -> int:
-        return hash(self.sources[0])
+    # def __hash__(self) -> int:
+    #     return hash(self.sources[0])
 
     @field_validator("sources", mode="before")
     @classmethod
@@ -61,5 +61,5 @@ class SourcePayload(BaseModel):
 
 class TaskFunctionResult(BaseModel):
     source_uid: str
-    result: Any
     kind: str
+    result: Any

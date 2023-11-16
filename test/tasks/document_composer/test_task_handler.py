@@ -24,6 +24,7 @@ def test_task_runner_passes_when_error():
     mock_source_text = "duumy content"
     mock_uid = "mock-id"
     spec = TaskSpec(provider="mock")
+
     result = task_runner(
         mock_source_text,
         source_uid=mock_uid,
