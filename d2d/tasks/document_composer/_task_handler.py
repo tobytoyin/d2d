@@ -6,7 +6,7 @@ from typing import Any, Generator, Iterable
 from pydantic import ValidationError
 
 from d2d.contracts.documents import Document, DocumentComponent
-from d2d.contracts.payload import TaskKeyword, TaskSpec
+from d2d.contracts.payload import TaskFunctionResult, TaskKeyword, TaskSpec
 from d2d.providers.factory import get_task_fn
 from d2d.tasks.common import transform_function_with_options
 
@@ -15,7 +15,12 @@ from d2d.tasks.common import transform_function_with_options
 # from .document_composer._task_func_handlers import execute_task_func
 
 
-def task_runner(*args, task_name: TaskKeyword, spec: TaskSpec):
+def task_runner(
+    *args,
+    source_uid: str,
+    task_name: TaskKeyword,
+    spec: TaskSpec,
+) -> TaskFunctionResult | None:
     """Retrieve the task function from the catalog and transform function for exec
 
     :param task_name: _description_
@@ -26,9 +31,18 @@ def task_runner(*args, task_name: TaskKeyword, spec: TaskSpec):
     :rtype: _type_
     """
     fn = get_task_fn(provider_name=spec.provider, task_name=task_name)
-    print(fn)
+
+    if fn is None:
+        return
+
     fn = transform_function_with_options(fn, options=spec.options)
-    return fn(*args)
+    result = fn(*args)
+
+    return TaskFunctionResult(
+        source_uid=source_uid,
+        result=result,
+        kind=task_name,
+    )
 
 
 # def convert_to_document_component(task_result: TaskFunctionResult) -> DocumentComponent:

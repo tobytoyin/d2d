@@ -67,10 +67,14 @@ def get_source_handling_provider(
 
     if provider is None:
         logging.warning("provider '%s' does not exist", provider_name)
-        raise TypeError
+        raise NotImplementedError
 
     # ensure interface
     if not issubclass(provider, ProviderSourceMetaHandlers):
-        raise TypeError
+        logging.warning(
+            "provider '%s' has implemented incorrect interface",
+            provider_name,
+        )
+        raise NotImplementedError
 
     return provider
