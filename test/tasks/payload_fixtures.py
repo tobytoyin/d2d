@@ -5,7 +5,7 @@ import pytest
 def valid_payload():
     return {
         "sources": [{"path": "."}, {"path": "hello-world-2.txt"}],
-        "source_handler": {"provider": "mock"},
+        "source_spec": {"provider": "mock"},
         "tasks": {
             "summary": {"provider": "mock"},
         },
@@ -16,7 +16,7 @@ def valid_payload():
 def invalid_payload_sources():
     return {
         "sources": [{"path": "."}, {"paths": "invalid.txt"}],
-        "source_handler": {"provider": "mock"},
+        "source_spec": {"provider": "mock"},
         "tasks": {
             "summary": {"provider": "mock"},
         },
@@ -29,7 +29,7 @@ def invalid_payload():
         # invalid structure
         "sources": {"path": "."},
         "tasks": {
-            "source_handler": {"provider": "mock"},
+            "source_spec": {"provider": "mock"},
             "summary": {"provider": "mock"},
         },
     }
@@ -39,7 +39,7 @@ def invalid_payload():
 def payload_with_invalid_task():
     return {
         "sources": [{"path": "."}],
-        "source_handler": {"provider": "mock"},
+        "source_spec": {"provider": "mock"},
         "tasks": {
             "summary": {"provider": "mock"},
             "invalid": {"provider": "none"},  # this is a invalid task indicator
@@ -51,7 +51,7 @@ def payload_with_invalid_task():
 def payload_with_invalid_provider():
     return {
         "sources": [{"path": "."}],
-        "source_handler": {"provider": "mock"},
+        "source_spec": {"provider": "mock"},
         "tasks": {
             "summary": {"provider": "invalid"},  # this is an invalid provider
         },
@@ -63,7 +63,7 @@ def payload_with_repeated_task_indicator():
     # pylint: disable=W0109
     return {
         "sources": [{"path": "."}],
-        "source_handler": {"provider": "mock"},
+        "source_spec": {"provider": "mock"},
         "tasks": {
             "summary": {"provider": "mock"},
             "summary": {"provider": "mock"},
@@ -76,7 +76,7 @@ def payload_with_repeated_task_indicator():
 def payload_with_options():
     return {
         "sources": [{"path": "."}],
-        "source_handler": {"provider": "mock"},
+        "source_spec": {"provider": "mock"},
         "tasks": {
             "summary": {
                 "provider": "mock",
@@ -90,7 +90,7 @@ def payload_with_options():
 def payload_with_options_unpacked():
     return {
         "sources": [{"path": "."}],
-        "source_handler": {"provider": "mock"},
+        "source_spec": {"provider": "mock"},
         "tasks": {
             "summary": {
                 "provider": "mock",

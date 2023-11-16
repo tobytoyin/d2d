@@ -15,5 +15,5 @@ from ..interface import SourceTextTasks
 # follows the services.SourceTasks interface
 class TaskCatalog:
     @staticmethod
-    def summary(text: str) -> dict[str, str]:
+    def summary(text: int) -> dict[str, str]:
         return {"content": "hello world"}

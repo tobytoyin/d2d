@@ -1,6 +1,4 @@
-from typing import TypedDict
-
-from pydantic import BaseModel, ConfigDict
+from pydantic import BaseModel, ConfigDict, field_validator
 
 
 class DocumentComponent(BaseModel):
@@ -25,3 +23,9 @@ class Summary(DocumentComponent):
 class Document(BaseModel):
     uid: str
     summary: Summary = Summary()
+
+    @field_validator("uid", mode="after")
+    @classmethod
+    def validate_uid_format(cls, v: str):
+        # TODO no spaces, quotes, etc....
+        return v

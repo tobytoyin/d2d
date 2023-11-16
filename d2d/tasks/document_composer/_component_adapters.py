@@ -12,7 +12,7 @@ from ..types import IncompatiblePayload
 
 # We use these functions to convert the JSON/ dict objects returned from
 # different Prvoiders' functions to its equalavent Pydantic model
-def summary_convertor(d: dict) -> Summary:
+def summary_adapter(d: dict) -> Summary:
     """Convert a input dictionary into structural Summary
 
     :param d: payload object
@@ -28,11 +28,11 @@ def summary_convertor(d: dict) -> Summary:
         return Summary()
 
 
-class ConvertorsMapper(ProviderTaskHandlers[dict, DocumentComponent]):
+class TaskFunctionsAdapters(ProviderTaskHandlers[dict, DocumentComponent]):
     """Mapper between provider tasks functions to the eqv pydantic object convertors
 
     :param ProviderInterface: _description_
     :type ProviderInterface: _type_
     """
 
-    summary = summary_convertor
+    summary = summary_adapter

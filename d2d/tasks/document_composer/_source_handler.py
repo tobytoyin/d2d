@@ -7,7 +7,7 @@ from typing import Generator
 
 from pydantic import ValidationError
 
-from d2d.contracts.payload import Source, SourceDict, SourceHandler, SourcePayload
+from d2d.contracts.payload import Source, SourceDict, SourcePayload, SourceSpec
 from d2d.providers.factory import get_source_handling_provider
 from d2d.tasks.common import transform_function_with_options
 
@@ -27,7 +27,7 @@ def payload_handler(payload: dict) -> SourcePayload:
 
 
 @cache
-def _get_source_text(source: Source, handler_payload: SourceHandler) -> str:
+def _get_source_text(source: Source, handler_payload: SourceSpec) -> str:
     # converting between Source to dict to allow cache,
     # this allow function to only interact with external source once to get the content
 
@@ -41,7 +41,7 @@ def _get_source_text(source: Source, handler_payload: SourceHandler) -> str:
 
 
 @cache
-def _get_source_uid(source: Source, handler_payload: SourceHandler) -> str:
+def _get_source_uid(source: Source, handler_payload: SourceSpec) -> str:
     provider_name = handler_payload.provider
     provider = get_source_handling_provider(provider_name=provider_name)
 
@@ -49,7 +49,7 @@ def _get_source_uid(source: Source, handler_payload: SourceHandler) -> str:
     return fn(source.model_dump())
 
 
-def get_source_contents(source: Source, spec: SourceHandler) -> SourceMetaItems:
+def get_source_contents(source: Source, spec: SourceSpec) -> SourceMetaItems:
     # just returning source_text and source_uid from a single function
     source_text = _get_source_text(source=source, handler_payload=spec)
     source_uid = _get_source_uid(source=source, handler_payload=spec)
