@@ -66,10 +66,15 @@ class _NodeIdentity:
 
     @staticmethod
     def gather_properties(document: doc.Document):
+        # some key values are specifically not compatiable in neo4j
+        metadata = {
+            k.replace("-", "_"): v for k, v in document.metadata.properties.items()
+        }
+
         props = {
             "uid": document.uid,
             **document.content.prefix_model_dump(),
-            **document.metadata.properties,
+            **metadata,
         }
         return no_quotes_object(props)
 
