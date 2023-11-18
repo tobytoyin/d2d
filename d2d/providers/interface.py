@@ -11,6 +11,8 @@ TaskFunction: TypeAlias = Callable[[T], TaskResultDict]
 class SourceTextTasks(ProviderTaskHandlers[str, TaskResultDict], Protocol):
     """Interface for Storing Text-related Tasks"""
 
+    provider_name: str
+
     @staticmethod
     def summary(_: str, /) -> TaskResultDict:
         ...
@@ -19,6 +21,6 @@ class SourceTextTasks(ProviderTaskHandlers[str, TaskResultDict], Protocol):
     def metadata(_: str, /) -> TaskResultDict:
         ...
 
-    # @staticmethod
-    # def relations(_: str, /) -> TaskResultDict:
-    #     ...
+    @staticmethod
+    def relations(_: str, /) -> TaskResultDict:
+        ...

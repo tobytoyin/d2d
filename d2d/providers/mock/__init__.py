@@ -13,6 +13,8 @@ class SourceCatalog:
 
 # follows the services.SourceTasks interface
 class TaskCatalog:
+    provider_name = "mock"
+
     @staticmethod
     def summary(text):
         return {

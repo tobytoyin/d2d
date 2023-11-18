@@ -1,3 +1,4 @@
+import argparse
 import asyncio
 from typing import TypeAlias
 
@@ -27,21 +28,3 @@ class DocumentToGraphAPI:
         process.update_or_create_relations(document)
 
         return True
-
-
-if __name__ == "__main__":
-    p = {
-        "sources": [
-            {"path": "t1.txt"},
-            {"path": "t2.txt"},
-            {"path": "t3.txt"},
-            {"path": "t4.txt"},
-        ],
-        "source_spec": {"provider": "mock"},
-        "tasks": {
-            "summary": {"provider": "mock"},
-            "metadata": {"provider": "mock"},
-            "relations": {"provider": "mock"},
-        },
-    }
-    DocumentToGraphAPI.async_run(p)
