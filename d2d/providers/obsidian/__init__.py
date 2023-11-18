@@ -1,5 +1,5 @@
 # follows the services.SourceIO interface
-from .processor import links_processor
+from .processor import frontmatter_processor, links_processor
 
 
 class SourceCatalog:
@@ -16,17 +16,8 @@ class SourceCatalog:
 # follows the services.SourceTasks interface
 class TaskCatalog:
     @staticmethod
-    def summary(text):
-        return {
-            "content": "hello world",
-        }
-
-    @staticmethod
     def metadata(text):
-        return {
-            "doc_type": "mock",
-            "properties": {"type": "mock"},
-        }
+        return frontmatter_processor(text)
 
     @staticmethod
     def relations(text):

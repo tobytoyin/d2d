@@ -3,11 +3,12 @@ import logging
 import d2d.contracts.exceptions as exc
 from d2d.contracts.interfaces import ProviderSourceMetaHandlers
 
-from . import mock
+from . import mock, obsidian
 from .interface import SourceTextTasks, TaskFunction
 
 _CATALOG = {
     "mock": mock.TaskCatalog,
+    "obsidian": obsidian.TaskCatalog,
 }
 
 
@@ -17,14 +18,6 @@ def get_tasks_provider(provider_name: str) -> type[SourceTextTasks] | None:
     if provider is None:
         logging.warning("provider '%s' does not exist", provider_name)
         return
-
-    # # ensure interface
-    # if not issubclass(provider, SourceTextTasks):
-    #     logging.warning(
-    #         "provider '%s' has implemented incorrect interface",
-    #         provider_name,
-    #     )
-    #     return
 
     return provider  # type: ignore
 
@@ -49,6 +42,7 @@ def get_task_fn(provider_name: str, task_name: str) -> TaskFunction | None:
 
 _SOURCE_CATALOG = {
     "mock": mock.SourceCatalog,
+    "obsidian": mock.SourceCatalog,
 }
 
 
