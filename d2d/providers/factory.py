@@ -42,7 +42,7 @@ def get_task_fn(provider_name: str, task_name: str) -> TaskFunction | None:
 
 _SOURCE_CATALOG = {
     "mock": mock.SourceCatalog,
-    "obsidian": mock.SourceCatalog,
+    "obsidian": obsidian.SourceCatalog,
 }
 
 
