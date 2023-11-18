@@ -6,13 +6,7 @@ from .mixin import GraphDBMixin
 from .utils import no_quotes_object
 
 
-class NodeIdentity(GraphDBMixin):
-    """Unit of Work converts a GrapDocumentModel into equivalent Cypher queries"""
-
-    def __init__(self, document: doc.Document) -> None:
-        super().__init__()
-        self.document = document
-
+class NodeIdentity:
     @staticmethod
     def node_id(document: doc.Document) -> str:
         return document.uid
@@ -22,8 +16,12 @@ class NodeIdentity(GraphDBMixin):
         return document.metadata.doc_type.capitalize()
 
     @staticmethod
+    def get_self(document: doc.Document) -> str:
+        return no_quotes_object({"uid": document.uid})
+
+    @staticmethod
     def create_self(tx, document: doc.Document):
-        match_self = no_quotes_object({"uid": document.uid})
+        match_self = NodeIdentity.get_self(document)
         print(match_self)
         query = f"""
         MERGE ( n {match_self} )
@@ -36,7 +34,7 @@ class NodeIdentity(GraphDBMixin):
         tx.run(query)
 
 
-class NodeCommonProc(GraphDBMixin):
+class NodeCommonProc:
     @staticmethod
     def detach_all_relationships(tx, document: doc.Document):
         match_self = no_quotes_object({"uid": document.uid})

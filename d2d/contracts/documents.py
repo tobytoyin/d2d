@@ -33,7 +33,7 @@ class Metadata(DocumentComponent):
 class Relation(DocumentComponent):
     rel_uid: str
     rel_type: str
-    properties: Optional[dict[str, Any]] = {}
+    properties: dict[str, Any] = {}
 
     model_config = ConfigDict(arbitrary_types_allowed=True)
 

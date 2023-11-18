@@ -28,9 +28,18 @@ def test_update_or_create_document(document_with_2_links):
     process = DocumentToNeo4J()
     process.update_or_create_document(document_with_2_links)
 
+    # TODO test counts
+
 
 def test_update_or_create_relations(document_with_2_links):
     reset_neo4j()
     process = DocumentToNeo4J()
     process.update_or_create_document(document_with_2_links)
     process.update_or_create_relations(document_with_2_links)
+
+
+def test_delete_document(document_with_2_links):
+    reset_neo4j()
+    process = DocumentToNeo4J()
+    process.update_or_create_document(document_with_2_links)
+    process.delete_document(document_with_2_links)
