@@ -99,3 +99,16 @@ def payload_with_options_unpacked():
             },
         },
     }
+
+
+@pytest.fixture
+def payload_with_all_features():
+    return {
+        "sources": [{"path": "t1.txt"}, {"path": "t2.txt"}, {"path": "t3.txt"}],
+        "source_spec": {"provider": "mock"},
+        "tasks": {
+            "summary": {"provider": "mock"},
+            "metadata": {"provider": "mock"},
+            "relations": {"provider": "mock"},
+        },
+    }

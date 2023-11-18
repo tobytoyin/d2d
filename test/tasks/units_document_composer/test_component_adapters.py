@@ -1,1 +1,0 @@
-from d2d.tasks.document_composer._component_adapters import summary_adapter

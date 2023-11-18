@@ -18,6 +18,14 @@ class ProviderTaskHandlers(Protocol[T, R]):
     def summary(_: T, /) -> R:
         ...
 
+    @staticmethod
+    def metadata(_: T, /) -> R:
+        ...
+
+    @staticmethod
+    def relations(_: T, /) -> R:
+        ...
+
 
 @runtime_checkable
 class ProviderSourceMetaHandlers(Protocol):

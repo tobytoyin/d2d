@@ -12,5 +12,13 @@ class SourceTextTasks(ProviderTaskHandlers[str, TaskResultDict], Protocol):
     """Interface for Storing Text-related Tasks"""
 
     @staticmethod
-    def summary(_: str) -> TaskResultDict:
+    def summary(_: str, /) -> TaskResultDict:
         ...
+
+    @staticmethod
+    def metadata(_: str, /) -> TaskResultDict:
+        ...
+
+    # @staticmethod
+    # def relations(_: str, /) -> TaskResultDict:
+    #     ...

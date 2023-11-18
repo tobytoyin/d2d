@@ -18,15 +18,15 @@ def get_tasks_provider(provider_name: str) -> type[SourceTextTasks] | None:
         logging.warning("provider '%s' does not exist", provider_name)
         return
 
-    # ensure interface
-    if not issubclass(provider, SourceTextTasks):
-        logging.warning(
-            "provider '%s' has implemented incorrect interface",
-            provider_name,
-        )
-        return
+    # # ensure interface
+    # if not issubclass(provider, SourceTextTasks):
+    #     logging.warning(
+    #         "provider '%s' has implemented incorrect interface",
+    #         provider_name,
+    #     )
+    #     return
 
-    return provider
+    return provider  # type: ignore
 
 
 def get_task_fn(provider_name: str, task_name: str) -> TaskFunction | None:

@@ -1,3 +1,5 @@
+from typing import Any
+
 from pydantic import BaseModel, ConfigDict, field_validator
 
 
@@ -20,9 +22,38 @@ class Summary(DocumentComponent):
         return "summary"
 
 
+class Metadata(DocumentComponent):
+    doc_type: str = "document"
+
+    @property
+    def key(self) -> str:
+        return "metadata"
+
+
+class Relation(DocumentComponent):
+    rel_uid: str
+    rel_type: str
+    properties: dict[str, Any] = {}
+
+    model_config = ConfigDict(arbitrary_types_allowed=True)
+
+    def __hash__(self) -> int:
+        return frozenset(self.model_dump()).__hash__()
+
+
+class Relations(DocumentComponent):
+    items: set[Relation] = set()
+
+    @property
+    def key(self) -> str:
+        return "relations"
+
+
 class Document(BaseModel):
     uid: str
     summary: Summary = Summary()
+    metadata: Metadata = Metadata()
+    relations: Relations = Relations()
 
     @field_validator("uid", mode="after")
     @classmethod

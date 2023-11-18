@@ -1,3 +1,4 @@
+import asyncio
 from typing import Iterable
 
 from d2d.contracts.documents import Document, DocumentComponent

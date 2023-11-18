@@ -5,13 +5,13 @@ import logging
 from pydantic import ValidationError
 
 import d2d.contracts.exceptions as exc
-from d2d.contracts.documents import DocumentComponent, Summary
+from d2d.contracts import documents as doc
 from d2d.providers.interface import ProviderTaskHandlers
 
 
 # We use these functions to convert the JSON/ dict objects returned from
 # different Prvoiders' functions to its equalavent Pydantic model
-def summary_adapter(d: dict) -> Summary:
+def summary_adapter(d: dict) -> doc.Summary:
     """Convert a input dictionary into structural Summary
 
     :param d: payload object
@@ -20,14 +20,32 @@ def summary_adapter(d: dict) -> Summary:
     :rtype: Summary
     """
     try:
-        return Summary.model_validate(d)
+        return doc.Summary.model_validate(d)
     except ValidationError:
         err = exc.IncompatibleProviderOutputs("summary input is not compatible")
         logging.warning(err)
-        return Summary()
+        return doc.Summary()
 
 
-class TaskFunctionsAdapters(ProviderTaskHandlers[dict, DocumentComponent]):
+def metadata_adpater(d: dict) -> doc.Metadata:
+    try:
+        return doc.Metadata.model_validate(d)
+    except ValidationError:
+        err = exc.IncompatibleProviderOutputs
+        logging.warning(err)
+        return doc.Metadata()
+
+
+def relations_adapter(d: dict) -> doc.Relations:
+    try:
+        return doc.Relations.model_validate(d)
+    except ValidationError:
+        err = exc.IncompatibleProviderOutputs
+        logging.warning(err)
+        return doc.Relations()
+
+
+class TaskFunctionsAdapters(ProviderTaskHandlers[dict, doc.DocumentComponent]):
     """Mapper between provider tasks functions to the eqv pydantic object convertors
 
     :param ProviderInterface: _description_
@@ -35,3 +53,5 @@ class TaskFunctionsAdapters(ProviderTaskHandlers[dict, DocumentComponent]):
     """
 
     summary = summary_adapter
+    metadata = metadata_adpater
+    relations = relations_adapter
