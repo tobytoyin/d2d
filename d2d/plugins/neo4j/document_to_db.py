@@ -86,6 +86,9 @@ class _NodeCommonProc:
         match_self = no_quotes_object({"uid": document.uid})
         final_query = f"MATCH (root {match_self})"
 
+        if not document.relations.items:
+            return
+
         for idx, rel in enumerate(document.relations.items):
             # for each related document
             # 1. merge to create/ replace existing node
