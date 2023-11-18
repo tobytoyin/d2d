@@ -41,4 +41,4 @@ def test_source_uid():
     handler_payload = SourceSpec(provider="mock")
     source = Source(path="dummy.txt")  # type: ignore
     reader = _get_source_uid(source, handler_payload)
-    assert reader == "mock-id-000"
+    assert reader == "dummy"

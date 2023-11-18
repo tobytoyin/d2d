@@ -1,14 +1,16 @@
 # follows the services.SourceIO interface
+from .processor import links_processor
+
+
 class SourceCatalog:
     @staticmethod
     def source_text(d: dict):
-        print(f"source_text - receive {d}")
-        print(f"source_text - read from {d['path']}")
-        return "mock io contents"
+        with open(d["path"], "r") as f:
+            return f.read()
 
     @staticmethod
     def uid_gen(d):
-        return str(d["path"]).split(".")[0]
+        return str(d["path"]).split("/")[-1].split(".")[0]
 
 
 # follows the services.SourceTasks interface
@@ -28,13 +30,4 @@ class TaskCatalog:
 
     @staticmethod
     def relations(text):
-        rel1 = {
-            "rel_uid": "0000",
-            "rel_type": "link",
-        }
-        rel2 = {
-            "rel_uid": "0001",
-            "rel_type": "link",
-            "properties": {"key1": "value1"},
-        }
-        return {"items": [rel1, rel2]}
+        return links_processor(text)

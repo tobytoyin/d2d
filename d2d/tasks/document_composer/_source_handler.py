@@ -12,7 +12,7 @@ from d2d.contracts.payload import Source, SourceDict, SourcePayload, SourceSpec
 from d2d.providers.factory import get_source_handling_provider
 from d2d.tasks.common import transform_function_with_options
 
-SourceMetaItems = namedtuple("SourceMetaItems", "source_text source_uid")
+SourceMetaItems = namedtuple("SourceMetaItems", "source_uid source_text")
 
 
 def payload_handler(payload: dict) -> SourcePayload:
@@ -57,4 +57,4 @@ def get_source_contents(source: Source, spec: SourceSpec) -> SourceMetaItems:
     # just returning source_text and source_uid from a single function
     source_text = _get_source_text(source=source, handler_payload=spec)
     source_uid = _get_source_uid(source=source, handler_payload=spec)
-    return SourceMetaItems(source_text, source_uid)
+    return SourceMetaItems(source_uid, source_text)

@@ -13,6 +13,23 @@ class DocumentComponent(BaseModel):
         """The reference key in `Document` class"""
         raise NotImplementedError
 
+    def prefix_model_dump(self, prefix=None):
+        if not prefix:
+            prefix = self.key + "_"
+
+        d = self.model_dump()
+        return {f"{prefix}{k}": v for k, v in d.items()}
+
+
+class Content(DocumentComponent):
+    """String Content of the document"""
+
+    text: str = ""
+
+    @property
+    def key(self) -> str:
+        return "content"
+
 
 class Summary(DocumentComponent):
     content: str = ""
@@ -24,6 +41,7 @@ class Summary(DocumentComponent):
 
 class Metadata(DocumentComponent):
     doc_type: str = "document"
+    properties: dict[str, Any] = {}
 
     @property
     def key(self) -> str:
@@ -51,6 +69,7 @@ class Relations(DocumentComponent):
 
 class Document(BaseModel):
     uid: str
+    content: Content = Content()
     summary: Summary = Summary()
     metadata: Metadata = Metadata()
     relations: Relations = Relations()
