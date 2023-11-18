@@ -23,4 +23,4 @@ class TaskCatalog:
 
     @staticmethod
     def relations(text):
-        return links_processor(text)
+        return {"items": links_processor(text)}
