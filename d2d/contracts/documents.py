@@ -1,4 +1,4 @@
-from typing import Any
+from typing import Any, Optional
 
 from pydantic import BaseModel, ConfigDict, field_validator
 
@@ -33,7 +33,7 @@ class Metadata(DocumentComponent):
 class Relation(DocumentComponent):
     rel_uid: str
     rel_type: str
-    properties: dict[str, Any] = {}
+    properties: Optional[dict[str, Any]] = {}
 
     model_config = ConfigDict(arbitrary_types_allowed=True)
 

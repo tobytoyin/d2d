@@ -9,9 +9,6 @@ class SourceCatalog:
     uid_gen = lambda d: "mock-id-000"
 
 
-from ..interface import SourceTextTasks
-
-
 # follows the services.SourceTasks interface
 class TaskCatalog:
     @staticmethod
