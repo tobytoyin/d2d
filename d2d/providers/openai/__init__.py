@@ -4,11 +4,11 @@ from openai import OpenAI
 # follows the services.SourceTasks interface
 class TaskCatalog:
     provider_name = "openai"
-    client = OpenAI()
-
+    
     @staticmethod
     def embedding(text: str, api_key: str):
-        callback = TaskCatalog.client.embeddings
+        client = OpenAI()
+        callback = client.embeddings
         callback.api_key = api_key
         res = callback.create(
             model="text-embedding-ada-002",
