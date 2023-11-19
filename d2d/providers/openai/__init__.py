@@ -29,15 +29,19 @@ class TaskCatalog:
         - extract named entity and relationships from a piece of text
         - only extract important entity but avoid common nouns
 
-        When an entity is extracted, you should output it in a form of: [ENTITY_ID, TYPE, PROPERTIES]
-        and extracted relationship in a form of [ENTITY_ID_ROOT, RELATIONSHIP, ENTITY_ID_OTHER, PROPERTIES].
+        When an entity is extracted, you should output them following the below rules:
+        - named entity structure  with: [ENTITY_ID, TYPE, PROPERTIES]
+        - relationships structures with [ENTITY_ID_ROOT, RELATIONSHIP, ENTITY_ID_OTHER, PROPERTIES]
+        - RELATIONSHIP should be verb phrase only and contains no tenses
+        - ENTITY_ID_ROOT and ENTITY_ID_OTHER can only be extracted named entity ENTITY_ID
+
         You should only output the result as JSON object.
 
         Example:
         content: Alice lawyer and is 25 years old and Bob is her roommate since 2001. Bob works as a journalist. Alice owns a the webpage www.alice.com and Bob owns the webpage www.bob.com.
         {
             "nodes": ["alice", "Person", {"age": 25, "occupation": "lawyer", "name":"Alice"}], ["bob", "Person", {"occupation": "journalist", "name": "Bob"}], ["alice.com", "Webpage", {"url": "www.alice.com"}], ["bob.com", "Webpage", {"url": "www.bob.com"}],
-            "relationships": ["alice", "roommate", "bob", {"start": 2021}], ["alice", "owns", "alice.com", {}], ["bob", "owns", "bob.com", {}]
+            "relationships": ["alice", "IS_ROOMMATE", "bob", {"start": 2021}], ["alice", "OWN", "alice.com", {}], ["bob", "OWN", "bob.com", {}]
         }
         """.strip()
 
