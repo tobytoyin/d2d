@@ -1,4 +1,4 @@
-from typing import Any, Optional
+from typing import Any, Iterable, Optional
 
 from pydantic import BaseModel, ConfigDict, field_validator
 
@@ -67,12 +67,21 @@ class Relations(DocumentComponent):
         return "relations"
 
 
+class Embedding(DocumentComponent):
+    embedding: Iterable[float] = None
+
+    @property
+    def key(self) -> str:
+        return "embedding"
+
+
 class Document(BaseModel):
     uid: str
     content: Content = Content()
     summary: Summary = Summary()
     metadata: Metadata = Metadata()
     relations: Relations = Relations()
+    embedding: Embedding = Embedding()
 
     @field_validator("uid", mode="after")
     @classmethod

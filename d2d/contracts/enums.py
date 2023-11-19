@@ -4,4 +4,5 @@ TaskKeyword: TypeAlias = Literal[
     "summary",
     "metadata",
     "relations",
+    "embedding",
 ]
