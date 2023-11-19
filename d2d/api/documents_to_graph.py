@@ -1,6 +1,6 @@
 import argparse
 import asyncio
-from typing import TypeAlias
+from typing import Any, TypeAlias
 
 from d2d.plugins.neo4j.document_to_db import DocumentToNeo4J
 from d2d.tasks.document_composer import DocumentComposer
@@ -8,7 +8,7 @@ from d2d.tasks.document_composer import DocumentComposer
 IS_COMPLETED: TypeAlias = bool
 
 
-class DocumentToGraphAPI:
+class _DocumentToGraphAPI:
     @staticmethod
     def async_run(payload):
         asyncio.run(DocumentToGraphAPI.run(payload))
@@ -28,3 +28,10 @@ class DocumentToGraphAPI:
         process.update_or_create_relations(document)
 
         return True
+
+
+class DocumentToGraphAPI:
+    def run(self, document) -> Any:
+        process = DocumentToNeo4J()
+        process.update_or_create_document(document)
+        process.update_or_create_relations(document)
