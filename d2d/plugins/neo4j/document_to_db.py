@@ -75,6 +75,7 @@ class _NodeIdentity:
             "uid": document.uid,
             **document.content.prefix_model_dump(),
             **metadata,
+            **document.embedding.prefix_model_dump(),
         }
         return no_quotes_object(props)
 

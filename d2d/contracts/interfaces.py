@@ -26,6 +26,10 @@ class ProviderTaskHandlers(Protocol[T, R]):
     def relations(_: T, /) -> R:
         ...
 
+    @staticmethod
+    def embedding(_: T, /) -> R:
+        ...
+
 
 @runtime_checkable
 class ProviderSourceMetaHandlers(Protocol):

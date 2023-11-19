@@ -3,12 +3,14 @@ import logging
 import d2d.contracts.exceptions as exc
 from d2d.contracts.interfaces import ProviderSourceMetaHandlers
 
-from . import mock, obsidian
+from . import mock, nlp, obsidian, openai
 from .interface import SourceTextTasks, TaskFunction
 
 _CATALOG = {
     "mock": mock.TaskCatalog,
     "obsidian": obsidian.TaskCatalog,
+    "openai": openai.TaskCatalog,
+    "nlp": nlp.TaskCatalog,
 }
 
 
