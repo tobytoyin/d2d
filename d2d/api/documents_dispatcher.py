@@ -4,17 +4,6 @@ from typing import Callable
 from d2d.contracts.documents import Document
 from d2d.plugins.factory import get_plugin
 
-from .documents_to_graph import DocumentToGraphAPI
-
-
-class PayloadDispatcher:
-    # def async_run(self, payload):
-    #     asyncio.run(DocumentToGraphAPI.run(payload))
-
-    def run(self, payload):
-        documents = DocumentComposer().run(payload)
-        print(list(documents))
-
 
 class DocumentServicesDispatcher:
     @staticmethod

@@ -1,6 +1,3 @@
-import asyncio
-from typing import Callable
-
 from d2d.contracts.payload import DocumentService
 from d2d.tasks.document_composer import DocumentComposer
 from d2d.tasks.payload_handler import convert_structural_payload
@@ -21,9 +18,6 @@ class DocumentsEndpoint:
         if not payload_obj.document_services:
             err = "document_services cannot be empty when using DocumentEndpoint"
             raise AttributeError(err)
-
-        print(payload_obj)
-
         # convert payload to documents
         documents = DocumentComposer().run(payload)
 
