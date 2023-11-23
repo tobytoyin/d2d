@@ -22,9 +22,15 @@ class DocumentComponent(BaseModel):
 
 
 class Content(DocumentComponent):
-    """String Content of the document"""
+    """Contents of the Document
+
+    text - text contents of the document
+    location - optionally if text contents shouldn't be fully stored, a location reference
+    codec - reference on how the text should be read, e.g., string, markdown, ...
+    """
 
     text: str = ""
+    location: str | None = None
     codec: str = "string"
 
     @property
