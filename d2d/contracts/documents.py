@@ -25,6 +25,7 @@ class Content(DocumentComponent):
     """String Content of the document"""
 
     text: str = ""
+    codec: str = "string"
 
     @property
     def key(self) -> str:
