@@ -8,16 +8,17 @@ from .documents_to_graph import DocumentToGraphAPI
 
 
 class PayloadDispatcher:
-    def async_run(self, payload):
-        asyncio.run(DocumentToGraphAPI.run(payload))
+    # def async_run(self, payload):
+    #     asyncio.run(DocumentToGraphAPI.run(payload))
 
     def run(self, payload):
         documents = DocumentComposer().run(payload)
+        print(list(documents))
 
 
-class DocumentDispatcher:
+class DocumentServicesDispatcher:
+    @staticmethod
     def service_runner(
-        self,
         document: Document,
         plugin_name: str | None = None,
         service_catalog=None,

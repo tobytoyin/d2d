@@ -4,7 +4,7 @@ import logging
 from pathlib import Path
 from typing import Any, Literal, Optional, TypeAlias
 
-from pydantic import BaseModel, ValidationError, field_validator
+from pydantic import BaseModel, Field, ValidationError, field_validator
 
 from d2d.contracts.enums import TaskKeyword
 
@@ -39,10 +39,16 @@ class TaskSpec(BaseModel):
     options: Optional[Options] = Options()
 
 
-class SourcePayload(BaseModel):
+class DocumentService(BaseModel):
+    plugin_name: str
+    service_name: str
+
+
+class JobPayload(BaseModel):
     sources: list[Source]
     source_spec: SourceSpec
     tasks: dict[TaskKeyword, TaskSpec]
+    document_services: list[DocumentService] | None = Field(default_factory=list)
 
     @field_validator("sources", mode="before")
     @classmethod

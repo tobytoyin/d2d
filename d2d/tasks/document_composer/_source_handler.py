@@ -8,14 +8,14 @@ from typing import Generator
 from pydantic import ValidationError
 
 import d2d.contracts.exceptions as exc
-from d2d.contracts.payload import Source, SourceDict, SourcePayload, SourceSpec
+from d2d.contracts.payload import JobPayload, Source, SourceDict, SourceSpec
 from d2d.providers.factory import get_source_handling_provider
 from d2d.tasks.common import transform_function_with_options
 
 SourceMetaItems = namedtuple("SourceMetaItems", "source_uid source_text")
 
 
-def payload_handler(payload: dict) -> SourcePayload:
+def payload_handler(payload: dict) -> JobPayload:
     """First contact point for the payload to get pass to the pipeline
 
 
@@ -25,7 +25,7 @@ def payload_handler(payload: dict) -> SourcePayload:
     :rtype: SourcePayload
     """
     try:
-        return SourcePayload.model_validate(payload)
+        return JobPayload.model_validate(payload)
     except ValidationError as e:
         raise exc.IncompatiblePayload from e
 
