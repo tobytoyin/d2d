@@ -15,8 +15,6 @@ class SourceCatalog:
 
 # follows the services.SourceTasks interface
 class TaskCatalog:
-    provider_name = "obsidian"
-
     @staticmethod
     def metadata(text):
         return frontmatter_processor(text)

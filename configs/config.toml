@@ -1,0 +1,4 @@
+[providers]
+mock="providers/mock"
+obsidian='providers/obsidian'
+openai='providers/openai'

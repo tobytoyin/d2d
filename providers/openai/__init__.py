@@ -3,8 +3,6 @@ from openai import OpenAI
 
 # follows the services.SourceTasks interface
 class TaskCatalog:
-    provider_name = "openai"
-
     @staticmethod
     def embedding(text: str, api_key: str):
         client = OpenAI()
