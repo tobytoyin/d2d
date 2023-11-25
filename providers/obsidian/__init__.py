@@ -9,8 +9,10 @@ class SourceCatalog:
             return f.read()
 
     @staticmethod
-    def uid_gen(d):
-        return str(d["path"]).split("/")[-1].split(".")[0]
+    def metadata(d):
+        return {
+            "uid": str(d["path"]).split("/")[-1].split(".")[0],
+        }
 
 
 # follows the services.SourceTasks interface

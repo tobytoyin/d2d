@@ -2,7 +2,7 @@ from __future__ import annotations
 
 import logging
 from pathlib import Path
-from typing import Any, Literal, Optional, TypeAlias
+from typing import Any, Optional, TypeAlias, TypedDict
 
 from pydantic import BaseModel, Field, ValidationError, field_validator
 
@@ -66,3 +66,13 @@ class TaskFunctionResult(BaseModel):
     source_uid: str
     kind: str
     result: Any
+
+
+### Payload Related TypedDict ###
+class _SourceCoreMetadata(TypedDict):
+    uid: str
+
+
+class SourceMetadata(_SourceCoreMetadata, total=False):
+    # allow extra fields
+    ...

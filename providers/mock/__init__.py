@@ -1,4 +1,8 @@
 # follows the services.SourceIO interface
+
+from datetime import datetime
+
+
 class SourceCatalog:
     @staticmethod
     def source_text(d: dict):
@@ -7,8 +11,11 @@ class SourceCatalog:
         return "mock io contents"
 
     @staticmethod
-    def uid_gen(d):
-        return str(d["path"]).split(".")[0]
+    def metadata(d):
+        return {
+            "uid": str(d["path"]).split(".")[0],
+            "createdTime": str(datetime.now()),
+        }
 
 
 # follows the services.SourceTasks interface
