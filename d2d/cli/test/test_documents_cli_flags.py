@@ -5,6 +5,7 @@ import pytest
 from d2d.cli.main import _Flags
 
 
+
 @pytest.fixture
 def base_parser():
     return ArgumentParser(prog="TestParser")
