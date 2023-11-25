@@ -2,7 +2,8 @@ from argparse import ArgumentParser
 
 import pytest
 
-from d2d.cli.documents_to_graph import _Flags
+from d2d.cli.main import _Flags
+
 
 
 @pytest.fixture
