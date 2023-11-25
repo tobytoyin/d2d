@@ -24,7 +24,8 @@ class DocumentComposer:
         spec: SourceSpec,
         tasks: dict[TaskKeyword, TaskSpec],
     ):
-        uid, text = get_source_contents(source=source, spec=spec)
+        metadata, text = get_source_contents(source=source, spec=spec)
+        uid = metadata["uid"]
 
         # loop over the task
         components = DocumentComposer._tasks_handler(text, uid, tasks)

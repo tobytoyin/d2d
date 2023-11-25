@@ -8,26 +8,11 @@ from typing import Generator
 from pydantic import ValidationError
 
 import d2d.contracts.exceptions as exc
-from d2d.contracts.payload import JobPayload, Source, SourceDict, SourceSpec
+from d2d.contracts.payload import JobPayload, Source, SourceMetadata, SourceSpec
 from d2d.providers.factory import get_source_handling_provider
 from d2d.tasks.common import transform_function_with_options
 
-SourceMetaItems = namedtuple("SourceMetaItems", "source_uid source_text")
-
-
-# def payload_handler(payload: dict) -> JobPayload:
-#     """First contact point for the payload to get pass to the pipeline
-
-
-#     :param payload: _description_
-#     :type payload: dict
-#     :return: _description_
-#     :rtype: SourcePayload
-#     """
-#     try:
-#         return JobPayload.model_validate(payload)
-#     except ValidationError as e:
-#         raise exc.IncompatiblePayload from e
+SourceMetaItems = namedtuple("SourceMetaItems", "source_metadata source_text")
 
 
 @cache
@@ -45,16 +30,16 @@ def _get_source_text(source: Source, handler_payload: SourceSpec) -> str:
 
 
 @cache
-def _get_source_uid(source: Source, handler_payload: SourceSpec) -> str:
+def _get_source_metadata(source: Source, handler_payload: SourceSpec) -> SourceMetadata:
     provider_name = handler_payload.provider
     provider = get_source_handling_provider(provider_name=provider_name)
 
-    fn = transform_function_with_options(provider.uid_gen, handler_payload.options)
+    fn = transform_function_with_options(provider.metadata, handler_payload.options)
     return fn(source.model_dump())
 
 
 def get_source_contents(source: Source, spec: SourceSpec) -> SourceMetaItems:
     # just returning source_text and source_uid from a single function
     source_text = _get_source_text(source=source, handler_payload=spec)
-    source_uid = _get_source_uid(source=source, handler_payload=spec)
-    return SourceMetaItems(source_uid, source_text)
+    source_metadata = _get_source_metadata(source=source, handler_payload=spec)
+    return SourceMetaItems(source_metadata, source_text)

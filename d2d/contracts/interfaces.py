@@ -1,6 +1,6 @@
 from typing import Any, Callable, Generic, Protocol, TypeVar, runtime_checkable
 
-from d2d.contracts.payload import SourceDict
+from d2d.contracts.payload import SourceDict, SourceMetadata
 
 T = TypeVar("T", contravariant=True)
 R = TypeVar("R", covariant=True)
@@ -51,12 +51,5 @@ class ProviderSourceMetaHandlers(Protocol):
         ...
 
     @staticmethod
-    def uid_gen(_: SourceDict, /) -> str:
-        """function to interact with 3rd party source and return string UID
-
-        :param payload: _description_
-        :type payload: SourcePayloadDict
-        :return: _description_
-        :rtype: str
-        """
+    def metadata(_: SourceDict, /) -> SourceMetadata:
         ...
