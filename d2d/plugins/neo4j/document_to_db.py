@@ -8,6 +8,10 @@ from .utils import no_quotes_object
 
 
 class DocumentToNeo4J(DocumentToDB[doc.Document], GraphDBMixin):
+    def update_or_create_document(self, document: doc.Document):
+        self.update_or_create_document(document)
+        self.update_or_create_relations(document)
+
     def update_or_create_relations(self, document: doc.Document):
         with self.driver.session() as session:
             _ = session.execute_write(

@@ -15,19 +15,19 @@ class ProviderTaskHandlers(Protocol[T, R]):
     """
 
     @staticmethod
-    def summary(_: T, /) -> R:
+    def summary(_: T, /, *args, **kwargs) -> R:
         ...
 
     @staticmethod
-    def metadata(_: T, /) -> R:
+    def metadata(_: T, /, *args, **kwargs) -> R:
         ...
 
     @staticmethod
-    def relations(_: T, /) -> R:
+    def relations(_: T, /, *args, **kwargs) -> R:
         ...
 
     @staticmethod
-    def embedding(_: T, /) -> R:
+    def embedding(_: T, /, *args, **kwargs) -> R:
         ...
 
 
