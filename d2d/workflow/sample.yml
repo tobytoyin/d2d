@@ -1,0 +1,11 @@
+sources:
+    - path: sample_yaml_1.txt
+    - path: sample_yaml_2.txt
+source_spec:
+    - provider: mock
+tasks:
+    summary:
+    - provider: mock
+document_services:
+    - plugin_name: neo4j
+      service_name: update_or_create_document
