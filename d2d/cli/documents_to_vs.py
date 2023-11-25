@@ -1,6 +1,6 @@
 import argparse
 
-from d2d.api.documents_to_graph import DocumentToGraphAPI
+from d2d.api.document_to_vs import DocumentToVsAPI
 from d2d.cli.utils import json_type
 
 
@@ -48,4 +48,4 @@ class CommandLine:
 
 if __name__ == "__main__":
     args = CommandLine.construct_payload()
-    _ = DocumentToGraphAPI().async_run(args)
+    _ = DocumentToVsAPI().async_run(args)
