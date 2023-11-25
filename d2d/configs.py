@@ -2,7 +2,7 @@ import importlib
 import os
 import tomllib
 
-CONFIG_PATH = os.environ.get("CONFIG_PATH", "configs/config.toml")
+CONFIG_PATH = os.environ.get("CONFIG_PATH", "d2d/configs/config.toml")
 
 
 class Config:

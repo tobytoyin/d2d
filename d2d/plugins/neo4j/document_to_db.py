@@ -1,5 +1,7 @@
 from __future__ import annotations
 
+import json
+
 from d2d.contracts import documents as doc
 
 from ..interface import DocumentToDB
@@ -56,32 +58,32 @@ class _NodeIdentity:
     @staticmethod
     def create_self(tx, document: doc.Document):
         match_self = _NodeIdentity.get_self(document)
-        print(match_self)
+        json_props = _NodeIdentity.read_json_properties(document)
         query = f"""
+        WITH apoc.convert.fromJsonMap('{json_props}') AS props
         MERGE ( n {match_self} )
         SET
-            n = {_NodeIdentity.gather_properties(document)},
+            n = props,
             n:{_NodeIdentity.node_label(document)},
             n.lastEdited = timestamp()
         """
-        print("------------")
-        print(query)
         tx.run(query)
 
     @staticmethod
-    def gather_properties(document: doc.Document):
+    def read_json_properties(document: doc.Document) -> str:
         # some key values are specifically not compatiable in neo4j
         metadata = {
             k.replace("-", "_"): v for k, v in document.metadata.properties.items()
         }
 
-        props = {
-            "uid": document.uid,
-            **document.content.prefix_model_dump(),
-            **metadata,
-            **document.embedding.prefix_model_dump(),
-        }
-        return no_quotes_object(props)
+        return json.dumps(
+            {
+                "uid": document.uid,
+                **document.content.prefix_model_dump(),
+                **metadata,
+                **document.embedding.prefix_model_dump(),
+            }
+        )
 
 
 class _NodeCommonProc:
