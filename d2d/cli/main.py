@@ -92,11 +92,12 @@ class CommandLine:
         return {
             "sources": cls._handle_files_sources_flag(),
             "source_spec": args.source_spec,
-            "tasks": {k: v for t in args.task for k, v in t.items()},
+            "tasks": {k: json_type(v) for k, v in args.tasks.items()},
             "document_services": args.document_services,
         }
 
 
 if __name__ == "__main__":
     args = CommandLine.construct_payload()
+    print(args)
     _ = DocumentsEndpoint.run(args)
