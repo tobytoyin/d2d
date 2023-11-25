@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "d2d"
-version = "0.1.2"
+version = "0.1.3"
 description = ""
 authors = ["Toby <40096033+tobytoyin@users.noreply.github.com>"]
 packages = [{include = "d2d"}]
