@@ -3,16 +3,14 @@ from typing import Iterable
 
 from d2d.contracts.documents import Document, DocumentComponent
 from d2d.contracts.enums import TaskKeyword
-from d2d.contracts.payload import Source, SourceSpec, TaskSpec
+from d2d.contracts.payload import JobPayload, Source, SourceSpec, TaskSpec
 
-from ._source_handler import get_source_contents, payload_handler
+from ._source_handler import get_source_contents
 from ._task_handler import task_handler
 
 
 class DocumentComposer:
-    def run(self, payload: dict):
-        spec = payload_handler(payload=payload)
-
+    def run(self, spec: JobPayload):
         sources = spec.sources
         source_handler = spec.source_spec
         tasks = spec.tasks

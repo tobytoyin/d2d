@@ -18,8 +18,9 @@ class DocumentsEndpoint:
         if not payload_obj.document_services:
             err = "document_services cannot be empty when using DocumentEndpoint"
             raise AttributeError(err)
+
         # convert payload to documents
-        documents = DocumentComposer().run(payload)
+        documents = DocumentComposer().run(payload_obj)
 
         # run on all the services
         for document in documents:

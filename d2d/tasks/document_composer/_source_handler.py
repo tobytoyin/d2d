@@ -15,19 +15,19 @@ from d2d.tasks.common import transform_function_with_options
 SourceMetaItems = namedtuple("SourceMetaItems", "source_uid source_text")
 
 
-def payload_handler(payload: dict) -> JobPayload:
-    """First contact point for the payload to get pass to the pipeline
+# def payload_handler(payload: dict) -> JobPayload:
+#     """First contact point for the payload to get pass to the pipeline
 
 
-    :param payload: _description_
-    :type payload: dict
-    :return: _description_
-    :rtype: SourcePayload
-    """
-    try:
-        return JobPayload.model_validate(payload)
-    except ValidationError as e:
-        raise exc.IncompatiblePayload from e
+#     :param payload: _description_
+#     :type payload: dict
+#     :return: _description_
+#     :rtype: SourcePayload
+#     """
+#     try:
+#         return JobPayload.model_validate(payload)
+#     except ValidationError as e:
+#         raise exc.IncompatiblePayload from e
 
 
 @cache
