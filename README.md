@@ -3,17 +3,11 @@
 ## CLI Usage
 
 ```shell
-python3 -m doc_uploader.cli  --src obsidian  --dst neo4j --files file1.md file2.md
-
-# upload every from a subdirectory
-find . -type f | \
-grep <pattern> | \
-xargs -I "{}" python3 -m doc_uploader.cli --src obsidian --dst neo4j --files "{}"
-
-# using a diff set (e.g., git diff)
-git diff --name-only --diff-filter=ACMRT | \
-grep <pattern> | \
-xargs -I "{}" python3 -m doc_uploader.cli --src obsidian --dst neo4j --files "{}"
+python3 -m d2d.cli.main \
+--source_spec '{"provider": "someProviderName"}' \
+--tasks metadata='{"provider": "someProviderName"}' relations='{"provider": "someProviderName"}' \
+--document_services '{"plugin_name": "neo4j","service_name": "update_or_create_document"}' \
+--files file1.txt file2.txt file3.txt
 ```
 
 ## Overall Designs
