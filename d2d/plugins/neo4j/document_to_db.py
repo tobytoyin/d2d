@@ -82,7 +82,8 @@ class _NodeIdentity:
                 **document.content.prefix_model_dump(),
                 **metadata,
                 **document.embedding.prefix_model_dump(),
-            }
+            },
+            default=str,
         )
 
 
