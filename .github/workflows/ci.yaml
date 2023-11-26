@@ -3,23 +3,10 @@ name: CI Checks On Push
 on: push
 
 jobs:
-  precommit:
+  test-in-container:
     runs-on: ubuntu-latest
-
     steps:
       - name: Checkout code
-        uses: actions/checkout@v2
-
-      - name: Set up Python
-        uses: actions/setup-python@v2
-        with:
-          python-version: "3.10"
-
-      - name: Install dependencies
-        run: pip install black pytest
-
-      - name: Run Tests
-        run: pytest -s -v
-
-      - name: Check if .py scripts is properly formatted in Black 
-        run: black --check ./streamlit        
+        uses: actions/checkout@v3
+      - name: Build Test Env
+        run: docker-compose -f 'docker-compose.ci.yaml' up --exit-code-from test-d2d
