@@ -24,13 +24,15 @@ class DocumentComposer:
         spec: SourceSpec,
         tasks: dict[TaskKeyword, TaskSpec],
     ):
-        metadata, text = get_source_contents(source=source, spec=spec)
-        uid = metadata["uid"]
+        source_loaders = get_source_contents(source=source, spec=spec)
 
-        # loop over the task
-        components = DocumentComposer._tasks_handler(text, uid, tasks)
-        document = DocumentComposer._construct_document(uid, components)
-        yield document
+        for source in source_loaders:
+            uid = source["uid"]
+
+            # loop over the task
+            components = DocumentComposer._tasks_handler(source["raw"], uid, tasks)
+            document = DocumentComposer._construct_document(uid, components)
+            yield document
 
     @staticmethod
     def _tasks_handler(text, uid, tasks):
