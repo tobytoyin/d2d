@@ -47,5 +47,6 @@ def get_source_contents(source: Source, spec: SourceSpec) -> SourceMetaItems:
 
     # just returning source_text and source_uid from a single function
     source_text = respond["raw"]
-    source_metadata = respond["uid"]
+    del respond["raw"]
+    source_metadata = respond
     return SourceMetaItems(source_metadata, source_text)
