@@ -59,14 +59,14 @@ class _NodeIdentity:
     def create_self(tx, document: doc.Document):
         match_self = _NodeIdentity.get_self(document)
         json_props = _NodeIdentity.read_json_properties(document)
-        query = f"""
-        WITH apoc.convert.fromJsonMap({json_props}) AS props
+        query = f'''
+        WITH apoc.convert.fromJsonMap("{json_props}") AS props
         MERGE ( n {match_self} )
         SET
             n = props,
             n:{_NodeIdentity.node_label(document)},
             n.lastEdited = timestamp()
-        """
+        '''
         tx.run(query)
 
     @staticmethod
