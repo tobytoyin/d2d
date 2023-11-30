@@ -38,15 +38,14 @@ def _get_source_metadata(source: Source, handler_payload: SourceSpec) -> SourceM
     return fn(source.model_dump())
 
 
-def get_source_contents(source: Source, spec: SourceSpec) -> SourceMetaItems:
+def get_source_contents(source: Source, spec: SourceSpec) -> Generator:
     provider_name = spec.provider
     provider = get_source_handling_provider(provider_name=provider_name)
 
     fn = transform_function_with_options(provider.loader, spec.options)
-    return fn(source.model_dump())
+    source_loader_res = fn(source.model_dump())
 
-    # # just returning source_text and source_uid from a single function
-    # source_text = respond["raw"]
-    # del respond["raw"]
-    # source_metadata = respond
-    # return SourceMetaItems(source_metadata, source_text)
+    if isinstance(source_loader_res, Generator):
+        return source_loader_res
+
+    yield source_loader_res
