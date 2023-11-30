@@ -60,7 +60,7 @@ class _NodeIdentity:
         match_self = _NodeIdentity.get_self(document)
         json_props = _NodeIdentity.read_json_properties(document)
         query = f"""
-        WITH apoc.convert.fromJsonMap(\'{json_props}\') AS props
+        WITH apoc.convert.fromJsonMap({json_props}) AS props
         MERGE ( n {match_self} )
         SET
             n = props,
