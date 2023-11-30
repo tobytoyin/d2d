@@ -9,13 +9,18 @@ import yaml
 
 @dataclass
 class ObsidianMarkdownRegex:
-    frontmatter = f"---\n((.|\n)+?)\n---"
+    frontmatter = r"^---\s+((.|\n)+?)\n---\s+"
+    frontmatter_section = r"^---\s+.+?\s+---\s+"
     links = r"(?<!!)\[\[(.*)\]\]"
+
+
+def inner_content_extraction(doc: str) -> str:
+    return re.sub(ObsidianMarkdownRegex.frontmatter_section, "", doc.strip())
 
 
 def frontmatter_processor(doc: str) -> dict:
     """convert frontmatter string into metada dict"""
-    metayamml_match = re.search(ObsidianMarkdownRegex.frontmatter, doc)
+    metayamml_match = re.search(ObsidianMarkdownRegex.frontmatter, doc.strip())
 
     if not metayamml_match:
         return {"doc_type": "unknown"}

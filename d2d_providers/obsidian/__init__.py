@@ -1,5 +1,5 @@
 # follows the services.SourceIO interface
-from .processor import frontmatter_processor, links_processor
+from .processor import frontmatter_processor, inner_content_extraction, links_processor
 
 
 class SourceCatalog:
@@ -24,3 +24,12 @@ class TaskCatalog:
     @staticmethod
     def relations(text):
         return {"items": links_processor(text)}
+
+    @staticmethod
+    def content(text):
+        content = inner_content_extraction(text)
+
+        return {
+            "text": content,
+            "codec": "markdown",
+        }
