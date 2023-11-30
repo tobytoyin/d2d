@@ -5,4 +5,5 @@ TaskKeyword: TypeAlias = Literal[
     "metadata",
     "relations",
     "embedding",
+    "content",
 ]
