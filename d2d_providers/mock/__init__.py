@@ -45,3 +45,6 @@ class TaskCatalog:
             "properties": {"key1": "value1"},
         }
         return {"items": [rel1, rel2]}
+
+    @staticmethod
+    def  
