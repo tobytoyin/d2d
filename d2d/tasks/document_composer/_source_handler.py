@@ -39,7 +39,13 @@ def _get_source_metadata(source: Source, handler_payload: SourceSpec) -> SourceM
 
 
 def get_source_contents(source: Source, spec: SourceSpec) -> SourceMetaItems:
+    provider_name = spec.provider
+    provider = get_source_handling_provider(provider_name=provider_name)
+
+    fn = transform_function_with_options(provider.loader, spec.options)
+    respond = fn(source.model_dump())
+
     # just returning source_text and source_uid from a single function
-    source_text = _get_source_text(source=source, handler_payload=spec)
-    source_metadata = _get_source_metadata(source=source, handler_payload=spec)
+    source_text = respond["raw"]
+    source_metadata = respond["uid"]
     return SourceMetaItems(source_metadata, source_text)

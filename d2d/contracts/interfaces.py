@@ -57,3 +57,7 @@ class ProviderSourceMetaHandlers(Protocol):
     @staticmethod
     def metadata(_: SourceDict, /) -> SourceMetadata:
         ...
+
+    @staticmethod
+    def loader(_: SourceDict, /) -> dict:
+        ...

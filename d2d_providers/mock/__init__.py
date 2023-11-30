@@ -17,6 +17,14 @@ class SourceCatalog:
             "createdTime": str(datetime.now()),
         }
 
+    @staticmethod
+    def loader(d: dict):
+        yield {
+            "raw": "mock io contents",
+            "uid": str(d["path"]).split(".")[0],
+            "createdTime": str(datetime.now()),
+        }
+
 
 # follows the services.SourceTasks interface
 class TaskCatalog:
