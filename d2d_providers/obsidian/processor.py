@@ -10,7 +10,7 @@ import yaml
 @dataclass
 class ObsidianMarkdownRegex:
     frontmatter = r"^---\s+((.|\n)+?)\n---\s+"
-    frontmatter_section = r"^---\s+.+?\s+---\s+"
+    frontmatter_section = r"^---\s+(?s:.+?)\s+---\s+"
     links = r"(?<!!)\[\[(.*)\]\]"
 
 
