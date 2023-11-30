@@ -19,7 +19,7 @@ class SourceCatalog:
 
     @staticmethod
     def loader(d: dict):
-        yield {
+        return {
             "raw": "mock io contents",
             "uid": str(d["path"]).split(".")[0],
             "createdTime": str(datetime.now()),
