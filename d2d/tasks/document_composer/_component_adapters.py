@@ -54,6 +54,15 @@ def embedding_adapter(d: dict) -> doc.Embedding:
         return doc.Embedding()
 
 
+def content_adapter(d: dict) -> doc.Content:
+    try:
+        return doc.Content.model_validate(d)
+    except ValidationError:
+        err = exc.IncompatibleProviderOutputs
+        logging.warning(err)
+        return doc.Content()
+
+
 class TaskFunctionsAdapters(ProviderTaskHandlers[dict, doc.DocumentComponent]):
     """Mapper between provider tasks functions to the eqv pydantic object convertors
 
@@ -65,3 +74,4 @@ class TaskFunctionsAdapters(ProviderTaskHandlers[dict, doc.DocumentComponent]):
     metadata = metadata_adpater
     relations = relations_adapter
     embedding = embedding_adapter
+    content = content_adapter

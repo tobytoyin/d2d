@@ -30,6 +30,10 @@ class ProviderTaskHandlers(Protocol[T, R]):
     def embedding(_: T, /, *args, **kwargs) -> R:
         ...
 
+    @staticmethod
+    def content(_: T, /, *args, **kwargs) -> R:
+        ...
+
 
 @runtime_checkable
 class ProviderSourceMetaHandlers(Protocol):
