@@ -16,7 +16,7 @@ class DocumentComposer:
         tasks = spec.tasks
 
         for source in sources:
-            yield DocumentComposer._single_runner(source, source_handler, tasks)
+            yield from DocumentComposer._single_runner(source, source_handler, tasks)
 
     @staticmethod
     def _single_runner(
@@ -30,7 +30,7 @@ class DocumentComposer:
         # loop over the task
         components = DocumentComposer._tasks_handler(text, uid, tasks)
         document = DocumentComposer._construct_document(uid, components)
-        return document
+        yield document
 
     @staticmethod
     def _tasks_handler(text, uid, tasks):
