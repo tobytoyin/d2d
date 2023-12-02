@@ -15,12 +15,12 @@ def test_doc_to_graph_route(document):
     _ = DocumentServicesDispatcher.service_runner(
         document,
         plugin_name="neo4j",
-        service_name="update_or_create_document",
+        service_name="update_or_create_linked_documents",
     )
 
     # with service object apporach
     _ = DocumentServicesDispatcher.service_runner(
         document,
         service_catalog=DocumentToNeo4J(),
-        service_name="update_or_create_document",
+        service_name="update_or_create_linked_documents",
     )
