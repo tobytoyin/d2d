@@ -12,7 +12,7 @@ def payload():
             "summary": {"provider": "mock"},
         },
         "document_services": [
-            {"plugin_name": "neo4j", "service_name": "update_or_create_document"}
+            {"plugin_name": "neo4j", "service_name": "update_or_create_linked_documents"}
         ],
     }
 
