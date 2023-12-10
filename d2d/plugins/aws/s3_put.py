@@ -12,7 +12,7 @@ class S3Put(SessionMixin):
         document: Document,
         /,
         put_prefix: str = "",
-        bucket_name: str,
+        bucket_name: str = "",
         access_key_id: str | None = None,
         secret_access_key: str | None = None,
     ):
