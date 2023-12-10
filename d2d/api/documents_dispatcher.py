@@ -3,6 +3,7 @@ from typing import Callable
 
 from d2d.contracts.documents import Document
 from d2d.plugins.factory import get_plugin
+from d2d.utils import transform_function_with_options
 
 
 class DocumentServicesDispatcher:
@@ -13,6 +14,7 @@ class DocumentServicesDispatcher:
         service_catalog=None,
         service_name: str | None = None,
         service_fn: Callable[[Document], None] | None = None,
+        options: None,
     ):
         """
         This method would execute the service_function based on two approach:
@@ -43,6 +45,7 @@ class DocumentServicesDispatcher:
         :rtype: _type_
         """
         if service_fn:
+            service_fn = transform_function_with_options(service_fn, options=options)
             service_fn(document)
 
         if not service_catalog:
