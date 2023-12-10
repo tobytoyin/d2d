@@ -1,5 +1,5 @@
 import json
-from typing import Any, Iterable
+from typing import Any, Iterable, Optional
 
 from pydantic import BaseModel, ConfigDict, field_validator
 
@@ -83,6 +83,23 @@ class Embedding(DocumentComponent):
         return "embedding"
 
 
+class ObjectReferences(DocumentComponent):
+    # container to store list of paths that reference objects from
+    # some path/ url locations
+    paths: Optional[Iterable[str]] = None
+    prefix: str = ""
+
+    @property
+    def key(self) -> str:
+        return "obj_refs"
+
+    @property
+    def object_names(self):
+        if self.paths is None:
+            return
+        return map(lambda e: e.split("/")[-1], self.paths)
+
+
 class Document(BaseModel):
     uid: str
     content: Content = Content()
@@ -90,6 +107,7 @@ class Document(BaseModel):
     metadata: Metadata = Metadata()
     relations: Relations = Relations()
     embedding: Embedding = Embedding()
+    obj_refs: ObjectReferences = ObjectReferences()
 
     @field_validator("uid", mode="after")
     @classmethod

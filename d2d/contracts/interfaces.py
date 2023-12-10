@@ -34,6 +34,10 @@ class ProviderTaskHandlers(Protocol[T, R]):
     def content(_: T, /, *args, **kwargs) -> R:
         ...
 
+    @staticmethod
+    def obj_refs(_: T, /, *args, **kwargs) -> R:
+        ...
+
 
 @runtime_checkable
 class ProviderSourceMetaHandlers(Protocol):

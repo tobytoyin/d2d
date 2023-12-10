@@ -1,5 +1,10 @@
 # follows the services.SourceIO interface
-from .processor import frontmatter_processor, inner_content_extraction, links_processor
+from .processor import (
+    frontmatter_processor,
+    image_extraction,
+    inner_content_extraction,
+    links_processor,
+)
 
 
 class SourceCatalog:
@@ -32,4 +37,13 @@ class TaskCatalog:
         return {
             "text": content,
             "codec": "markdown",
+        }
+
+    @staticmethod
+    def obj_refs(text, prefix=""):
+        img_refs = image_extraction(text)
+
+        return {
+            "paths": img_refs,
+            "prefix": prefix,
         }
