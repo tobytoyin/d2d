@@ -9,7 +9,7 @@ from .mixin import GraphDBMixin
 from .utils import no_quotes_object
 
 
-class DocumentToNeo4J(DocumentPlugin[doc.Document], GraphDBMixin):
+class DocumentToNeo4J(DocumentPlugin, GraphDBMixin):
     def update_or_create_linked_documents(self, document: doc.Document):
         self.update_or_create_document(document)
         self.update_or_create_relations(document)
