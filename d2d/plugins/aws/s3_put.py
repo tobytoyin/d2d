@@ -10,7 +10,7 @@ class S3Put(SessionMixin):
     def put_objects(
         self,
         document: Document,
-        *,
+        /,
         put_prefix: str = "",
         bucket_name: str,
         access_key_id: str | None = None,
