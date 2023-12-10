@@ -8,19 +8,20 @@ import yaml
 
 
 @dataclass
-class ObsidianMarkdownRegex:
+class MdRegex:
     frontmatter = r"^---\s+((.|\n)+?)\n---\s+"
     frontmatter_section = r"^---\s+(?s:.+?)\s+---\s+"
     links = r"(?<!!)\[\[(.*)\]\]"
+    render_ref = r"!\[\[(.+?)(?:\|.+?)?\]\]"
 
 
 def inner_content_extraction(doc: str) -> str:
-    return re.sub(ObsidianMarkdownRegex.frontmatter_section, "", doc.strip())
+    return re.sub(MdRegex.frontmatter_section, "", doc.strip())
 
 
 def frontmatter_processor(doc: str) -> dict:
     """convert frontmatter string into metada dict"""
-    metayamml_match = re.search(ObsidianMarkdownRegex.frontmatter, doc.strip())
+    metayamml_match = re.search(MdRegex.frontmatter, doc.strip())
 
     if not metayamml_match:
         return {"doc_type": "unknown"}
@@ -36,7 +37,7 @@ def frontmatter_processor(doc: str) -> dict:
 
 
 def _extract_link_id(link_str: str) -> str:
-    extracted_link_id = re.sub(ObsidianMarkdownRegex.links, "\1", link_str)
+    extracted_link_id = re.sub(MdRegex.links, "\1", link_str)
     extracted_link_id = re.sub("\|.*", "", extracted_link_id)  # remove alias
     extracted_link_id = re.sub("#.*", "", extracted_link_id)  # remove header references
     extracted_link_id = extracted_link_id.split("/")[-1]  # remove filepath if any
@@ -53,7 +54,7 @@ def links_processor(doc: str) -> List[dict]:
     """
     collection = {}
     link_type = "LINK"  # obisidian only has a single link type
-    links_match = set(re.findall(ObsidianMarkdownRegex.links, doc))
+    links_match = set(re.findall(MdRegex.links, doc))
 
     if not links_match:
         return []
@@ -86,3 +87,13 @@ def links_processor(doc: str) -> List[dict]:
         collection[hash_key] = update_obj
 
     return list(collection.values())
+
+
+def image_extraction(doc: str) -> List[str]:
+    render_refs = set(re.findall(MdRegex.render_ref, doc))
+
+    def _filter_img_ext(e: str):
+        if e.split(".")[-1] in ["png", "jpg"]:
+            return e
+
+    return list(filter(_filter_img_ext, render_refs))

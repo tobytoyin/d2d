@@ -4,12 +4,12 @@ import json
 
 from d2d.contracts import documents as doc
 
-from ..interface import DocumentToDB
+from ..interface import DocumentPlugin
 from .mixin import GraphDBMixin
 from .utils import no_quotes_object
 
 
-class DocumentToNeo4J(DocumentToDB[doc.Document], GraphDBMixin):
+class DocumentToNeo4J(DocumentPlugin[doc.Document], GraphDBMixin):
     def update_or_create_linked_documents(self, document: doc.Document):
         self.update_or_create_document(document)
         self.update_or_create_relations(document)
