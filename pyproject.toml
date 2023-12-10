@@ -7,7 +7,7 @@ packages = [{include = "d2d"}, {include = "d2d_providers"}]
 include = ["configs/*.toml"]
 
 [tool.poetry.dependencies]
-python = "^3.11"
+python = "^3.12"
 Markdown = "^3.4.3"
 PyYAML = "^6.0.1"
 neo4j = "^5.11.0"

@@ -11,3 +11,12 @@ class SourceCatalog:
     @staticmethod
     def uid_gen(d):
         return str(d["path"]).split("/")[-1].split(".")[0]
+
+    @@staticmethod
+    def loader(d: dict):
+        pass
+
+
+def line_chunker(reader):
+    with open(reader, "r") as f:
+        f

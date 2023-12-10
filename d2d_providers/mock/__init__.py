@@ -5,14 +5,9 @@ from datetime import datetime
 
 class SourceCatalog:
     @staticmethod
-    def source_text(d: dict):
-        print(f"source_text - receive {d}")
-        print(f"source_text - read from {d['path']}")
-        return "mock io contents"
-
-    @staticmethod
-    def metadata(d):
+    def loader(d: dict):
         return {
+            "raw": "mock io contents",
             "uid": str(d["path"]).split(".")[0],
             "createdTime": str(datetime.now()),
         }
