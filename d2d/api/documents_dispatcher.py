@@ -46,9 +46,11 @@ class DocumentServicesDispatcher:
         """
         if service_fn:
             service_fn = transform_function_with_options(service_fn, options=options)
-            service_fn(document)
+            return service_fn(document)
 
         if not service_catalog:
             service_catalog = get_plugin(plugin_name=plugin_name)
 
-        return getattr(service_catalog, service_name)(document)
+        service_fn = getattr(service_catalog, service_name)
+        service_fn = transform_function_with_options(service_fn, options=options)
+        return service_fn(document)
