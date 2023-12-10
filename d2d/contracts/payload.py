@@ -42,6 +42,7 @@ class TaskSpec(BaseModel):
 class DocumentService(BaseModel):
     plugin_name: str
     service_name: str
+    options: Optional[Options] = Options()
 
 
 class JobPayload(BaseModel):

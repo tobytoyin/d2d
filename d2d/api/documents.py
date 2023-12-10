@@ -35,4 +35,5 @@ class DocumentsEndpoint:
             document=document,
             plugin_name=model.plugin_name,
             service_name=model.service_name,
+            options=model.options,
         )
