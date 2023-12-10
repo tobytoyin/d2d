@@ -12,6 +12,7 @@ Markdown = "^3.4.3"
 PyYAML = "^6.0.1"
 neo4j = "^5.11.0"
 pydantic = "^2.1.1"
+boto3 = "^1.33.11"
 # sentence-transformers = "^2.2.2"
 
 [tool.poetry.group.openai.dependencies]
