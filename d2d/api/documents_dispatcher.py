@@ -14,7 +14,7 @@ class DocumentServicesDispatcher:
         service_catalog=None,
         service_name: str | None = None,
         service_fn: Callable[[Document], None] | None = None,
-        options: None,
+        options = None,
     ):
         """
         This method would execute the service_function based on two approach:
