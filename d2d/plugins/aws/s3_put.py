@@ -29,4 +29,4 @@ class S3Put(SessionMixin):
             path = os.path.join(prefix, f)
             put_path = os.path.join(put_prefix, f)
             s3.upload_file(path, bucket_name, put_path)
-            logging.info("uploaded: %s", path)
+            print(f"uploaded: {path}")
