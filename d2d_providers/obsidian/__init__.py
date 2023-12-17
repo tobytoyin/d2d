@@ -18,7 +18,7 @@ class SourceCatalog:
             return image_ref_to_url(doc, url_prefix=url_prefix)
 
     @staticmethod
-    def metadata(d):
+    def metadata(d, **kwds):
         return {
             "uid": str(d["path"]).split("/")[-1].split(".")[0],
         }
