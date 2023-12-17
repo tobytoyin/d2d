@@ -10,12 +10,9 @@ from .processor import (
 
 class SourceCatalog:
     @staticmethod
-    def source_text(d: dict, url_prefix=None):
+    def source_text(d: dict):
         with open(d["path"], "r") as f:
-            doc = f.read()
-            if url_prefix is None:
-                return doc
-            return image_ref_to_url(doc, url_prefix=url_prefix)
+            return f.read()
 
     @staticmethod
     def metadata(d, **kwds):
@@ -35,8 +32,11 @@ class TaskCatalog:
         return {"items": links_processor(text)}
 
     @staticmethod
-    def content(text):
+    def content(text, url_prefix=None):
         content = inner_content_extraction(text)
+
+        if url_prefix:
+            content = image_ref_to_url(content, url_prefix=url_prefix)        
 
         return {
             "text": content,
