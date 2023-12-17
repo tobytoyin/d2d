@@ -13,6 +13,8 @@ class MdRegex:
     frontmatter_section = r"^---\s+(?s:.+?)\s+---\s+"
     links = r"(?<!!)\[\[(.*)\]\]"
     render_ref = r"!\[\[(.+?)(?:\|.+?)?\]\]"
+    # capture entire ![[...]] for images
+    image_ref = r"(!\[\[(.+?(?:png|jpg))(?:\|.+?)?\]\])"
 
 
 def inner_content_extraction(doc: str) -> str:
@@ -97,3 +99,9 @@ def image_extraction(doc: str) -> List[str]:
             return e
 
     return list(filter(_filter_img_ext, render_refs))
+
+
+def image_ref_to_url(doc: str, url_prefix: str) -> str:
+    sub_url_regex = rf'[<img src="{url_prefix}\2"]()'
+    result = re.sub(MdRegex.image_ref, sub_url_regex, doc)
+    return result

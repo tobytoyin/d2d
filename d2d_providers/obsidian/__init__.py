@@ -2,6 +2,7 @@
 from .processor import (
     frontmatter_processor,
     image_extraction,
+    image_ref_to_url,
     inner_content_extraction,
     links_processor,
 )
@@ -9,9 +10,12 @@ from .processor import (
 
 class SourceCatalog:
     @staticmethod
-    def source_text(d: dict):
+    def source_text(d: dict, url_prefix=None):
         with open(d["path"], "r") as f:
-            return f.read()
+            doc = f.read()
+            if url_prefix is None:
+                return doc
+            return image_ref_to_url(doc, url_prefix=url_prefix)
 
     @staticmethod
     def metadata(d):

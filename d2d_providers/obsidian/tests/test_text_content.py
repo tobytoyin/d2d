@@ -1,4 +1,6 @@
 from .. import TaskCatalog
+from ..processor import image_ref_to_url
+from .fixtures import doc1
 
 
 def test_contents_without_frontmatter():
@@ -65,3 +67,9 @@ def test_contents_with_frontmatter_and_sepline():
     }
 
     assert expected == TaskCatalog.content(contents)
+
+
+def test_modifying_image_to_url(doc1):
+    res = image_ref_to_url(doc1, "http://")
+
+    print(res)
