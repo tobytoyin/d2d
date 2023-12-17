@@ -102,6 +102,6 @@ def image_extraction(doc: str) -> List[str]:
 
 
 def image_ref_to_url(doc: str, url_prefix: str) -> str:
-    sub_url_regex = rf'[<img src="{url_prefix}\2"]()'
+    sub_url_regex = rf'[<img src="{url_prefix}\2">]()'
     result = re.sub(MdRegex.image_ref, sub_url_regex, doc)
     return result
