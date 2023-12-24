@@ -1,11 +1,10 @@
-import asyncio
 from typing import Iterable
 
 from d2d.contracts.documents import Document, DocumentComponent
 from d2d.contracts.enums import TaskKeyword
 from d2d.contracts.payload import JobPayload, Source, SourceSpec, TaskSpec
+from d2d.source_api import SourceLoader
 
-from ._source_handler import get_source_contents
 from ._task_handler import task_handler
 
 
@@ -24,11 +23,11 @@ class DocumentComposer:
         spec: SourceSpec,
         tasks: dict[TaskKeyword, TaskSpec],
     ):
-        metadata, text = get_source_contents(source=source, spec=spec)
-        uid = metadata["uid"]
+        sourceapi = SourceLoader(source=source, spec=spec)
+        uid = sourceapi.source_uid
 
         # loop over the task
-        components = DocumentComposer._tasks_handler(text, uid, tasks)
+        components = DocumentComposer._tasks_handler(sourceapi.source_text, uid, tasks)
         document = DocumentComposer._construct_document(uid, components)
         return document
 
