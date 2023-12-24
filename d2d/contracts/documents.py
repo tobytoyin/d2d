@@ -79,6 +79,7 @@ class Embedding(DocumentComponent):
     source: str | None = None
     vector: list[float] | None = None
     model: str | None = None
+    dimension: int = 0
 
     @property
     def key(self) -> str:
