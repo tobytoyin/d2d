@@ -21,7 +21,7 @@ from d2d.tasks.common import transform_function_with_options
 SourceMetaItems = namedtuple("SourceMetaItems", "source_metadata source_text")
 
 
-class SourceAPI:
+class SourceLoader:
     """
     SourceHandler (SourceAPI) has a simple purpose:
     - it takes it a `Source` configuration object

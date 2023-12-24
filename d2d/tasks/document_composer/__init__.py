@@ -3,7 +3,7 @@ from typing import Iterable
 from d2d.contracts.documents import Document, DocumentComponent
 from d2d.contracts.enums import TaskKeyword
 from d2d.contracts.payload import JobPayload, Source, SourceSpec, TaskSpec
-from d2d.source_api import SourceAPI
+from d2d.source_api import SourceLoader
 
 from ._task_handler import task_handler
 
@@ -23,7 +23,7 @@ class DocumentComposer:
         spec: SourceSpec,
         tasks: dict[TaskKeyword, TaskSpec],
     ):
-        sourceapi = SourceAPI(source=source, spec=spec)
+        sourceapi = SourceLoader(source=source, spec=spec)
         uid = sourceapi.source_metadata.uid
 
         # loop over the task

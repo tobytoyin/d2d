@@ -1,7 +1,7 @@
 import logging
 
 from d2d.contracts.payload import Source, SourceMetadataModel, SourceSpec
-from d2d.source_api import SourceAPI
+from d2d.source_api import SourceLoader
 
 
 ### Assuming upstream validates SourceHanlder
@@ -11,7 +11,7 @@ def test_source_text():
     spec = SourceSpec(provider="mock")
     source = Source(path="dummy.txt")  # type: ignore
 
-    sourceapi = SourceAPI(source=source, spec=spec)
+    sourceapi = SourceLoader(source=source, spec=spec)
     result = sourceapi.source_text
     logging.debug(result)
     assert result == "mock io contents"
@@ -21,7 +21,7 @@ def test_source_metadata():
     spec = SourceSpec(provider="mock")
     source = Source(path="dummy.txt")  # type: ignore
 
-    sourceapi = SourceAPI(source=source, spec=spec)
+    sourceapi = SourceLoader(source=source, spec=spec)
     result = sourceapi.source_metadata
     logging.debug(result)
 
