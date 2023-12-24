@@ -1,11 +1,11 @@
 from d2d.contracts.documents import Document
 
-from ..interface import ToEmbeddingStore
+from ..interface import DocumentPlugin
 from .mixin import GraphDBMixin
 from .utils import no_quotes_object
 
 
-class DocumentToN4JEmbedding(ToEmbeddingStore[Document], GraphDBMixin):
+class DocumentToN4JEmbedding(DocumentPlugin, GraphDBMixin):
     def update_or_create_embedding(self, document: Document):
         embedding = no_quotes_object(document.embedding.prefix_model_dump())
         match_self = no_quotes_object({"uid": document.uid})

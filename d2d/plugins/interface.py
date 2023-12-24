@@ -15,3 +15,6 @@ class DocumentPlugin:
     # object storage capabilities
     def put_objects(self, _: Document, /, **kwargs):
         ...
+
+    def update_or_create_embedding(self, _: Document, /, **kwds):
+        ...
