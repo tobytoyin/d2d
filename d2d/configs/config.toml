@@ -2,6 +2,7 @@
 mock="d2d_providers/mock"
 obsidian='d2d_providers/obsidian'
 openai='d2d_providers/openai_api'
+nlp='d2d_providers/nlp'
 
 [paths]
 secrets="configs/secrets.toml"
