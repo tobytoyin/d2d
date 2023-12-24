@@ -77,7 +77,7 @@ class Relations(DocumentComponent):
 
 class Embedding(DocumentComponent):
     source: str | None = None
-    embedding: Iterable[float] | None = None
+    vector: list[float] | None = None
     model: str | None = None
 
     @property
