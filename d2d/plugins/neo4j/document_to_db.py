@@ -8,6 +8,7 @@ from ..interface import DocumentPlugin
 from .mixin import GraphDBMixin
 from .utils import no_quotes_object
 
+GLOBAL_LABEL = "UserDocument"  # universal node label
 
 class DocumentToNeo4J(DocumentPlugin, GraphDBMixin):
     def update_or_create_linked_documents(self, document: doc.Document):
@@ -64,7 +65,7 @@ class _NodeIdentity:
         MERGE ( n {match_self} )
         SET
             n = props,
-            n:{_NodeIdentity.node_label(document)},
+            n:{GLOBAL_LABEL}:{_NodeIdentity.node_label(document)},
             n.lastEdited = timestamp()
         """
         tx.run(query)
