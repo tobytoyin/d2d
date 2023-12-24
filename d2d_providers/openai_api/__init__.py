@@ -17,6 +17,7 @@ class TaskCatalog:
             "vector": res.data[0].embedding,
             "source": "openai",
             "model": "text-embedding-ada-002",
+            "dimension": 1536,
         }
 
 
