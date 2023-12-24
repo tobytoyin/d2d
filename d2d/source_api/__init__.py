@@ -58,3 +58,7 @@ class SourceLoader:
         )
 
         return SourceMetadataModel(**fn(self.source.model_dump()))
+
+    @property
+    def source_uid(self) -> str:
+        return self.source_metadata.uid
