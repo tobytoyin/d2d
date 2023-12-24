@@ -4,7 +4,7 @@ import logging
 from pathlib import Path
 from typing import Any, Optional, TypeAlias, TypedDict
 
-from pydantic import BaseModel, Field, ValidationError, field_validator
+from pydantic import BaseModel, ConfigDict, Field, ValidationError, field_validator
 
 from d2d.contracts.enums import TaskKeyword
 
@@ -77,3 +77,9 @@ class _SourceCoreMetadata(TypedDict):
 class SourceMetadata(_SourceCoreMetadata, total=False):
     # allow extra fields
     ...
+
+
+class SourceMetadataModel(BaseModel):
+    uid: str
+
+    model_config = ConfigDict(extra="allow")
