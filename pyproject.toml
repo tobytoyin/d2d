@@ -7,14 +7,14 @@ packages = [{include = "d2d"}, {include = "d2d_providers"}]
 include = ["configs/*.toml"]
 
 [tool.poetry.dependencies]
-python = "^3.11"
+python = "^3.9"
 Markdown = "^3.4.3"
 PyYAML = "^6.0.1"
 neo4j = "^5.11.0"
 pydantic = "^2.1.1"
 boto3 = "^1.33.11"
 openai = "^1.3.3"
-# sentence-transformers = "^2.2.2"
+sentence-transformers = "^2.2.2"
 
 
 [tool.poetry.group.aws.dependencies]
