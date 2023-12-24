@@ -14,7 +14,7 @@ class TaskCatalog:
         )
 
         return {
-            "embedding": res.data[0].embedding,
+            "vector": res.data[0].embedding,
             "source": "openai",
             "model": "text-embedding-ada-002",
         }
