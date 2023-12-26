@@ -1,4 +1,5 @@
 from d2d.contracts import documents as doc
+import json
 
 from .utils import no_quotes_object
 
@@ -6,7 +7,7 @@ from .utils import no_quotes_object
 def add_named_entites(tx, document: doc.Document):
     # add named entites nodes
     for entity in document.ner.entities:
-        json_props = entity.model_dump(mode="json")
+        json_props = json.dumps(entity.model_dump())
         match_self = no_quotes_object({"id": entity.id})
         query = f"""
         WITH apoc.convert.fromJsonMap({repr(json_props)}) AS props
