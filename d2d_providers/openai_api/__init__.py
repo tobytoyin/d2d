@@ -28,19 +28,16 @@ class TaskCatalog:
         callback = client.chat.completions
 
         prompt_template = """
-        You are a data scientist who wishes to create knowledge graph. Your task
-        is to:
-        - extract about 10 named entities and relationships from a piece of text
-        - only extract important entities and keywords but avoid common noun phrases
+        You are a data scientist who wishes to create knowledge graph. Your task is to:
+        - extract about 10 named entities relationships from a piece of text
+        - named entities should be important entities or keywords and avoid common noun phrases
 
         When an entity is extracted, you should output them following the below rules:
-        - named entity structure  with: {"id": ENTITY_ID, "type": ENTITY_TYPE, "properties": PROPERTIES}
-        - ENTITY_ID should prioritise in noun phrases, named entities, or keywords
-        - ENTITY_TYPE should be in CamelCase without spaces
-        - ENTITY_TYPE should be different from ENTITY_ID and use term that represents general concepts, i.e., Technology, Company, Location
-        - relationships structures with {"root": ENTITY_ID_ROOT, "type": RELATION_TYPE, "target": ENTITY_ID_OTHER, "properties": PROPERTIES}
-        - RELATION_TYPE should limit to verbs; verbs are in present tense; verbs phrases are joined with _
-        - you should replace special symbols in RELATION_TYPE to "_"; it should be in CAPITAL_CASE
+        - named entity are structured: {"id": ENTITY_ID, "type": ENTITY_TYPE, "properties": PROPERTIES}
+        - relationships ared structured: {"root": ENTITY_ID_ROOT, "type": RELATION_TYPE, "target": ENTITY_ID_OTHER, "properties": PROPERTIES}
+        - ENTITY_TYPE should be in CamelCase without spaces    
+        - ENTITY_TYPE should be output as a general term or a category, i.e., Technology, Company, Location, Person
+        - RELATION_TYPE should limit to verbs; verbs are in present tense; should be written in active voice
         - ENTITY_ID_ROOT and ENTITY_ID_OTHER can only be extracted named entity ENTITY_ID
 
         You should only output the result as JSON object.
@@ -55,7 +52,7 @@ class TaskCatalog:
             ],
             "relations": [
                 {"root": "alice", "type": "IS", "target": "bob", "properties": {"start": "2021", "relation": "roommate"}}
-                {"root": "alice", "type": "OWN", "target": "alice.com", "properties": {}}
+                {"root": "alice", "type": "OWNS", "target": "alice.com", "properties": {}}
             ]
         }
         """.strip()
