@@ -38,6 +38,10 @@ class ProviderTaskHandlers(Protocol[T, R]):
     def obj_refs(_: T, /, *args, **kwargs) -> R:
         ...
 
+    @staticmethod
+    def named_entity_relations(_: T, /, *args, **kwargs) -> R:
+        ...
+
 
 @runtime_checkable
 class ProviderSourceMetaHandlers(Protocol):

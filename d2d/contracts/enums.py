@@ -7,4 +7,5 @@ TaskKeyword: TypeAlias = Literal[
     "embedding",
     "content",
     "obj_refs",
+    "named_entity_relations",
 ]
