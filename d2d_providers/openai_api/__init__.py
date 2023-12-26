@@ -40,7 +40,7 @@ class TaskCatalog:
         - ENTITY_TYPE should be different from ENTITY_ID and use term that represents general concepts, i.e., Technology, Company, Location
         - relationships structures with {"root": ENTITY_ID_ROOT, "type": RELATION_TYPE, "target": ENTITY_ID_OTHER, "properties": PROPERTIES}
         - RELATION_TYPE should limit to verbs; verbs are in present tense; verbs phrases are joined with _
-        - RELATION_TYPE should have no special symbols other an "_"; it should be in CAPITAL_CASE
+        - you should replace special symbols in RELATION_TYPE to "_"; it should be in CAPITAL_CASE
         - ENTITY_ID_ROOT and ENTITY_ID_OTHER can only be extracted named entity ENTITY_ID
 
         You should only output the result as JSON object.
