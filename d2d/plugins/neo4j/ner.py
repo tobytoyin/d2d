@@ -14,12 +14,13 @@ def add_named_entites(tx, document: doc.Document):
         query = f"""
         WITH apoc.convert.fromJsonMap({repr(json_props)}) AS props
         MERGE ( n {match_root} )
+        MATCH (doc {match_doc})
         SET
             n = props,
             n:NERNode:{entity.type},
             n.lastEdited = timestamp()
 
-        MERGE (doc {match_doc})-[ :NERContain ]->(n)
+        MERGE (doc)-[ :NERContain ]->(n)
         """
         print(query)
         tx.run(query)
@@ -32,6 +33,8 @@ def add_relations(tx, document: doc.Document):
         match_root = no_quotes_object({"id": rel.root})
         match_other = no_quotes_object({"id": rel.target})
         q = f"""
-        MERGE (root {match_root})-[ :{rel.type} {rel_props} ]->(other {match_other})
+        MATCH (root {match_root})
+        MATCH (other {match_other})
+        MERGE (root)-[ :{rel.type} {rel_props} ]->(other)
         """
         tx.run(q)
