@@ -35,7 +35,8 @@ class TaskCatalog:
         When an entity is extracted, you should output them following the below rules:
         - named entity are structured: {"id": ENTITY_ID, "type": ENTITY_TYPE, "properties": PROPERTIES}
         - relationships ared structured: {"root": ENTITY_ID_ROOT, "type": RELATION_TYPE, "target": ENTITY_ID_OTHER, "properties": PROPERTIES}
-        - you can replace ENTITY_ID with a similar term that you know of, e.g., "data base" becomes "database", "mobile device" becomes "mobile phone"
+        - if possible, replace ENTITY_ID with a similar term, e.g., "data base" becomes "database", "mobile devices" becomes "mobile phone"
+        - if possible, replace plural ENTITY_ID to singular
         - ENTITY_TYPE should be in CamelCase without spaces    
         - ENTITY_TYPE should be output as a general term or a category, i.e., Technology, Company, Location, Person
         - RELATION_TYPE should limit to verbs; verbs are in present tense; should be written in active voice
