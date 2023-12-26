@@ -27,5 +27,5 @@ def add_relations(tx, document: doc.Document):
         rel_props = no_quotes_object(rel.properties)
         match_self = no_quotes_object({"id": rel.root})
         match_other = no_quotes_object({"id": rel.target})
-        q = f"MERGE (root {match_self})-[ :NERLink:{rel.type} {rel_props} ]->(other {match_other})"
+        q = f"MERGE (root {match_self})-[ :{rel.type} {rel_props} ]->(other {match_other})"
         tx.run(q)
