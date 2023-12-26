@@ -7,7 +7,7 @@ from .utils import no_quotes_object
 def add_named_entites(tx, document: doc.Document):
     # add named entites nodes
     for entity in document.ner.entities:
-        json_props = json.dumps(entity.model_dump(), default=str)
+        json_props = json.dumps({"id": entity.id, **entity.properties}, default=str)
         match_self = no_quotes_object({"id": entity.id})
         query = f"""
         WITH apoc.convert.fromJsonMap({repr(json_props)}) AS props
