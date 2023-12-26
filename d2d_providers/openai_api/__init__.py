@@ -34,10 +34,11 @@ class TaskCatalog:
         - only extract important entities and keywords but avoid common nouns
 
         When an entity is extracted, you should output them following the below rules:
-        - named entity structure  with: {"id": ENTITY_ID, "type": TYPE, "properties": PROPERTIES}
-        - relationships structures with {"root": ENTITY_ID_ROOT, "type": RELATIONSHIP, "target": ENTITY_ID_OTHER, "properties": PROPERTIES}
+        - named entity structure  with: {"id": ENTITY_ID, "type": ENTITY_TYPE, "properties": PROPERTIES}
+        - ENTITY_TYPE needs to be in CamelCase without spaces
+        - relationships structures with {"root": ENTITY_ID_ROOT, "type": RELATION_TYPE, "target": ENTITY_ID_OTHER, "properties": PROPERTIES}
         - ENTITY_ID should prioritise in noun phrases, named entities, or keywords
-        - RELATIONSHIP should be verb phrase only and contains no tenses
+        - RELATION_TYPE should limit to verbs; verbs are in present tense; verbs phrases are joined with _
         - ENTITY_ID_ROOT and ENTITY_ID_OTHER can only be extracted named entity ENTITY_ID
 
         You should only output the result as JSON object.
