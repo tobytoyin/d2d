@@ -13,8 +13,8 @@ def add_named_entites(tx, document: doc.Document):
         WITH apoc.convert.fromJsonMap({repr(json_props)}) AS props
         MERGE ( n {match_self} )
         SET
-            n = props
-            n:{entity.type}
+            n = props,
+            n:{entity.type},
             n.lastEdited = timestamp()
         """
         tx.run(query)
