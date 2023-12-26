@@ -6,9 +6,11 @@ from d2d.contracts import documents as doc
 
 from ..interface import DocumentPlugin
 from .mixin import GraphDBMixin
+from .ner import add_named_entites
 from .utils import no_quotes_object
 
 GLOBAL_LABEL = "UserDocument"  # universal node label
+
 
 class DocumentToNeo4J(DocumentPlugin, GraphDBMixin):
     def update_or_create_linked_documents(self, document: doc.Document):
@@ -39,6 +41,12 @@ class DocumentToNeo4J(DocumentPlugin, GraphDBMixin):
     def update_or_create_document(self, document: doc.Document):
         with self.driver.session() as session:
             _ = session.execute_write(_NodeIdentity.create_self, document)
+
+        self.close_driver()
+
+    def create_named_entities(self, document: doc.Document):
+        with self.driver.session() as session:
+            _ = session.execute_write(add_named_entites, document)
 
         self.close_driver()
 
