@@ -5,7 +5,6 @@ from sentence_transformers import SentenceTransformer
 class TaskCatalog:
     @staticmethod
     def embedding(text: str, sent_delim="\r"):
-        return
         model = SentenceTransformer("all-MiniLM-L6-v2")
 
         sentences = text.split(sent_delim)
