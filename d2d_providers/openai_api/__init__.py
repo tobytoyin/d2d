@@ -30,8 +30,8 @@ class TaskCatalog:
         prompt_template = """
         You are a data scientist who wishes to create knowledge graph. Your task
         is to:
-        - extract named entity and relationships from a piece of text
-        - only extract important entities and keywords but avoid common nouns
+        - extract about 10 named entities and relationships from a piece of text
+        - only extract important entities and keywords but avoid common noun phrases
 
         When an entity is extracted, you should output them following the below rules:
         - named entity structure  with: {"id": ENTITY_ID, "type": ENTITY_TYPE, "properties": PROPERTIES}
@@ -40,6 +40,7 @@ class TaskCatalog:
         - ENTITY_TYPE should be different from ENTITY_ID and use noun that represents into general category, i.e., Technology, Company, Location
         - relationships structures with {"root": ENTITY_ID_ROOT, "type": RELATION_TYPE, "target": ENTITY_ID_OTHER, "properties": PROPERTIES}
         - RELATION_TYPE should limit to verbs; verbs are in present tense; verbs phrases are joined with _
+        - RELATION_TYPE should have no special symbols other an "_"; it should be in CAPITAL_CASE
         - ENTITY_ID_ROOT and ENTITY_ID_OTHER can only be extracted named entity ENTITY_ID
 
         You should only output the result as JSON object.
@@ -66,7 +67,10 @@ class TaskCatalog:
                 {"role": "user", "content": text},
             ],
         )
+        print(completion.choices[0].message.content)
         payload = json.loads(completion.choices[0].message.content)
+
+    
 
         return {
             **payload,
