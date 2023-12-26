@@ -115,7 +115,8 @@ class NamedEntity(BaseModel):
 
     @field_validator("id")
     def id_lower(cls, v: str):
-        return v.lower()    
+        v = v.lower()
+        return '_'.join(v.split(' '))
 
 
 class EntitiesRelation(BaseModel):
@@ -126,11 +127,13 @@ class EntitiesRelation(BaseModel):
 
     @field_validator("root")
     def root_lower(cls, v: str):
-        return v.lower()
+        v = v.lower()
+        return '_'.join(v.split(' '))
 
     @field_validator("target")
     def target_lower(cls, v: str):
-        return v.lower()    
+        v = v.lower()
+        return '_'.join(v.split(' '))  
 
     @field_validator("type")
     def type_no_specialchar(cls, v: str):
