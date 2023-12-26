@@ -37,7 +37,7 @@ class TaskCatalog:
         - named entity structure  with: {"id": ENTITY_ID, "type": ENTITY_TYPE, "properties": PROPERTIES}
         - ENTITY_ID should prioritise in noun phrases, named entities, or keywords
         - ENTITY_TYPE should be in CamelCase without spaces
-        - ENTITY_TYPE should be different from ENTITY_ID and use noun that represents into general category, i.e., Technology, Company, Location
+        - ENTITY_TYPE should be different from ENTITY_ID and use term that represents general concepts, i.e., Technology, Company, Location
         - relationships structures with {"root": ENTITY_ID_ROOT, "type": RELATION_TYPE, "target": ENTITY_ID_OTHER, "properties": PROPERTIES}
         - RELATION_TYPE should limit to verbs; verbs are in present tense; verbs phrases are joined with _
         - RELATION_TYPE should have no special symbols other an "_"; it should be in CAPITAL_CASE
