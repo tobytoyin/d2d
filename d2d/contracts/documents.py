@@ -103,6 +103,30 @@ class ObjectReferences(DocumentComponent):
         return map(lambda e: e.split("/")[-1], self.paths)
 
 
+class NamedEntity(BaseModel):
+    id: str
+    type: str
+    properties: dict[str, str]
+
+
+class EntitiesRelation(BaseModel):
+    root: str
+    type: str
+    target: str
+    properties: dict[str, str]
+
+
+class NamedEntitiesRelations(DocumentComponent):
+    source: str | None = None
+    model: str | None = None
+    entities: list[NamedEntity] = None
+    relations: list[EntitiesRelation] = None
+
+    @property
+    def key(self) -> str:
+        return "ner"
+
+
 class Document(BaseModel):
     uid: str
     content: Content = Content()
@@ -111,6 +135,7 @@ class Document(BaseModel):
     relations: Relations = Relations()
     embedding: Embedding = Embedding()
     obj_refs: ObjectReferences = ObjectReferences()
+    ner: NamedEntitiesRelations = NamedEntitiesRelations()
 
     @field_validator("uid", mode="after")
     @classmethod
