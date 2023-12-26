@@ -1,5 +1,6 @@
 import json
 from typing import Any, Iterable, Optional
+import re
 
 from pydantic import BaseModel, ConfigDict, field_validator
 
@@ -108,12 +109,21 @@ class NamedEntity(BaseModel):
     type: str
     properties: dict[str, str] = {}
 
+    @field_validator("type")
+    def type_camelcase(cls, v: str):
+        return ''.join(v.split(' '))
+
+
 
 class EntitiesRelation(BaseModel):
     root: str
     type: str
     target: str
     properties: dict[str, str] = {}
+
+    @field_validator("type")
+    def type_no_specialchar(cls, v: str):
+        return re.sub('[^a-zA-Z0-9 \n\.]', '_', v)
 
 
 class NamedEntitiesRelations(DocumentComponent):
