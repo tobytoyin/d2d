@@ -14,7 +14,7 @@ def add_named_entites(tx, document: doc.Document):
         query = f"""
         WITH apoc.convert.fromJsonMap({repr(json_props)}) AS props
         MERGE ( n {match_root} )
-        MATCH (doc {match_doc})
+        MERGE (doc {match_doc})
         SET
             n = props,
             n:NERNode:{entity.type},
