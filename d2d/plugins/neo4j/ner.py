@@ -5,7 +5,7 @@ from .utils import no_quotes_object
 
 def add_named_entites(tx, document: doc.Document):
     # add named entites nodes
-    for entity in document.named_entity_relations.entites:
+    for entity in document.ner.entites:
         json_props = entity.model_dump(mode="json")
         match_self = no_quotes_object({"id": entity.id})
         query = f"""
