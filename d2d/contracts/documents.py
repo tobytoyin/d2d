@@ -135,6 +135,7 @@ class EntitiesRelation(BaseModel):
     @field_validator("type")
     def type_no_specialchar(cls, v: str):
         v = re.sub('[^a-zA-Z0-9 \n\.]', '_', v)
+        v = '_'.join(v.split(' '))
         return v.upper()
 
 
