@@ -113,6 +113,9 @@ class NamedEntity(BaseModel):
     def type_camelcase(cls, v: str):
         return ''.join(v.split(' '))
 
+    @field_validator("id")
+    def id_lower(cls, v: str):
+        return v.lower()    
 
 
 class EntitiesRelation(BaseModel):
@@ -121,9 +124,18 @@ class EntitiesRelation(BaseModel):
     target: str
     properties: dict[str, str] = {}
 
+    @field_validator("root")
+    def root_lower(cls, v: str):
+        return v.lower()
+
+    @field_validator("target")
+    def target_lower(cls, v: str):
+        return v.lower()    
+
     @field_validator("type")
     def type_no_specialchar(cls, v: str):
-        return re.sub('[^a-zA-Z0-9 \n\.]', '_', v)
+        v = re.sub('[^a-zA-Z0-9 \n\.]', '_', v)
+        return v.upper()
 
 
 class NamedEntitiesRelations(DocumentComponent):
