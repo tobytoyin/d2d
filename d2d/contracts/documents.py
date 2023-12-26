@@ -106,14 +106,14 @@ class ObjectReferences(DocumentComponent):
 class NamedEntity(BaseModel):
     id: str
     type: str
-    properties: dict[str, str]
+    properties: dict[str, str] = {}
 
 
 class EntitiesRelation(BaseModel):
     root: str
     type: str
     target: str
-    properties: dict[str, str]
+    properties: dict[str, str] = {}
 
 
 class NamedEntitiesRelations(DocumentComponent):
