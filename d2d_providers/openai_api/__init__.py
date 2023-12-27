@@ -1,6 +1,8 @@
 import json
+import re
 
 from openai import OpenAI
+
 
 
 # follows the services.SourceTasks interface
@@ -47,7 +49,9 @@ class TaskCatalog:
         You should output the result as JSON string only.
 
         Example:
-        content: Alice lawyer and is 25 years old and Bob is her roommate since 2001. Bob works as a journalist. Alice owns a the webpage www.alice.com and Bob owns the webpage www.bob.com.
+        user: Alice lawyer and is 25 years old and Bob is her roommate since 2001. Bob works as a journalist. Alice owns a the webpage www.alice.com and Bob owns the webpage www.bob.com.
+        you:
+        ```json
         {
             "entities": [
                 {"id": "alice", "type": "Person", "properties": {"age": "25", "occupation": "lawyer", "name":"Alice"}},
@@ -59,6 +63,7 @@ class TaskCatalog:
                 {"root": "alice", "type": "OWNS", "target": "alice.com", "properties": {}}
             ]
         }
+        ```
         """.strip()
 
         completion = callback.create(
@@ -68,11 +73,11 @@ class TaskCatalog:
                 {"role": "user", "content": text},
             ],
         )
-        print(completion.choices[0].message.content)
-        payload = json.loads(completion.choices[0].message.content)
-
-    
-
+        
+        print(completion.choices[0].message.content)            
+        # sometime it returns as markdown json
+        json_str = re.findall('```json(.*)```', text, re.DOTALL)[0].strip()
+        payload = json.loads(json_str)
         return {
             **payload,
             "source": "openai",
