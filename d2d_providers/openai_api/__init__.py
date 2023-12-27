@@ -74,7 +74,7 @@ class TaskCatalog:
             ],
         )
 
-        content = completion.choices[0].message.content)            
+        content = completion.choices[0].message.content      
         print(content)
         
         # sometime it returns as markdown json
