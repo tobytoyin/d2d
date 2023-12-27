@@ -60,7 +60,7 @@ class TaskCatalog:
         """.strip()
 
         completion = callback.create(
-            model="gpt-3.5-turbo",
+            model="gpt-3.5-turbo-1106",
             messages=[
                 {"role": "system", "content": prompt_template},
                 {"role": "user", "content": text},
@@ -74,5 +74,5 @@ class TaskCatalog:
         return {
             **payload,
             "source": "openai",
-            "model": "gpt-3.5-turbo",
+            "model": "gpt-3.5-turbo-1106",
         }
