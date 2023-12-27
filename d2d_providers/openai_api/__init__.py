@@ -73,10 +73,12 @@ class TaskCatalog:
                 {"role": "user", "content": text},
             ],
         )
+
+        content = completion.choices[0].message.content)            
+        print(content)
         
-        print(completion.choices[0].message.content)            
         # sometime it returns as markdown json
-        json_str = re.findall('```json(.*)```', text, re.DOTALL)[0].strip()
+        json_str = re.findall('```json(.*)```', content, re.DOTALL)[0].strip()
         payload = json.loads(json_str)
         return {
             **payload,
