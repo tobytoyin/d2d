@@ -29,9 +29,11 @@ class TaskCatalog:
 
         prompt_template = """
         You are a data scientist who wishes to create knowledge graph. Your task is to:
-        - extract about 10 named entities relationships from a piece of text
+        - extract named entities relationships from a piece of text
+        - you can infer new entities even if the text doesn't contain it
         - named entities should be important entities or keywords and avoid common noun phrases
-
+        - try to popuate the top 10 most important entities
+        
         When an entity is extracted, you should output them following the below rules:
         - named entity are structured: {"id": ENTITY_ID, "type": ENTITY_TYPE, "properties": PROPERTIES}
         - relationships ared structured: {"root": ENTITY_ID_ROOT, "type": RELATION_TYPE, "target": ENTITY_ID_OTHER, "properties": PROPERTIES}
