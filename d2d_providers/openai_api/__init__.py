@@ -44,7 +44,7 @@ class TaskCatalog:
         - RELATION_TYPE should limit to verbs; verbs are in present tense; should be written in active voice
         - ENTITY_ID_ROOT and ENTITY_ID_OTHER can only be extracted named entity ENTITY_ID
 
-        You should only output the result as JSON object.
+        You should output the result as JSON string only.
 
         Example:
         content: Alice lawyer and is 25 years old and Bob is her roommate since 2001. Bob works as a journalist. Alice owns a the webpage www.alice.com and Bob owns the webpage www.bob.com.
