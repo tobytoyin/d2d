@@ -1,4 +1,6 @@
 # follows the services.SourceIO interface
+from urllib.parse import unquote
+
 from .processor import (
     frontmatter_processor,
     image_extraction,
@@ -16,8 +18,10 @@ class SourceCatalog:
 
     @staticmethod
     def metadata(d, **kwds):
+        
         return {
             "uid": str(d["path"]).split("/")[-1].split(".")[0],
+            "url": f"obsidian://open?vault=master-notes&file={unquote(d['path')}", 
         }
 
 
