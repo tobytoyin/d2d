@@ -21,7 +21,6 @@ class SourceCatalog:
         
         return {
             "uid": str(d["path"]).split("/")[-1].split(".")[0],
-            "url": f"obsidian://open?vault=master-notes&file={quote(str(d['path']), safe='')}", 
         }
 
 
