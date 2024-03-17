@@ -46,7 +46,7 @@ class TaskCatalog:
         - RELATION_TYPE should limit to verbs; verbs are in present tense; should be written in active voice
         - ENTITY_ID_ROOT and ENTITY_ID_OTHER can only be extracted named entity ENTITY_ID
 
-        You should output the result as JSON string only.
+        You should output the result as proper JSON string only.
 
         Example:
         user: Alice lawyer and is 25 years old and Bob is her roommate since 2001. Bob works as a journalist. Alice owns a the webpage www.alice.com and Bob owns the webpage www.bob.com.
@@ -56,7 +56,7 @@ class TaskCatalog:
             "entities": [
                 {"id": "alice", "type": "Person", "properties": {"age": "25", "occupation": "lawyer", "name":"Alice"}},
                 {"id": "bob", "type": "Person", "properties": {"occupation": "journalist", "name": "Bob"}},
-                {"id": "alice.com", "type": "Webpage", "properties": {"url": "www.alice.com"}}
+                {"id": "alice.com", "type": "Webpage", "properties": {"url": "www.alice.com", "website": true}}
             ],
             "relations": [
                 {"root": "alice", "type": "IS", "target": "bob", "properties": {"start": "2021", "relation": "roommate"}}
