@@ -42,7 +42,7 @@ def _extract_link_id(link_str: str) -> str:
     extracted_link_id = re.sub(MdRegex.links, "\1", link_str)
     extracted_link_id = re.sub("\|.*", "", extracted_link_id)  # remove alias
     extracted_link_id = re.sub("#.*", "", extracted_link_id)  # remove header references
-    extracted_link_id = re.sub("\\", "", extracted_link_id)  # remove symbol break within table
+    extracted_link_id = extracted_link_id.replace("\\", "") # remove symbol break within | ... | 
     extracted_link_id = extracted_link_id.split("/")[-1]  # remove filepath if any
     return extracted_link_id
 
