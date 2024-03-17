@@ -119,10 +119,10 @@ class _NodeCommonProc:
 
             rel_var = f"target{idx}"
             rel_props = no_quotes_object(rel.properties)
-            match_rel = no_quotes_object({"uid": rel.rel_uid})
+            match_rel = f'{{uid: "{rel.rel_uid}"}}'
 
             create_or_merge_subq = f"""
-            MERGE ({rel_var} {match_rel})
+            MERGE ({rel_var} {match_rel} )
             MERGE (root)-[ :{rel.rel_type} {rel_props} ]->({rel_var})
             """
             final_query += create_or_merge_subq
