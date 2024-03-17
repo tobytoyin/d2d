@@ -1,6 +1,4 @@
 # follows the services.SourceIO interface
-from urllib.parse import quote
-
 from .processor import (
     frontmatter_processor,
     image_extraction,
